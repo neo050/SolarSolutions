@@ -29,18 +29,26 @@
   <main>
     <section class="contact">
       <h1>צור קשר</h1>
-      <form id="contactForm" action="#" method="post">
-        <label for="name">שם מלא:</label>
-        <input type="text" id="name" name="name" required>
-        
-        <label for="email">אימייל:</label>
-        <input type="email" id="email" name="email" required>
-        
-        <label for="message">הודעה:</label>
-        <textarea id="message" name="message" required></textarea>
-        
-        <button type="submit" class="btn">שלח הודעה</button>
-      </form>
+        <form 
+            action="https://formspree.io/f/mdkeklpn" 
+            method="POST"
+            id="contactForm"
+    >
+  <label for="name">שם מלא:</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="email">אימייל:</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="message">הודעה:</label>
+  <textarea id="message" name="message" required></textarea>
+
+  <!-- שדה נסתר שמגדיר לאן יפנה המשתמש לאחר שליחה מוצלחת -->
+  <input type="hidden" name="_redirect" value="https://your-github-username.github.io/your-repo-name/success.html">
+
+  <button type="submit" class="btn">שלח הודעה</button>
+</form>
+
       <div class="contact-logos">
         <a href="tel:+972546656076">
           <img src="assets/img/phone-logo.png" alt="טלפון" class="logo-icon">

@@ -1,7 +1,7 @@
 // טיפול בטופס "צור קשר" – מניעת שליחה ברירת מחדל והצגת הודעה
 document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert("תודה שפנית אלינו! ניצור איתך קשר בהקדם.");
+    //e.preventDefault();
+    //alert("תודה שפנית אלינו! ניצור איתך קשר בהקדם.");
     // ניתן להוסיף כאן לוגיקת AJAX לשליחה לשרת אם נדרש
   });
   
