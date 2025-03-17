@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="מחשבון חסכון סולארי להמחשת ההשפעה הכלכלית של התקנת מערכות סולאריות">
+  <meta name="keywords" content="מחשבון חסכון, מערכות סולאריות, חיסכון בחשמל">
+  <title>מחשבון חסכון סולארי</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">לוגו החברה</a>
+      <nav>
+        <ul>
+          <li><a href="index.html">בית</a></li>
+          <li><a href="about.html">על החברה</a></li>
+          <li><a href="solutions.html">פתרונות סולאריים</a></li>
+          <li><a href="projects.html">פרויקטים</a></li>
+          <li><a href="contact.html">צור קשר</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="calculator">
+      <h1>מחשבון חסכון סולארי</h1>
+      <form id="calculatorForm">
+        <label for="monthlyUsage">צריכת חשמל חודשית (קוט"ש):</label>
+        <input type="number" id="monthlyUsage" name="monthlyUsage" required>
+        
+        <label for="electricityCost">עלות חשמל (ש"ח לקוט"ש):</label>
+        <input type="number" id="electricityCost" name="electricityCost" step="0.01" required>
+        
+        <button type="button" onclick="calculateSavings()" class="btn">חשב חסכון</button>
+      </form>
+      <div id="result"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 כל הזכויות שמורות - חברת מערכות סולאריות</p>
+    </div>
+  </footer>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

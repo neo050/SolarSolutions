@@ -1,0 +1,318 @@
+/* Reset בסיסי */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #fff;
+    color: #333;
+    direction: rtl;
+  }
+  
+  /* הגדרת קונטיינר מרכזי */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* עיצוב Header */
+  header {
+    background-color: #e0f2f1;
+    padding: 20px 0;
+  }
+  
+  header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #00796b;
+    text-decoration: none;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: #00796b;
+    font-weight: bold;
+  }
+  
+  /* Hero Section */
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 40px 0;
+    background: #f1f8e9;
+  }
+  
+  .hero-content {
+    flex: 1 1 500px;
+    padding: 20px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5em;
+    color: #00796b;
+  }
+  
+  .hero-content p {
+    margin: 20px 0;
+    font-size: 1.2em;
+  }
+  
+  .cta-buttons .btn {
+    display: inline-block;
+    background-color: #00796b;
+    color: #fff;
+    padding: 10px 20px;
+    margin-right: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .hero img {
+    flex: 1 1 400px;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Benefits Section */
+  .benefits {
+    padding: 40px 0;
+    text-align: center;
+  }
+  
+  .benefits h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .benefits-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .benefit-item {
+    background-color: #e0f2f1;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1 1 250px;
+    max-width: 300px;
+  }
+  
+  .benefit-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Testimonials */
+  .testimonials {
+    background-color: #f1f8e9;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .testimonials h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .testimonial {
+    font-style: italic;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  /* About Section */
+  .about {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .about h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .about p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  /* Solutions Section */
+  .solutions {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .solutions h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .solution-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .solution-item {
+    background-color: #e0f2f1;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1 1 250px;
+    max-width: 300px;
+  }
+  
+  .solution-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Projects Section */
+  .projects {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .projects h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .project-item {
+    background-color: #e0f2f1;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1 1 250px;
+    max-width: 300px;
+  }
+  
+  .project-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Contact Section */
+  .contact {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .contact h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .contact form {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: right;
+  }
+  
+  .contact form label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .contact form input, .contact form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .contact form button {
+    margin-top: 20px;
+    background-color: #00796b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Calculator Section */
+  .calculator {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .calculator h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+  
+  .calculator form {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: right;
+  }
+  
+  .calculator form label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .calculator form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .calculator .btn {
+    margin-top: 20px;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #e0f2f1;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero {
+      flex-direction: column;
+    }
+    
+    nav ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
