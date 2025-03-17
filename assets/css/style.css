@@ -325,13 +325,13 @@
     margin-top: 20px;
   }
   
-  .logo-icon {
+.logo-icon {
     width: 40px;
     height: 40px;
     transition: transform 0.3s ease;
   }
   
-  .logo-icon:hover {
+.logo-icon:hover {
     transform: scale(1.1);
   }
   
