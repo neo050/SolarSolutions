@@ -29,11 +29,13 @@
   <main>
     <section class="contact">
       <h1>צור קשר</h1>
-        <form 
-            action="https://formspree.io/f/mdkeklpn" 
-            method="POST"
-            id="contactForm"
+  <form 
+    action="https://formspree.io/f/mdkeklpn" 
+    method="POST"
+    id="contactForm"
     >
+    <!-- שדה נסתר שמגדיר לאן יפנה המשתמש לאחר שליחה מוצלחת -->
+  <input type="hidden" name="_next" value="https://neo050.github.io/SolarSolutions/success.html">
   <label for="name">שם מלא:</label>
   <input type="text" id="name" name="name" required>
 
@@ -42,10 +44,6 @@
 
   <label for="message">הודעה:</label>
   <textarea id="message" name="message" required></textarea>
-
-  <!-- שדה נסתר שמגדיר לאן יפנה המשתמש לאחר שליחה מוצלחת -->
-  <input type="hidden" name="_redirect" value="https://neo050.github.io/SolarSolutions/success.html">
-
   <button type="submit" class="btn">שלח הודעה</button>
 </form>
 
