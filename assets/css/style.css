@@ -316,3 +316,30 @@
     }
   }
   
+  /* עיצוב ללוגואים בדף צור קשר */
+.contact-logos {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+  }
+  
+  .logo-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  /* התאמה למסכים קטנים */
+  @media (max-width: 768px) {
+    .logo-icon {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  
