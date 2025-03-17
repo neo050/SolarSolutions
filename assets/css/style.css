@@ -317,7 +317,7 @@
   }
   
   /* עיצוב ללוגואים בדף צור קשר */
-.contact-logos {
+.contact-logos{
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -325,7 +325,7 @@
     margin-top: 20px;
   }
   
-  .logo-icon {
+  .logo-icon{
     width: 40px;
     height: 40px;
     transition: transform 0.3s ease;
@@ -337,7 +337,7 @@
   
   /* התאמה למסכים קטנים */
   @media (max-width: 768px) {
-    .logo-icon {
+    .logo-icon{
       width: 30px;
       height: 30px;
     }
