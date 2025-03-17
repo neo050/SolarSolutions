@@ -8,10 +8,16 @@
   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #fff;
+    background-color: #fff; /* צבע רקע fallback במידה והתמונה לא נטענת */
+    background-image: url("../img/background1.jpg"); /* הנתיב לתמונה */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed; /* אפקט פרלקס קל, אם תרצה אפשר להחליף ב-scroll */
+    background-size: cover; /* מתאים את התמונה לגודל המסך */
     color: #333;
     direction: rtl;
   }
+  
   
   /* הגדרת קונטיינר מרכזי */
   .container {
