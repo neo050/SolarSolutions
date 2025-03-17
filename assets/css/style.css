@@ -1,25 +1,33 @@
 /* Reset בסיסי */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
+html, body {
+  height: 100%;
+  margin: 0;  /* כבר מוגדר ב-Reset, אך מומלץ לוודא שאין מרווחים */
+  padding: 0;
+}
 
+body {
+  display: flex;
+  flex-direction: column;
+  /* שאר הגדרות body שלך (גופן, רקע, כיוון RTL וכו') יכולות להישאר כאן */
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #fff;
+  color: #333;
+  direction: rtl;
+}
 
-  body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #fff; /* צבע רקע fallback במידה והתמונה לא נטענת */
-    /*background-image: url("../img/background1.jpg"); /* הנתיב לתמונה */
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed; /* אפקט פרלקס קל, אם תרצה אפשר להחליף ב-scroll */
-    background-size: cover; /* מתאים את התמונה לגודל המסך */
-    color: #333;
-    direction: rtl;
-  }
-  
+main {
+  /* החלק המרכזי יתפוס את כל הגובה שנותר */
+  flex: 1 0 auto;
+}
+
+footer {
+  /* בטל את margin-top הקבוע אם הוא מונע "הידבקות" לתחתית */
+  margin-top: auto;
+  background-color: #e0f2f1;
+  text-align: center;
+  padding: 20px 0;
+}
   /* הגדרת קונטיינר מרכזי */
   .container {
     width: 90%;
@@ -303,13 +311,7 @@
     margin-top: 20px;
   }
   
-  /* Footer */
-  footer {
-    background-color: #e0f2f1;
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 40px;
-  }
+ 
   
   /* Responsive */
   @media (max-width: 768px) {
