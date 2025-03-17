@@ -29,26 +29,22 @@
   <main>
     <section class="contact">
       <h1>צור קשר</h1>
-  <form 
-    action="https://formsubmit.co/neoray.asking666@gmail.com" 
-    method="POST"
-    id="contactForm"
-    >
-    <!-- שדה נסתר שמגדיר לאן יפנה המשתמש לאחר שליחה מוצלחת -->
-  <input type="hidden" name="_next" value="https://neo050.github.io/SolarSolutions/success.html">
-  <label for="name">שם מלא:</label>
-  <input type="text" id="name" name="name" required>
+      <!-- הסר את action והשתמש ב-JS כדי לשלוח דרך EmailJS -->
+      <form id="contactForm">
+        <label for="name">שם מלא:</label>
+        <input type="text" id="name" name="name" required>
 
-  <label for="email">אימייל:</label>
-  <input type="email" id="email" name="email" required>
+        <label for="email">אימייל:</label>
+        <input type="email" id="email" name="email" required>
 
-  <label for="phone">פלאפון:</label>
-  <input type="number" id="phone" name="phone" required>
+        <label for="phone">פלאפון:</label>
+        <input type="number" id="phone" name="phone" required>
 
-  <label for="message">הודעה:</label>
-  <textarea id="message" name="message" required></textarea>
-  <button type="submit" class="btn">שלח הודעה</button>
-</form>
+        <label for="message">הודעה:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit" class="btn">שלח הודעה</button>
+      </form>
 
       <div class="contact-logos">
         <a href="tel:+972546656076">
@@ -67,6 +63,17 @@
       <p>&copy; 2025 כל הזכויות שמורות - חברת מערכות סולאריות</p>
     </div>
   </footer>
+
+  <!-- 1) הטמעת ספריית EmailJS -->
+  <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+  <script>
+    // 2) אתחול EmailJS עם מפתח פומבי (Public Key) שאתה מקבל מ-EmailJS
+    (function() {
+      emailjs.init("YOUR_PUBLIC_KEY_HERE");
+    })();
+  </script>
+
+  <!-- 3) סקריפט הראשי שלך -->
   <script src="assets/js/main.js"></script>
 </body>
 </html>
