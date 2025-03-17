@@ -3,9 +3,11 @@ document.getElementById('contactForm')?.addEventListener('submit', function(e) {
   e.preventDefault(); // למנוע התנהגות ברירת מחדל של הטופס
 
   // קריאה ל-EmailJS כדי לשלוח את הטופס
-  emailjs.sendForm('service_12b5hzh', 'template_y2az434', '#contactForm')
+  const serviceID = 'service_o5qssn5';
+  const templateID = 'template_y2az434';
+   emailjs.sendForm(serviceID, templateID, this)
     .then(function(response) {
-      console.log('SUCCESS!', response.status, response.text);
+     console.log('SUCCESS!', response.status, response.text);
       // לאחר שליחה מוצלחת, הפנה את המשתמש לעמוד תודה
       window.location.href = 'success.html';
     }, function(error) {

@@ -45,7 +45,6 @@
 
         <button type="submit" class="btn">שלח הודעה</button>
       </form>
-
       <div class="contact-logos">
         <a href="tel:+972546656076">
           <img src="assets/img/phone-logo.png" alt="טלפון" class="logo-icon">
@@ -64,14 +63,12 @@
     </div>
   </footer>
 
-  <!-- 1) הטמעת ספריית EmailJS -->
-  <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
-  <script>
-    // 2) אתחול EmailJS עם מפתח פומבי (Public Key) שאתה מקבל מ-EmailJS
-    (function() {
-      emailjs.init("7BQ442uTTcxN1Owoa");
-    })();
-  </script>
+  <script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+  emailjs.init('7BQ442uTTcxN1Owoa')
+</script>
 
   <!-- 3) סקריפט הראשי שלך -->
   <script src="assets/js/main.js"></script>
