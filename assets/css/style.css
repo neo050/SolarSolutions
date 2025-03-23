@@ -63,27 +63,249 @@ footer {
   }
   
   /* Hero Section */
+ /* קודם כל - ברירת המחדל לתצוגה על מסכים גדולים */
+ .hero {
+
+  /* תמונה כלשהי – ברירת מחדל */
+  display: flex;
+  background-image: url("../img/solar_panels_2500.webp"); 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; /* מציג את כל התמונה בשלמותה */
+  background-color: #fff;   /* צבע למילוי שוליים אם היחס שונה */
+  min-height: 1666px;
+  justify-content:flex-end;
+}
+
+
+/* 1) עד רוחב 549px => נטען 400px */
+@media (max-width: 549px) {
   .hero {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 40px 0;
-    background: #f1f8e9;
+    background-image: url("../img/solar_panels_400.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 266px;
+    background-size: cover;
+    justify-content:flex-end;
+   
   }
+}
+
+/* 2) 550px עד 699px => 550px */
+@media (min-width: 550px) and (max-width: 699px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_550.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 366px;
+    background-size: cover;
+    justify-content:flex-end;
+  }
+}
+
+/* 3) 700px עד 849px => 700px */
+@media (min-width: 700px) and (max-width: 849px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_700.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 466px;
+    background-size: cover;
+    justify-content:flex-end;
+  }
+}
+
+/* 4) 850px עד 999px => 850px */
+@media (min-width: 850px) and (max-width: 999px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_850.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 566px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 5) 1000px עד 1149px => 1000px */
+@media (min-width: 1000px) and (max-width: 1149px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1000.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 666px;
+    background-size: cover;
+    justify-content:flex-end;
+  }
+}
+
+/* 6) 1150px עד 1299px => 1150px */
+@media (min-width: 1150px) and (max-width: 1299px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1150.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 766px;
+    background-size: cover;
+    justify-content:flex-end;
+   
+  }
+}
+
+/* 7) 1300px עד 1449px => 1300px */
+@media (min-width: 1300px) and (max-width: 1449px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1300.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 866px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 8) 1450px עד 1599px => 1450px */
+@media (min-width: 1450px) and (max-width: 1599px) {
+  .hero {
+
+    display: flex;
+    background-image: url("../img/solar_panels_1450.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 966px;
+    background-size: cover;
+    justify-content:flex-end;
+ 
+  }
+}
+
+/* 9) 1600px עד 1749px => 1600px */
+@media (min-width: 1600px) and (max-width: 1749px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1600.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1066px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 10) 1750px עד 1899px => 1750px */
+@media (min-width: 1750px) and (max-width: 1899px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1750.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1166px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 11) 1900px עד 2049px => 1900px */
+@media (min-width: 1900px) and (max-width: 2049px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_1900.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1266px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 12) 2050px עד 2199px => 2050px */
+@media (min-width: 2050px) and (max-width: 2199px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_2050.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1366px;
+    background-size: cover;
+    justify-content:flex-end;
+    
+  }
+}
+
+/* 13) 2200px עד 2349px => 2200px */
+@media (min-width: 2200px) and (max-width: 2349px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_2200.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1466px;
+    background-size: cover;
+    justify-content:flex-end;
+
+  }
+}
+
+/* 14) 2350px עד 2499px => 2350px */
+@media (min-width: 2350px) and (max-width: 2499px) {
+  .hero {
+    display: flex;
+    background-image: url("../img/solar_panels_2350.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1566px;
+    background-size: cover;
+    justify-content:flex-end;
+  }
+}
+
+/* 15) 2500px ומעלה => 2500px (כבר הגדרנו כברירת מחדל, אבל אפשר שוב) */
+@media (min-width: 2500px) {
+  .hero {
+
+    display: flex;
+    background-image: url("../img/solar_panels_2500.webp");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 1666px;
+    background-size: cover;
+    justify-content:flex-end;
+  
+  }
+}
+
+
+/* אם תרצה הגדרה נוספת למסכים מעל 1200px, אפשר להשאיר את ברירת המחדל */
+
+  
   
   .hero-content {
     flex: 1 1 500px;
     padding: 20px;
+  
   }
   
   .hero-content h1 {
-    font-size: 2.5em;
+    font-size: 1.7em;
     color: #00796b;
   }
   
   .hero-content p {
     margin: 20px 0;
     font-size: 1.2em;
+    color: #f6f6f6;
   }
   
   .cta-buttons .btn {
@@ -94,6 +316,7 @@ footer {
     margin-right: 10px;
     text-decoration: none;
     border-radius: 5px;
+    font-size: 0.9em;
   }
   
   .hero img {
