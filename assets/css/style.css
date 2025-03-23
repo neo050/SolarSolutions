@@ -82,7 +82,7 @@ footer {
 @media (max-width: 549px) {
   .hero {
     display: flex;
-    background-image: url("../img/solar_panels_400.webp");
+    background-image: url("../img/original.jpg");
     background-repeat: no-repeat;
     background-position: center center;
     min-height: 266px;
