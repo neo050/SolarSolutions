@@ -21,12 +21,14 @@ main {
   flex: 1 0 auto;
 }
 
+
 footer {
   /* בטל את margin-top הקבוע אם הוא מונע "הידבקות" לתחתית */
   margin-top: auto;
   background-color: #e0f2f1;
   text-align: center;
   padding: 20px 0;
+
 }
   /* הגדרת קונטיינר מרכזי */
   .container {
@@ -34,6 +36,7 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
   }
+
   
   /* עיצוב Header */
   header {
@@ -350,13 +353,26 @@ footer {
     border-radius: 5px;
     flex: 1 1 250px;
     max-width: 300px;
+    
+   
+    
   }
-  
+ 
+  .p-benefits {
+   
+    font-style:italic;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+/*
   .benefit-item img {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
   }
+     */
   
   /* Testimonials */
   .testimonials {
