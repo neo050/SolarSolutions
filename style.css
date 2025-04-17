@@ -109,7 +109,7 @@
     gap: clamp(4px, 2vw, 12px);
     padding: 0;
   }
-  .icon-nav li {
+  .icon-nav li button{
     width: clamp(40px, 10vw, 80px);
     height: clamp(40px, 10vw, 80px);
     background-color: #fff;
