@@ -1,14 +1,14 @@
+
 /* Reset בסיסי */
 html, body {
   height: 100%;
-  margin: 0;  /* כבר מוגדר ב-Reset, אך מומלץ לוודא שאין מרווחים */
+  margin: 0;
   padding: 0;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  /* שאר הגדרות body שלך (גופן, רקע, כיוון RTL וכו') יכולות להישאר כאן */
   font-family: Arial, sans-serif;
   line-height: 1.6;
   background-color: #fff;
@@ -16,578 +16,295 @@ body {
   direction: rtl;
 }
 
-main {
-  /* החלק המרכזי יתפוס את כל הגובה שנותר */
-  flex: 1 0 auto;
+/* Hero Image Section */
+.hero-image-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.01);
+  opacity: 0.95;
 }
 
 
+/* Overlay מעל התמונה */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* לוגו החברה – מוצב בפינה העליונה הימנית על התמונה */
+.logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+}
+
+/* ניתן להתאים את גודל הלוגו דרך המחלקה logo-icon */
+.logo-icon {
+  width: clamp(120px, 15vw, 200px);
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* כפתור צור קשר – מיקום תחתון שמאלי, בעל גודל דינאמי */
+.contact-btn {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  background-color: #00796b;
+  color: #fff;
+  padding: clamp(10px, 2vw, 20px) clamp(16px, 3vw, 28px);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+ 
+
+}
+
+.contact-btn:hover {
+  background-color: #004d40;
+}
+
+/* מכולת האיקונים – מיקום תחתון ימני */
+.icon-nav-container {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}
+
+.icon-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: clamp(10px, 2vw, 20px);
+  margin: 0;
+  padding: 0;
+}
+
+/* הגדרת גודל האיקונים באופן דינאמי */
+.icon-nav li {
+  width: clamp(80px, 10vw, 120px);
+  height: clamp(80px, 10vw, 120px);
+  background-color: #fff;
+  border-radius: 50%;
+  border: 3px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.icon-nav li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #06A9EA;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+
+.icon-nav li a img {
+  max-height: 2em;
+  width: auto;
+  margin-bottom: 5px;
+  filter: grayscale(5%) brightness(0.5);
+  transition: filter 0.3s ease;
+}
+
+.icon-nav li a:hover img {
+  filter: grayscale(2%) brightness(1);
+}
+
+.icon-nav li a:hover {
+  transform: scale(1.1);
+}
+
+/* כפתורי קריאה לפעולה (CTA) */
+.cta-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.cta-buttons .btn {
+  background-color: #00796b;
+  color: #fff;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.cta-buttons .btn:hover {
+  background-color: #004d40;
+}
+
+/* BENEFITS */
+.benefits {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.benefits h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #00796b;
+}
+
+.benefits-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.benefit-item {
+  background-color: #e0f2f1;
+  padding: 20px;
+  border-radius: 5px;
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.p-benefits {
+  font-style: italic;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* TESTIMONIALS */
+.testimonials {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #00796b;
+}
+
+.testimonial {
+  font-style: italic;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+/* GENERAL CONTAINER */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* FOOTER */
 footer {
-  /* בטל את margin-top הקבוע אם הוא מונע "הידבקות" לתחתית */
-  margin-top: auto;
   background-color: #e0f2f1;
   text-align: center;
   padding: 20px 0;
-
-}
-  /* הגדרת קונטיינר מרכזי */
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  
-  /* עיצוב Header */
-  header {
-    background-color: #e0f2f1;
-    padding: 20px 0;
-  }
-  
-  header .logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #00796b;
-    text-decoration: none;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  nav ul li a {
-    text-decoration: none;
-    color: #00796b;
-    font-weight: bold;
-  }
-  
-  /* Hero Section */
- /* קודם כל - ברירת המחדל לתצוגה על מסכים גדולים */
- .hero {
-
-  /* תמונה כלשהי – ברירת מחדל */
-  display: flex;
-  background-image: url("../img/solar_panels_2500.webp"); 
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover; /* מציג את כל התמונה בשלמותה */
-  background-color: #fff;   /* צבע למילוי שוליים אם היחס שונה */
-  min-height: 1666px;
-  justify-content:flex-end;
 }
 
-
-/* 1) עד רוחב 549px => נטען 400px */
-@media (max-width: 549px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/original.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 266px;
-    background-size: cover;
-    justify-content:flex-end;
-   
-  }
-}
-
-/* 2) 550px עד 699px => 550px */
-@media (min-width: 550px) and (max-width: 699px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_550.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 366px;
-    background-size: cover;
-    justify-content:flex-end;
-  }
-}
-
-/* 3) 700px עד 849px => 700px */
-@media (min-width: 700px) and (max-width: 849px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_700.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 466px;
-    background-size: cover;
-    justify-content:flex-end;
-  }
-}
-
-/* 4) 850px עד 999px => 850px */
-@media (min-width: 850px) and (max-width: 999px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_850.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 566px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 5) 1000px עד 1149px => 1000px */
-@media (min-width: 1000px) and (max-width: 1149px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1000.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 666px;
-    background-size: cover;
-    justify-content:flex-end;
-  }
-}
-
-/* 6) 1150px עד 1299px => 1150px */
-@media (min-width: 1150px) and (max-width: 1299px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1150.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 766px;
-    background-size: cover;
-    justify-content:flex-end;
-   
-  }
-}
-
-/* 7) 1300px עד 1449px => 1300px */
-@media (min-width: 1300px) and (max-width: 1449px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1300.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 866px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 8) 1450px עד 1599px => 1450px */
-@media (min-width: 1450px) and (max-width: 1599px) {
-  .hero {
-
-    display: flex;
-    background-image: url("../img/solar_panels_1450.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 966px;
-    background-size: cover;
-    justify-content:flex-end;
- 
-  }
-}
-
-/* 9) 1600px עד 1749px => 1600px */
-@media (min-width: 1600px) and (max-width: 1749px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1600.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1066px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 10) 1750px עד 1899px => 1750px */
-@media (min-width: 1750px) and (max-width: 1899px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1750.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1166px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 11) 1900px עד 2049px => 1900px */
-@media (min-width: 1900px) and (max-width: 2049px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_1900.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1266px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 12) 2050px עד 2199px => 2050px */
-@media (min-width: 2050px) and (max-width: 2199px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_2050.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1366px;
-    background-size: cover;
-    justify-content:flex-end;
-    
-  }
-}
-
-/* 13) 2200px עד 2349px => 2200px */
-@media (min-width: 2200px) and (max-width: 2349px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_2200.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1466px;
-    background-size: cover;
-    justify-content:flex-end;
-
-  }
-}
-
-/* 14) 2350px עד 2499px => 2350px */
-@media (min-width: 2350px) and (max-width: 2499px) {
-  .hero {
-    display: flex;
-    background-image: url("../img/solar_panels_2350.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1566px;
-    background-size: cover;
-    justify-content:flex-end;
-  }
-}
-
-/* 15) 2500px ומעלה => 2500px (כבר הגדרנו כברירת מחדל, אבל אפשר שוב) */
-@media (min-width: 2500px) {
-  .hero {
-
-    display: flex;
-    background-image: url("../img/solar_panels_2500.webp");
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 1666px;
-    background-size: cover;
-    justify-content:flex-end;
-  
-  }
-}
-
-
-/* אם תרצה הגדרה נוספת למסכים מעל 1200px, אפשר להשאיר את ברירת המחדל */
-
-  
-  
-  .hero-content {
-    flex: 1 1 500px;
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .hero-overlay {
     padding: 20px;
-  
+    align-items: center;
+    justify-content: center;
   }
   
-  .hero-content h1 {
-    font-size: 1.7em;
-    color: #00796b;
+  .logo {
+    top: 10px;
+    right: 10px;
   }
   
-  .hero-content p {
-    margin: 20px 0;
-    font-size: 1.2em;
-    color: #f6f6f6;
+  .contact-btn {
+    bottom: 20px;
+    left: 20px;
+  }
+  
+  .icon-nav-container {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .icon-nav {
+    flex-direction: row;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px;
   }
   
   .cta-buttons .btn {
-    display: inline-block;
-    background-color: #00796b;
-    color: #fff;
-    padding: 10px 20px;
-    margin-right: 10px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9em;
-  }
-  
-  .hero img {
-    flex: 1 1 400px;
-    max-width: 100%;
-    height: auto;
-  }
-  
-  /* Benefits Section */
-  .benefits {
-    padding: 40px 0;
+    width: 100%;
     text-align: center;
   }
   
-  .benefits h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #00796b;
-  }
-  
-  .benefits-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .benefit-item {
-    background-color: #e0f2f1;
-    padding: 20px;
-    border-radius: 5px;
-    flex: 1 1 250px;
-    max-width: 300px;
-    
-   
-    
-  }
- 
-  .p-benefits {
-   
-    font-style:italic;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-/*
-  .benefit-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
-     */
-  
-  /* Testimonials */
-  .testimonials {
-    background-color: #f1f8e9;
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
+  .benefits h2, 
   .testimonials h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #00796b;
+    font-size: 1.8em;
   }
-  
-  .testimonial {
-    font-style: italic;
-    margin: 20px auto;
-    max-width: 800px;
+}
+
+
+
+/* --- ניווט אייקונים --- */
+.icon-nav li {
+  /* הורדנו את המינימום ל‑40px, שמרנו על 10vw כערך אידיאלי 
+     ו‑80px כמקסימום כדי שלא יצמחו מדי */
+  width: clamp(40px, 10vw, 80px);
+  height: clamp(40px, 10vw, 80px);
+
+  /* gap קטן יותר בשביל להתאים למסכים צרים */
+  /* אפשר גם להוריד כאן את המינימום ל‑4px */
+}
+.icon-nav {
+  display: flex;
+  gap: clamp(4px, 2vw, 12px);
+  margin: 0;
+  padding: 0;
+}
+
+/* --- כפתור לבדיקה --- */
+.contact-btn {
+  /* הורדנו את הפדינג המינימלי ל‑6px */
+  padding: clamp(6px, 2vw, 16px) clamp(12px, 3vw, 24px);
+  font-size: clamp(0.7rem, 2vw, 1rem);
+}
+
+/* --- media query ליותר קיצוני --- */
+@media (max-width: 400px) {
+  .icon-nav li {
+    /* אם רוצים להתכווץ עוד יותר */
+    width: clamp(32px, 12vw, 60px);
+    height: clamp(32px, 12vw, 60px);
   }
-  
-  /* About Section */
-  .about {
-    padding: 40px 20px;
-    text-align: center;
+  .icon-nav {
+    gap: clamp(2px, 2vw, 8px);
   }
-  
-  .about h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #00796b;
+  .contact-btn {
+    padding: clamp(4px, 2vw, 12px) clamp(8px, 3vw, 20px);
+    font-size: clamp(0.6rem, 2.5vw, 0.9rem);
   }
-  
-  .about p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-  }
-  
-  /* Solutions Section */
-  .solutions {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .solutions h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #00796b;
-  }
-  
-  .solution-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .solution-item {
-    background-color: #e0f2f1;
-    padding: 20px;
-    border-radius: 5px;
-    flex: 1 1 250px;
-    max-width: 300px;
-  }
-  
-  .solution-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
-  
-  /* Projects Section */
-  .projects {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .projects h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #00796b;
-  }
-  
-  .projects-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .project-item {
-    background-color: #e0f2f1;
-    padding: 20px;
-    border-radius: 5px;
-    flex: 1 1 250px;
-    max-width: 300px;
-  }
-  
-  .project-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
-  
-  /* Contact Section */
-  .contact {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .contact h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #00796b;
-  }
-  
-  .contact form {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: right;
-  }
-  
-  .contact form label {
-    display: block;
-    margin: 10px 0 5px;
-  }
-  
-  .contact form input, .contact form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .contact form button {
-    margin-top: 20px;
-    background-color: #00796b;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Calculator Section */
-  .calculator {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .calculator h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #00796b;
-  }
-  
-  .calculator form {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: right;
-  }
-  
-  .calculator form label {
-    display: block;
-    margin: 10px 0 5px;
-  }
-  
-  .calculator form input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .calculator .btn {
-    margin-top: 20px;
-  }
-  
- 
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .hero {
-      flex-direction: column;
-    }
-    
-    nav ul {
-      flex-direction: column;
-      gap: 10px;
-    }
-  }
-  
-  /* עיצוב ללוגואים בדף צור קשר */
-.contact-logos {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    transition: transform 0.3s ease;
-  }
-  
-.logo-icon:hover {
-    transform: scale(1.1);
-  }
-  
-  /* התאמה למסכים קטנים */
-  @media (max-width: 768px) {
-    .logo-icon {
-      width: 30px;
-      height: 30px;
-    }
-  }
-  
+}

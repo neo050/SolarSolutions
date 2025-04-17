@@ -1,0 +1,267 @@
+
+/* אפס ריווח גלובלי */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* גוף הדף */
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 1. הגדרת מכולת ה‑Hero */
+  .hero {
+    display: grid;
+    position: relative;
+    width: auto;
+    height: 100vh;
+  
+    /* 3 עמודות, 3 שורות */
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+  
+    /* שמות אזורים */
+    grid-template-areas:
+      "logo    logo    logo"
+      ".       .       ."
+      "nav .     contact";
+  
+    /* רקע התמונה */
+    background: url("assets/img/image-small.webp") center/cover no-repeat;
+    min-height: 600px;
+  }
+  @media (min-width: 700px) {
+    .hero::before {
+      background-image: url("assets/img/image-medium.webp");
+    }
+  }
+  @media (min-width: 1200px) {
+    .hero::before {
+      background-image: url("assets/img/image-large.webp");
+    }
+  }
+  /* 2. לוגו בפינה עליונה ימנית */
+  .logo-div {
+    grid-area: logo;
+    justify-self:start ;   /* ימינה */
+    align-self: end;   /* למעלה */
+    padding: 1rem;
+  }
+  .logo-icon {
+    display: block;
+    max-width: 20rem;
+    height: auto;
+  }
+  
+  /* 3. כפתור בדיקת התאמה בפינה תחתונה שמאלית */
+  .contact-btn {
+    grid-area: contact;
+        /* למטה */
+        justify-self: end; /* שמאלה */
+         align-self: end; 
+    
+
+    font-size: clamp(0.7rem, 2vw, 1rem);
+    padding: 0;
+    
+  
+ 
+  }
+  .contact-btn {
+    
+    background-color: #00796b;
+
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    max-width: 25rem;
+    max-width: 25rem;
+    
+    padding: clamp(6px, 2vw, 16px) clamp(12px, 3vw, 24px);
+  font-size: clamp(0.7rem, 2vw, 1rem);
+    text-align: center;
+    margin-bottom: 10px;
+   
+  }
+  
+.contact-btn:hover {
+  background-color: #004d40;
+}
+
+  
+  /* 4. ניווט אייקונים בפינה תחתונה ימנית */
+  .icon-nav-container {
+    grid-area: nav;
+   
+       /* למטה */
+    padding: 0;
+  }
+  .icon-nav {
+    list-style: none;
+    display: flex;
+    gap: clamp(4px, 2vw, 12px);
+    padding: 0;
+  }
+  .icon-nav li {
+    width: clamp(40px, 10vw, 80px);
+    height: clamp(40px, 10vw, 80px);
+    background-color: #fff;
+    border-radius: 50%;
+    border: 3px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .icon-nav li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #06A9EA;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+  .icon-nav li a img {
+    max-height: 2em;
+    width: auto;
+    margin-bottom: 5px;
+    filter: grayscale(5%) brightness(0.5);
+    transition: filter 0.3s ease;
+  }
+  .icon-nav li a:hover img {
+    filter: grayscale(2%) brightness(1);
+  }
+  .icon-nav li a:hover {
+    transform: scale(1.1);
+  }
+  
+  /* 5. Overlay חצי־שקוף מעל התמונה */
+  .hero-overlay {
+    grid-area: 1 / 1 / 4 / 4; /* תופס את כל הגריד */
+    
+    pointer-events: none;
+  }
+  
+  /* 6. סגנון כללי ל‑sections ולכותרות */
+  h1, h2 {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+  .benefits, .testimonials {
+    padding: 2rem 1rem;
+  }
+  
+/* BENEFITS */
+.benefits {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.benefits h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #00796b;
+}
+
+.benefits-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.benefit-item {
+  background-color: #e0f2f1;
+  padding: 20px;
+  border-radius: 5px;
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.p-benefits {
+  font-style: italic;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+  .testimonial {
+    max-width: 600px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  
+  /* Footer */
+  footer {
+    background: #e0f2f1;
+    
+ 
+    text-align: center;
+    padding: 1rem;
+  }
+  
+/* מתחת לרוחב של 600px – הסתרת הטקסט ב‑logos-span */
+@media (max-width: 600px) {
+    .logos-span {
+      display: none;
+    }
+  }
+  @media (max-width: 400px) {
+    .icon-nav li {
+      /* אם רוצים להתכווץ עוד יותר */
+      width: clamp(32px, 12vw, 60px);
+      height: clamp(32px, 12vw, 60px);
+    }
+    .icon-nav {
+      gap: clamp(2px, 2vw, 8px);
+    }
+    .contact-btn {
+      padding: clamp(4px, 2vw, 12px) clamp(8px, 3vw, 20px);
+      font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+    }
+  }
+  
+  nav
+  {
+    display:inline-flex;
+    justify-content: end;
+
+  }
+
+  h2
+  {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00796b;
+    font-weight: bold ;
+  }
+
+
+
+  .carousel-indicators [data-bs-target] {
+    background-color: #aaa;
+  }
+  .carousel-indicators .active {
+    background-color: #aaa;
+  }
+
+  .carousel-indicators {
+    bottom: -3rem; /* הזזה כלפי מטה */
+  }
+  
+  .carousel-control-prev-icon{
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23aaa' d='M3.646 6.854a.5.5 0 0 1 0-.708L5.793 4 3.646 1.854a.5.5 0 1 1 .708-.708l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708 0z'/%3E%3C/svg%3E");
+
+  }
+
+  .carousel-control-next-icon {
+
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23aaa' d='M4.354 1.146a.5.5 0 0 1 0 .708L2.207 4l2.147 2.146a.5.5 0 0 1-.708.708l-2.5-2.5a.5.5 0 0 1 0-.708l2.5-2.5a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+  }
