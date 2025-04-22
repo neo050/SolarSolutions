@@ -116,6 +116,63 @@ function initAutocomplete() {
   });
 }
 
+
+/**************************************
+ * 1) EmailJS INIT
+ **************************************/
+
+
+/**************************************
+ * 2) TESTIMONIAL FORM SUBMISSION
+ **************************************/
+
+
+/**************************************
+ * 3) HAMBURGER MENU
+ **************************************/
+// main.js
+// Hamburger Menu Toggle
+
+// Ensure DOM is fully loaded
+window.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.querySelector('.hamburger');
+  const navOverlay = document.querySelector('.nav-overlay');
+
+  if (hamburger && navOverlay) {
+    hamburger.addEventListener('click', () => {
+      navOverlay.classList.toggle('open');
+    });
+    // Close overlay when clicking outside menu
+    navOverlay.addEventListener('click', (e) => {
+      if (e.target === navOverlay) {
+        navOverlay.classList.remove('open');
+      }
+    });
+  }
+});
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // בודקים שזו באמת הכתובת של עמוד ההצלחה
+    if (window.location.pathname.endsWith('success.html')) {
+      const section = document.querySelector('.contact-success');
+      if (section) {
+        section.innerHTML = `
+          <h1>תודה על המלצתך!</h1>
+          <h2>שמחנו לקרוא את חוות הדעת שלך – ההמלצה התקבלה בהצלחה ותפורסום בקרוב באתר שלנו.</h2>
+          <p style="margin-top:1rem; text-align:center;">
+            נשמח תמיד לשמוע ממך – לכל שאלה נוספת, תוכל לפנות אלינו בווצאפ:
+            <a href="https://wa.me/972546656076" target="_blank" rel="noopener" style="display:inline-block;margin-left:0.5rem;">
+              <img src="assets/img/whatsapp-logo.png" alt="וואצאפ" style="width:32px;vertical-align:middle;">
+            </a>
+          </p>
+        `;
+      }
+    }
+  });
+
+
+
+
 // Expose the calculator function globally if you want to call it from HTML
 window.calculateSavings = calculateSavings;
 window.initAutocomplete = initAutocomplete;

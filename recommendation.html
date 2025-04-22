@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>השאירו המלצה</title>
+  <link rel="stylesheet" href="assets/css/recommendation.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/img/solar solution logos/6.svg" alt="לוגו החברה">
+      </a>
+      <button class="hamburger" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="nav-overlay">
+        <ul class="nav-list">
+          <li><a href="index.html">בית</a></li>
+          <li><a href="about.html">על החברה</a></li>
+          <li><a href="solutions.html">פתרונות סולאריים</a></li>
+          <li><a href="projects.html">פרויקטים</a></li>
+          <li><a href="contact.html">צור קשר</a></li>
+          <li><a href="recommendation.html" class="active">השאירו המלצה</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Form Section -->
+  <main class="testimonial-page">
+    <div class="container card">
+      <h1 class="title">השאירו המלצה על השירות שלנו</h1>
+      <p class="subtitle">תודה שבחרתם בנו! נשמח אם תשתפו חוויה והמלצה על התקנת מערכות סולאריות לביתכם.</p>
+
+      <form id="testimonialForm"
+            action="https://formsubmit.co/neoray.asking666@gmail.com"
+            method="POST"
+            enctype="multipart/form-data">
+
+        <!-- EmailJS alternative: FormSubmit -->
+        <input type="hidden" name="_subject" value="המלצה חדשה מהאתר">
+        <input type="hidden" name="_next" value="https://neo050.github.io/SolarSolutions/success.html">
+        <input type="hidden" name="_captcha" value="false">
+
+        <div class="form-group">
+          <label for="name">שם מלא:</label>
+          <input type="text" id="name" name="name" placeholder="למשל: יוסי כהן" required>
+        </div>
+
+        <div class="form-group">
+          <label for="location">מקום מגורים:</label>
+          <input type="text" id="location" name="location" placeholder="עיר, שכונה" required>
+        </div>
+
+        <div class="form-group">
+          <label for="recommendation">המלצה שלכם:</label>
+          <textarea id="recommendation" name="recommendation" rows="5" placeholder="ספרו לנו על החוויה והשירות" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="photo">העלאת תמונה (אופציונלי):</label>
+          <input type="file" id="photo" name="photo" accept="image/*">
+          <small class="optional-note">נשמח לצרף תמונה שלך  שתוצג באתר מתחת להמלצה; אם קשה, שלחו לנו בווצאפ במקום.</small>
+        </div>
+
+        <button type="submit" class="btn-primary">שלח המלצה</button>
+      </form>
+
+      <div class="whatsapp-contact">
+        <a href="https://wa.me/972546656076" target="_blank" aria-label="שליחה בווצאפ">
+          <img src="assets/img/whatsapp-logo.png" alt="וואטסאפ">
+        </a>
+        <span>במידה ותיתקלו בבעיה, שלחו לנו הודעה בווצאפ</span>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 כל הזכויות שמורות לחברת מערכות סולאריות</p>
+    </div>
+  </footer>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="assets/js/main.js"></script>
+ 
+</body>
+</html>

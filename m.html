@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="השאירו המלצה על השירות שלנו ותמונות לקוחות מרוצים שלנו">
+  <title>השאירו המלצה</title>
+  <style>
+    /* Reset בסיסי */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; color: #333; direction: rtl; }
+    .container { max-width: 600px; width: 90%; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: padding 0.3s; }
+    .logo-container { text-align: center; margin-bottom: 1rem; }
+    .logo-icon { width: 300px; height: auto; }
+    h1 { font-size: 2rem; margin-bottom: 1.5rem; text-align: center; color: #00796B; }
+    form { display: flex; flex-direction: column; gap: 1.25rem; }
+    label { font-weight: 600; font-size: 1rem; color: #004d40; }
+    input[type="text"], textarea { width: 100%; padding: 0.85rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; transition: border-color 0.2s; }
+    input[type="text"]:focus, textarea:focus { border-color: #00796B; outline: none; }
+    textarea { resize: vertical; min-height: 140px; }
+    .upload-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
+    .upload-note { font-size: 0.9rem; color: #555; }
+    .btn-upload { display: inline-block; padding: 0.7rem 1.2rem; background-color: #009688; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s, transform 0.1s; text-align: center; }
+    .btn-upload:hover { background-color: #00796B; transform: translateY(-1px); }
+    .btn-upload:active { transform: translateY(1px); }
+    input[type="file"] { display: none; }
+    .file-name { font-size: 0.95rem; color: #333; padding: 0.5rem; background: #e8f5f2; border-radius: 4px; }
+    .btn-submit { margin-top: 1rem; background-color: #00796B; color: #fff; padding: 0.85rem; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
+    .btn-submit:hover { background-color: #00563f; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(1px); }
+    .whatsapp-cta { text-align: center; margin-top: 2rem; }
+    .whatsapp-cta p { font-size: 1rem; color: #555; margin-bottom: 0.5rem; }
+    .whatsapp-cta a img { width: 52px; height: 52px; transition: transform 0.2s; }
+    .whatsapp-cta a img:hover { transform: scale(1.1); }
+    .footer-note { font-size: 0.85rem; color: #888; text-align: center; margin-top: 1.5rem; }
+
+    /* Responsive לכל המכשירים */
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem; }
+      .logo-icon { width: 200px; }
+      h1 { font-size: 1.75rem; }
+      label { font-size: 0.95rem; }
+      .btn-upload, .btn-submit { font-size: 0.95rem; padding: 0.65rem 1rem; }
+      .whatsapp-cta p { font-size: 0.95rem; }
+      .whatsapp-cta a img { width: 48px; height: 48px; }
+    }
+    @media (min-width: 768px) {
+      .container { width: 70%; }
+    }
+    @media (min-width: 1024px) {
+      .container { width: 50%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="index.html" class="logo">
+        <img src="assets/img/solar solution logos/6.svg" alt="לוגו החברה" class="logo-icon">
+      </a>
+    </div>
+    <h1>השאירו המלצה</h1>
+    <form id="testimonialForm" action="https://formsubmit.co/neoray.asking666@gmail.com" method="POST" enctype="multipart/form-data">
+      <!-- הגדרות FormSubmit -->
+      <input type="hidden" name="_subject" value="המלצה חדשה מהאתר">
+      <input type="hidden" name="_next" value="https://neo050.github.io/SolarSolutions/success.html">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="_honey" style="display:none">
+
+      <label for="name">שם מלא *</label>
+      <input type="text" id="name" name="name" required placeholder="למשל: יעל לוי">
+
+      <label for="location">מקום מגורים *</label>
+      <input type="text" id="location" name="location" required placeholder="עיר, שכונה">
+
+      <label for="testimonial">המלצה שלכם *</label>
+      <textarea id="testimonial" name="testimonial" required placeholder="שתפו אותנו בחוויית השירות ותרשמו את דעתכם"></textarea>
+
+      <div class="upload-wrapper">
+        <label>אנא העלו תמונה שלכם שתופיע מתחת להמלצה באתר (אופציונלי)</label>
+        <label for="photo" class="btn-upload">בחרו תמונה</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
+        <span class="file-name" id="file-name">לא נבחרה תמונה</span>
+        <p class="upload-note">אם קשה להעלות תמונה, תוכלו לשלוח לנו אותה בווצאפ.</p>
+      </div>
+
+      <button type="submit" class="btn-submit">שלח המלצה</button>
+    </form>
+
+    <div class="whatsapp-cta">
+      <p>זקוקים לעזרה? שלחו לנו הודעה בווצאפ:</p>
+      <a href="https://wa.me/972546656076" target="_blank" rel="noopener">
+        <img src="assets/img/whatsapp-logo.png" alt="וואצאפ">
+      </a>
+    </div>
+
+    <p class="footer-note">כל התכנים יישלחו אלינו למייל מיד עם ההגשה</p>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('photo');
+    const fileNameSpan = document.getElementById('file-name');
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      fileNameSpan.textContent = file ? file.name : 'לא נבחרה תמונה';
+    });
+  </script>
+</body>
+</html>

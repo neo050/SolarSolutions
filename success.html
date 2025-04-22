@@ -9,7 +9,9 @@
 <body>
   <header>
     <div class="container">
-      <a href="index.html" class="logo">לוגו החברה</a>
+      <a href="index.html" class="logo">
+        <img src="assets/img/solar solution logos/6.svg" alt="לוגו החברה" class="logo-icon">
+      </a>
       <nav>
         <ul>
           <li><a href="index.html">בית</a></li>
@@ -32,6 +34,32 @@
         <p>&copy; 2025 כל הזכויות שמורות - חברת מערכות סולאריות</p>
       </div>
     </footer>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // אם הגענו מ־recommendation.html (שם העמוד שמכיל את הטופס)
+        const ref = document.referrer;
+        if (ref && ref.includes('recommendation.html')|| ref.includes('m.html')) {
+          const section = document.querySelector('.contact-success');
+          section.innerHTML = `
+            <h1>תודה רבה על ההמלצה!</h1>
+            <h2>המלצתך התקבלה בהצלחה ופורסמה בקרוב באתר שלנו.</h2>
+            <p style="margin-top:1.5rem; text-align:center;">
+              נשמח תמיד לשמוע ממך – לכל שאלה נוספת:
+            </p>
+            <div style="text-align:center; margin-top:0.5rem;">
+              <a href="https://wa.me/972546656076" target="_blank" rel="noopener" 
+                 style="display:inline-block; text-decoration:none; font-weight:600;">
+                <img src="assets/img/whatsapp-logo.png" alt="וואצאפ" 
+                     style="width:36px; vertical-align:middle; margin-right:0.5rem;">
+                שלחו לנו בווצאפ
+              </a>
+            </div>
+          `;
+        }
+      });
+    </script>
  
 </body>
 </html>

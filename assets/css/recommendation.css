@@ -1,0 +1,233 @@
+/* ========== Reset & Base ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ========== Header ========== */
+.site-header {
+  background: #ffffff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo img {
+  height: 40px;
+}
+
+/* ========== Hamburger Button ========== */
+.hamburger {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 11;
+}
+.hamburger .bar {
+  width: 24px;
+  height: 3px;
+  background-color: #555;
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.hamburger:hover .bar {
+  background-color: #A07C38;
+}
+
+/* ========== Navigation Overlay ========== */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.nav-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+.nav-list {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  list-style: none;
+  text-align: center;
+  max-width: 90%;
+}
+.nav-list li {
+  margin: 1rem 0;
+}
+.nav-list a {
+  text-decoration: none;
+  font-size: 1.25rem;
+  color: #333;
+  transition: color 0.2s;
+}
+.nav-list a:hover,
+.nav-list a.active {
+  color: #A07C38;
+}
+
+/* ========== Main Content Card ========== */
+.testimonial-page {
+  padding: 2rem 0;
+}
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* ========== Form Styles ========== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+input[type="text"],
+input[type="file"],
+textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background: #fcfcfc;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #A07C38;
+}
+.optional-note {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* ========== File Upload Button ========== */
+input[type="file"] {
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button {
+  background-color: #A07C38;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+input[type="file"]::file-selector-button:hover {
+  background-color: #916D2B;
+  transform: translateY(-1px);
+}
+
+/* ========== Submit Button ========== */
+.btn-primary {
+  background-color: #A07C38;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: center;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ========== WhatsApp Contact ========== */
+.whatsapp-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.whatsapp-contact img {
+  width: 2rem;
+  height: auto;
+}
+
+/* ========== Footer ========== */
+.site-footer {
+  text-align: center;
+  padding: 1rem 0;
+  background: #ffffff;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .testimonial-page { padding: 1rem 0; }
+  .card { padding: 1.5rem; }
+  .title { font-size: 1.5rem; }
+  .subtitle { font-size: 0.9rem; }
+  input[type="text"],
+  input[type="file"],
+  textarea { font-size: 0.9rem; padding: 0.6rem 0.8rem; }
+  input[type="file"]::file-selector-button,
+  .btn-primary { font-size: 0.9rem; padding: 0.6rem 1rem; }
+  .whatsapp-contact span { font-size: 0.9rem; }
+}
