@@ -218,6 +218,16 @@
     .logos-span {
       display: none;
     }
+    .logo-icon {
+    display: block;
+    max-width: 12rem;
+    height: auto;
+  }
+
+  .logo-div {
+    padding: 0;
+    margin: 0;
+  }
   }
   @media (max-width: 400px) {
     .icon-nav li {
@@ -232,6 +242,11 @@
       padding: clamp(4px, 2vw, 12px) clamp(8px, 3vw, 20px);
       font-size: clamp(0.6rem, 2.5vw, 0.9rem);
     }
+      .logo-icon {
+    display: block;
+    max-width: 10rem;
+    height: auto;
+  }
   }
   
   nav
