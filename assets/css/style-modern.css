@@ -19,6 +19,8 @@ body {
 main {
   /* החלק המרכזי יתפוס את כל הגובה שנותר */
   flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 
@@ -608,4 +610,19 @@ footer {
       width: 12rem;
       height: auto;
     }
+  }
+  .about2
+  {
+    
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+   text-align: center;
+   font-family: Arial, sans-serif;
+   font-size: 1em;
+   
+ }
+  .RNRG
+  {
+    color: #f7c319;
   }

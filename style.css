@@ -48,7 +48,7 @@
   /* 2. לוגו בפינה עליונה ימנית */
   .logo-div {
     grid-area: logo;
-    justify-self:start ;   /* ימינה */
+    justify-self:end ;   /* ימינה */
     align-self: end;   /* למעלה */
     padding: 1rem;
   }
@@ -74,9 +74,9 @@
   }
   .contact-btn {
     
-    background-color: #00796b;
+    background-color: #fff;
 
-    color: #fff;
+    color:  #00796b;
     text-decoration: none;
     border-radius: 8px;
     transition: background-color 0.3s ease;
@@ -92,7 +92,7 @@
   }
   
 .contact-btn:hover {
-  background-color: #004d40;
+  background-color: #ffffffc0;
 }
 
   
