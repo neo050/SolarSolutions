@@ -12,6 +12,7 @@
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    
   }
   
   /* 1. הגדרת מכולת ה‑Hero */
@@ -186,8 +187,10 @@
 
 .benefit-item {
   background-color: #e0f2f1;
+   background-color: #419c829d; 
+   box-shadow:0 -1px 4px rgba(183, 176, 42, 0.9);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 6%;
   flex: 1 1 250px;
   max-width: 300px;
 }
@@ -285,4 +288,9 @@
   .carousel-control-next-icon {
 
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23aaa' d='M4.354 1.146a.5.5 0 0 1 0 .708L2.207 4l2.147 2.146a.5.5 0 0 1-.708.708l-2.5-2.5a.5.5 0 0 1 0-.708l2.5-2.5a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+  }
+
+  .RNRG
+  {
+    color: #f7c319;
   }
