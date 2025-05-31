@@ -626,3 +626,37 @@ footer {
   {
     color: #f7c319;
   }
+
+
+
+/* 1) הפוך כל project-item לטור Flex אנכי */
+.project-item{
+  display:flex;
+  flex-direction:column;
+  /* מונע גלילה פנימית והבהקים לבנים בזמן המעבר */
+  overflow:hidden;
+  border-radius:8px;     /* בונוס: פינות מעוגלות יפות */
+}
+
+/* 2) הקרוסלה ממלאת את כל הגובה הפנוי */
+.project-item .carousel-inner{
+  flex:1 0 auto;         /* גדל כדי למלא, אבל לא פחות מ-min-height */
+  min-height:300px;      /* גובה “בלוק” אחיד לכל התמונות */
+}
+
+/* 3) כל תמונה ממלאת 100 % מהמיכל – בלי שוליים לבנים */
+.project-item .carousel-item img{
+  width:100%;
+  height:100%;           /* במקום 300px → תמיד גובה בלוק */
+  object-fit:cover;      /* חותך/מגדיל כדי שלא יישארו פסי מילוי */
+  display:block;         /* מבטל רווח inline קטנטן */
+}
+
+/* 4) הכותרת נדבקת לתחתית באופן טבעי */
+.project-item .sticky-bottom{
+  padding:.75rem 1rem;
+  box-shadow:0 -1px 4px rgba(255,255,255,.9);
+       /* אם רוצים חצי שקוף: rgba(255,255,255,.9) */
+  font-weight: bold;
+}
+
