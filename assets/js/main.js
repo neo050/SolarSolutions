@@ -1,8 +1,13 @@
 /**************************************
  * 1) EmailJS INIT
  **************************************/
-// Initialize EmailJS (public key)
-emailjs.init("7BQ442uTTcxN1Owoa");
+// Initialize EmailJS (public key) if the library is loaded.
+// Some pages include main.js without loading EmailJS which caused
+// "emailjs is not defined" errors. Guarding the initialization ensures
+// that the script runs safely on every page.
+if (typeof emailjs !== "undefined") {
+  emailjs.init("7BQ442uTTcxN1Owoa");
+}
 
 /**************************************
  * 2) CONTACT FORM (contact.html)
