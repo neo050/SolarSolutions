@@ -638,7 +638,10 @@ footer {
   flex-direction:column;
   /* מונע גלילה פנימית והבהקים לבנים בזמן המעבר */
   overflow:hidden;
-  border-radius:8px;     /* בונוס: פינות מעוגלות יפות */
+  border-radius:6%;     /* בונוס: פינות מעוגלות יפות */
+
+   background-color: #419c829d; 
+   box-shadow:0 -1px 4px rgba(183, 176, 42, 0.9);
 }
 
 /* 2) הקרוסלה ממלאת את כל הגובה הפנוי */
