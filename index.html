@@ -1,234 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="מערכות סולאריות מתקדמות למכירה והתקנה. חסוך בחשמל ותמוך באיכות הסביבה עם טכנולוגיה ירוקה">
-  <meta name="keywords" content="מערכות סולאריות, פאנלים סולאריים, התקנת סולאריים, אנרגיה ירוקה, חסכון בחשמל">
-  <title>מערכות סולאריות - בית</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>בחירת שירות — חשמל / סולארי</title>
+  <meta name="description" content="דף נחיתה מינימליסטי לבחירת עמוד חשמל או עמוד סולארי" />
+  <!-- Heebo: clean Hebrew typeface -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#0e152f;
+      --text:#e5e7eb; --muted:#a6b3c6; --border:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Heebo",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 75% 10%, rgba(96,165,250,.18), transparent 60%),
+        radial-gradient(1200px 700px at 25% 90%, rgba(34,211,238,.18), transparent 60%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      background-size:200% 200%;
+      animation:bgShift 14s ease-in-out infinite;
+      display:grid; place-items:center; padding:2rem;
+    }
+    @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-  <!-- Bootstrap RTL CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    .container{width:min(1100px,100%); text-align:center}
+    .title{font-weight:800; letter-spacing:-.02em; font-size:clamp(1.6rem,2.2vw + 1rem,2.4rem)}
+    .subtitle{margin:.5rem 0 2rem; color:var(--muted)}
 
-  <!-- הסגנון שלכם -->
-  <link rel="stylesheet" href="style.css">
+    .grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(1rem,3vw,2rem); align-items:stretch}
+
+    a.card{position:relative; text-decoration:none; color:inherit; border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      backdrop-filter:blur(8px); border-radius:24px; padding-block:clamp(2rem,5vw,3rem);
+      display:grid; place-items:center; gap:1rem; box-shadow:0 10px 30px rgba(0,0,0,.18);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    a.card:hover{transform:translateY(-4px) scale(1.01); box-shadow:0 16px 40px rgba(0,0,0,.28); border-color:rgba(255,255,255,.22)}
+    a.card:focus-visible{outline:2px solid #93c5fd; outline-offset:4px}
+
+    /* Logo frame */
+    .logoWrap{width:clamp(110px,24vw,180px); aspect-ratio:1; border-radius:32px; display:grid; place-items:center; position:relative;
+      background:radial-gradient(120px 120px at 50% 30%, rgba(255,255,255,.15), rgba(255,255,255,.06));
+      border:1px solid var(--border); overflow:hidden;
+    }
+    .logoWrap::after{content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px;
+      background:linear-gradient(135deg, rgba(96,165,250,.6), rgba(34,211,238,.6));
+      -webkit-mask:linear-gradient(#0000,#0000),linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+    }
+    /* Variant accents */
+    .card[data-variant="electric"] .logoWrap::after{background:linear-gradient(135deg,#60a5fa,#22d3ee)}
+    .card[data-variant="solar"] .logoWrap::after{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+
+    .icon{width:54%; height:54%; display:block}
+    .label{font-weight:700; font-size:clamp(1rem,1.2vw + .6rem,1.25rem); letter-spacing:.02em}
+
+    /* Footer */
+    .footer{margin-top:2rem; color:var(--muted); font-size:.9rem}
+
+    @media (max-width: 720px){ .grid{grid-template-columns:1fr} }
+    @media (prefers-reduced-motion: reduce){ body{animation:none} a.card:hover{transform:none} }
+  </style>
 </head>
 <body>
+  <main class="container">
+    <h1 class="title"></h1>
+    <p class="subtitle"></p>
 
-  <main class="hero">
-    <div class="logo-div">
-      <a href="index.html" class="logo-img">
-        <img src="assets/img/solar solution logos/rnrg.png" alt="לוגו החברה" class="logo-icon">
+    <section class="grid" aria-label="קישורים מהירים לעמודי השירות">
+      <!-- Electric page card -->
+      <a class="card" data-variant="electric" href="/energy/" aria-label="מעבר לעמוד החשמל" title="מעבר לעמוד החשמל">
+        <div class="logoWrap" aria-hidden="true">
+          <!-- Image logo instead of SVG -->
+          <img src="assets/img/electric/logo.png" alt="לוגו חשמל" class="logo-icon" style="width:54%; height:auto; display:block" loading="lazy" decoding="async">
+        </div>
+        <div class="label">לעמוד החשמל</div>
       </a>
-      <!--  <h4>מערכות סולאריות מתקדמות</h4> -->
-     
 
+      <!-- Solar page card -->
+      <a class="card" data-variant="solar" href="solar.html" aria-label="מעבר לעמוד הסולארי" title="מעבר לעמוד הסולארי">
+        <div class="logoWrap" aria-hidden="true">
+          <!-- Image logo instead of SVG -->
+          <img src="assets/img/solar solution logos/rnrg.png" alt="לוגו החברה" class="logo-icon" style="width:54%; height:auto; display:block" loading="lazy" decoding="async">
+        </div>
+        <div class="label">לעמוד הסולארי</div>
+      </a>
+    </section>
+
+    <div class="footer" aria-hidden="true">
     </div>
-    <div class="hero-overlay"></div>
-    <nav class="icon-nav-container">
-      <ul class="icon-nav">
-        <li><button><a href="index.html" title="בית"><img src="assets/img/solar solution logos/2.svg" alt="בית"><span class="logos-span">בית</span></a></button></li>
-        <li><button><a href="about.html" title="על החברה"><img src="assets/img/solar solution logos/5.svg" alt="על החברה"><span class="logos-span">על החברה</span></a></button></li>
-        <li><button> <a href="solutions.html" title="פתרונות"><img src="assets/img/solar solution logos/1.svg" alt="פתרונות"><span class="logos-span">פתרונות</span></a></button></li>
-        <li><button > <a href="projects.html" title="פרויקטים"><img src="assets/img/solar solution logos/4.svg" alt="פרויקטים"><span class="logos-span">פרויקטים</span></a></button></li>
-        <li><button> <a href="contact.html" title="צור קשר"><img src="assets/img/solar solution logos/3.svg" alt="צור קשר"><span class="logos-span">צור קשר</span></a></button></li>
-      </ul>
-    </nav>
-   
-      <a href="CompatibilityCheck.html" class="contact-btn">לבדיקת התאמה</a>
-    
   </main>
 
- 
-
-  <!-- Benefits Section   color: #f7c319 ; -->
-  <section class="benefits">
-    <h2>למה לבחור במערכות שלנו?</h2>
-    <div class="benefits-grid">
-      <div class="benefit-item">
-        <p class="p-benefits">התאמת מערכת אישית לצרכי הלקוח</p>
-      </div>
-      <div class="benefit-item">
-        <p class="p-benefits">אמינות ושירות אישי מרגע ההזמנה ולשנים קדימה</p>
-      </div>
-      <div class="benefit-item">
-        <p class="p-benefits">החזר השקעה מהיר ומשתלם</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials Section with Bootstrap Carousel -->
-  <section class="testimonials py-5 ">
-    <div class="container">
-      <h2 class="text-center mb-4">לקוחות ממליצים</h2>
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <!-- אינדיקטורים -->
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Card 1"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Card 2"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Card 3"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Card 4"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Card 5"></button>
-        </div>
-
-        <!-- תוכן הקרוסלה -->
-        <div class="carousel-inner">
-          <!-- קלף 1 -->
-          <div class="carousel-item active">
-            <div class="card mx-auto" style="width: 18rem;">
-              <div class="position-relative" style="height: 60px;">
-                <img src="assets/img/ניר רווח, גני תקווה.jpg" alt="Icon" class="rounded-circle position-absolute" style="width: 70px; height: 70px; top: 10px; right: 10px;">
-              </div>
-              <div class="card-body text-center">
-                <h5 class="card-title">
-                  ניר רווח, גני תקווה
-                </h5>
-                <p class="card-text">
-                  מבקש ושמח להמליץ בחום על רוני חג'ג'!   
-                                  חשמלאי מקצועי ואמין.  
-                                  התקין אצלנו מערכת סולארית.  
-                                  עבודה יסודית עם גימור מעולה!!  
-                                  יותר מכל רוצה לציין את השירות האדיב של רוני שלא עזב אותנו עד שהכל היה מושלם.  
-                                  תמיד עם חיוך וסבלנות.   
-                                  בטוח שיגיע רחוק ב"ה.  
-                                 . בשורות טובות! 🤝
-
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- קלף 2 -->
-          <div class="carousel-item">
-            <div class="card mx-auto" style="width: 18rem;">
-              <div class="position-relative" style="height: 60px;">
-                <img src="assets/img/נועה חממי, בת עין.jpg" alt="Icon" class="rounded-circle position-absolute" style="width: 70px; height: 70px; top: 10px; right: 10px;">
-              </div>
-              <div class="card-body text-center">
-                <h5 class="card-title">
-                  נועה חממי, בת עין
-                 </h5>
-                <p class="card-text">
-                  הכרתי את רוני האלוף דרך פוסט שפרסמתי  
-                    בבתים על גלגלים  
-                    הייתי צריכה בנאדם תותח שיעשה לי חשמל  
-                    סולארי למשאית – והאמת הרבה המליצו עליו  
-                    אז יצרתי איתו קשר  
-                    הוא מקצועי עושה את העבודה עד לפרטים  
-                    הקטנים  
-                    כבר עברה יותר משנה ועד היום אני מרוצה  
-                    .מהעבודה שלו ❤️
-
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- קלף 3 -->
-          <div class="carousel-item">
-            <div class="card mx-auto" style="width: 18rem;">
-              <div class="position-relative" style="height: 60px;">
-                <img src="assets/img/בר טופז.jpg" alt="Icon" class="rounded-circle position-absolute" style="width: 70px; height: 70px; top: 10px; right: 10px;">
-              </div>
-              <div class="card-body text-center">
-                <h5 class="card-title">
-                  בר טופז, אשדוד
-                </h5>
-                <p class="card-text">
-                .אחרי תקופה שרציתי להתקין מערכת סולרית היה לי כול כך הרבה חששות למי לפנות עד שמצאתי את רוני הוא באמת מקצוען הוא הסביר לי את כול התהליך ומקסם את מלוא הפוטנציאלי של שהטח הפנוי שהיה לי כדי להתקין את המערכת ובעלות הכי שווה שמצאתי
-                ✌️
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-
-          <!-- קלף 4 -->
-          <div class="carousel-item">
-            <div class="card mx-auto" style="width: 18rem;">
-              <div class="position-relative" style="height: 60px;">
-                <img src="assets/img/רז אבישי.jpg" alt="Icon" class="rounded-circle position-absolute" style="width: 70px; height: 70px; top: 10px; right: 10px;">
-              </div>
-              <div class="card-body text-center">
-                <h5 class="card-title">
-                  רז אבישי, קיבוץ הרדוף
-                </h5>
-                <p class="card-text">
-                 . רוני מקצועי מאוד והכי חשוב בן אדם ישר ואכפתי ללקוחות , עשה אצלי עבודה מעולה , תמיד זמין לכל שאלה או עזרה 
-                 🙏
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-
-          
-
-          
-          <!-- קלף 5 -->
-          <div class="carousel-item">
-            <div class="card mx-auto" style="width: 18rem;">
-              <div class="position-relative" style="height: 60px;">
-                <img src="assets/img/אלכס.jpg" alt="Icon" class="rounded-circle position-absolute" style="width: 70px; height: 70px; top: 10px; right: 10px;">
-              </div>
-              <div class="card-body text-center">
-                <h5 class="card-title">
-                  אלכס סוחוליטקו, אשדוד
-                </h5>
-                <p class="card-text">
-  
-                 . ממליץ בחום בחור מקצועי מאוד בעבודות חשמל ,מחירים טובים השירות טוב
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-
-        </div>
-
-      
-          
-
-
-
-
-           <!-- כפתורי ניווט -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" >
-          <span class="carousel-control-prev-icon" aria-hidden="true" ></span>
-          <span class="visually-hidden">קודם</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">הבא</span>
-        </button>
-
-        </div>
-
-       
-
-        
-      </div>
-    </div>
-
-
-   
-  </section>
-
-  <!-- Footer -->
-    <footer>
-    <div class="container">
-      <p> 
-           כל הזכויות שמורות - חברת <span class="RNRG">RNRG</span>   
-      </p>
-      <p id="year"></p>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/main.js"></script>
+  <!-- No JavaScript needed; CSS handles animations & hover. -->
 </body>
 </html>
