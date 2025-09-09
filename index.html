@@ -4,98 +4,216 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>בחירת שירות — חשמל / סולארי</title>
-  <meta name="description" content="דף נחיתה מינימליסטי לבחירת עמוד חשמל או עמוד סולארי" />
-  <!-- Heebo: clean Hebrew typeface -->
+  <meta name="description" content="דף בחירה חד, מינימליסטי ומקצועי לשירותי חשמל וסולארי" />
+
+  <!-- Heebo for crisp Hebrew -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg1:#0b1020; --bg2:#0e152f;
-      --text:#e5e7eb; --muted:#a6b3c6; --border:rgba(255,255,255,.12);
+      /* Refined palette: near-black + violet with a gentle white tint */
+      --bg:#0b0b11;              /* near-black */
+      --bg2:#120e1b;             /* deep purple-black */
+      --ink:#F5F4FF;             /* primary text (soft white) */
+      --muted:#B7B3C9;           /* secondary text */
+      --border:#2E2A3C;          /* subtle border */
+      --violet:#8B5CF6;          /* main accent */
+      --violet-2:#C7B8FF;        /* light violet with white tint */
+      --whiteTint: rgba(255,255,255,.06);
+      --glow: rgba(139,92,246,.28); /* hover glow */
+      --cardGlass: rgba(255,255,255,.03);
+      --cardGlassTop: rgba(255,255,255,.06);
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:"Heebo",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
-      color:var(--text);
+      margin:0;
+      font-family:"Heebo", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Noto Sans", sans-serif;
+      color:var(--ink);
+      /* Softer background with a white-tinted violet wash */
       background:
-        radial-gradient(1200px 700px at 75% 10%, rgba(96,165,250,.18), transparent 60%),
-        radial-gradient(1200px 700px at 25% 90%, rgba(34,211,238,.18), transparent 60%),
-        linear-gradient(135deg,var(--bg1),var(--bg2));
-      background-size:200% 200%;
-      animation:bgShift 14s ease-in-out infinite;
-      display:grid; place-items:center; padding:2rem;
+        radial-gradient(1200px 700px at 80% 0%, rgba(139,92,246,.18), transparent 60%),
+        radial-gradient(1000px 600px at 15% 100%, rgba(199,184,255,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      background-size:180% 180%;
+      animation:bgShift 20s ease-in-out infinite;
+
+      display:grid; place-items:center; padding:clamp(16px,4vw,40px);
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-    .container{width:min(1100px,100%); text-align:center}
-    .title{font-weight:800; letter-spacing:-.02em; font-size:clamp(1.6rem,2.2vw + 1rem,2.4rem)}
-    .subtitle{margin:.5rem 0 2rem; color:var(--muted)}
-
-    .grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(1rem,3vw,2rem); align-items:stretch}
-
-    a.card{position:relative; text-decoration:none; color:inherit; border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      backdrop-filter:blur(8px); border-radius:24px; padding-block:clamp(2rem,5vw,3rem);
-      display:grid; place-items:center; gap:1rem; box-shadow:0 10px 30px rgba(0,0,0,.18);
-      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    @keyframes bgShift{
+      0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
     }
-    a.card:hover{transform:translateY(-4px) scale(1.01); box-shadow:0 16px 40px rgba(0,0,0,.28); border-color:rgba(255,255,255,.22)}
-    a.card:focus-visible{outline:2px solid #93c5fd; outline-offset:4px}
 
-    /* Logo frame */
-    .logoWrap{width:clamp(110px,24vw,180px); aspect-ratio:1; border-radius:32px; display:grid; place-items:center; position:relative;
-      background:radial-gradient(120px 120px at 50% 30%, rgba(255,255,255,.15), rgba(255,255,255,.06));
-      border:1px solid var(--border); overflow:hidden;
+    .wrap{width:min(1100px,100%)}
+
+    .title{
+      margin:0 0 .25rem;
+      font-size:clamp(1.6rem,1.2rem + 1.6vw,2.4rem);
+      font-weight:800; letter-spacing:-.02em;
+      background:linear-gradient(90deg, var(--ink) 0%, var(--violet-2) 80%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
     }
-    .logoWrap::after{content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px;
-      background:linear-gradient(135deg, rgba(96,165,250,.6), rgba(34,211,238,.6));
-      -webkit-mask:linear-gradient(#0000,#0000),linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+    .subtitle{
+      margin:0 0 2.2rem;
+      color:var(--muted);
+      font-size:clamp(.95rem,.9rem + .4vw,1.05rem);
     }
-    /* Variant accents */
-    .card[data-variant="electric"] .logoWrap::after{background:linear-gradient(135deg,#60a5fa,#22d3ee)}
-    .card[data-variant="solar"] .logoWrap::after{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
 
-    .icon{width:54%; height:54%; display:block}
-    .label{font-weight:700; font-size:clamp(1rem,1.2vw + .6rem,1.25rem); letter-spacing:.02em}
-
-    /* Footer */
-    .footer{margin-top:2rem; color:var(--muted); font-size:.9rem}
-
+    .grid{
+      display:grid; gap:clamp(16px,2.6vw,28px);
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
     @media (max-width: 720px){ .grid{grid-template-columns:1fr} }
-    @media (prefers-reduced-motion: reduce){ body{animation:none} a.card:hover{transform:none} }
+
+    /* Card — glassy, no rotating borders */
+    a.card{
+      position:relative; isolation:isolate;
+      display:grid; place-items:center; text-align:center; text-decoration:none; color:inherit;
+      padding:clamp(24px,4vw,34px);
+      border-radius:22px;
+      border:1px solid var(--border);
+      background:
+        linear-gradient(180deg, var(--cardGlassTop), var(--cardGlass));
+      box-shadow: 0 8px 28px rgba(0,0,0,.35);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
+    }
+    /* Top glossy film (very subtle) */
+    a.card::before{
+      content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), transparent 40%);
+      mix-blend-mode:screen; opacity:.5;
+    }
+    a.card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.5), 0 0 0 6px var(--glow);
+      border-color: rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), var(--cardGlass));
+    }
+    a.card:focus-visible{ outline:2px solid var(--violet-2); outline-offset:4px }
+
+    /* Logo frame — refined, no spinning effects */
+    .logoWrap{
+      width:clamp(120px,26vw,190px);
+      aspect-ratio:1;
+      border-radius:28px;
+      display:grid; place-items:center;
+      background:linear-gradient(180deg, #171522, #100F16);
+      border:1px solid #3A3550;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 12px 30px rgba(0,0,0,.45);
+      position:relative; overflow:hidden;
+    }
+    /* Gentle shimmer stripe across the logo only */
+    .logoWrap::before{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.09) 45%, rgba(199,184,255,.10) 50%, transparent 60%);
+      transform: translateX(-120%);
+      opacity:.0;
+      transition: opacity .35s ease;
+    }
+    a.card:hover .logoWrap::before{
+      opacity:.8;
+      animation: logoShimmer .9s ease forwards;
+    }
+    @keyframes logoShimmer{
+      to{ transform: translateX(120%) }
+    }
+    .logo{ width:64%; height:auto; display:block; object-fit:contain; z-index:1 }
+
+    .label{
+      margin-top:clamp(12px,1.6vw,16px);
+      font-weight:800; letter-spacing:.02em;
+      font-size:clamp(1rem,.9rem + .6vw,1.2rem);
+      color:var(--ink);
+    }
+
+    /* -------- Full-screen ultra-subtle wave + sparkles on hover (no JS) -------- */
+    /* Uses :has() — supported בכרום/אדג׳/ספארי מודרניים. Fallback: פשוט בלי האפקט. */
+    body::after, body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0;
+    }
+    /* Shimmer wave sweeping across screen */
+    body::after{
+      background:
+        linear-gradient(120deg,
+          transparent 30%,
+          rgba(255,255,255,.07) 45%,
+          rgba(199,184,255,.08) 50%,
+          rgba(255,255,255,.07) 55%,
+          transparent 70%);
+      transform: translateX(-120%);
+      filter: blur(0.5px);
+    }
+    /* Micro-sparkles (two dot grids, very faint, with white tint) */
+    body::before{
+      background-image:
+        radial-gradient(rgba(255,255,255,.10) 1px, transparent 1.6px),
+        radial-gradient(rgba(199,184,255,.08) 1px, transparent 1.8px);
+      background-size: 22px 22px, 34px 34px;
+      background-position: 0 0, 11px 9px;
+      filter: blur(.7px);
+    }
+
+    /* Trigger on any hovered card: sweep once + gentle twinkle */
+    body:has(.card:hover)::after{
+      opacity:1;
+      animation: sweep 1.25s ease-out forwards;
+    }
+    body:has(.card:hover)::before{
+      opacity:.28;
+      animation: twinkle 1.35s ease-out forwards;
+    }
+
+    @keyframes sweep{
+      0%   { transform:translateX(-120%) }
+      100% { transform:translateX(120%) }
+    }
+    @keyframes twinkle{
+      0%   { opacity:0;   background-position: 0 0, 11px 9px }
+      40%  { opacity:.28; background-position: 3px 2px, 14px 12px }
+      100% { opacity:.18; background-position: 0 0, 11px 9px }
+    }
+
+    /* Motion prefs */
+    @media (prefers-reduced-motion: reduce){
+      body{animation:none}
+      a.card:hover{transform:none}
+      .logoWrap::before{transition:none; animation:none}
+      body::after, body::before{display:none}
+    }
   </style>
 </head>
 <body>
-  <main class="container">
-    <h1 class="title"></h1>
+  <main class="wrap">
+    <h1 class="title">בחירת שירות</h1>
     <p class="subtitle"></p>
 
-    <section class="grid" aria-label="קישורים מהירים לעמודי השירות">
-      <!-- Electric page card -->
-      <a class="card" data-variant="electric" href="/energy/" aria-label="מעבר לעמוד החשמל" title="מעבר לעמוד החשמל">
+    <section class="grid" aria-label="קישורים לשירותים">
+      <!-- Electric -->
+      <a class="card" href="/energy/" aria-label="לעמוד החשמל" title="לעמוד החשמל">
         <div class="logoWrap" aria-hidden="true">
-          <!-- Image logo instead of SVG -->
-          <img src="assets/img/electric/logo.png" alt="לוגו חשמל" class="logo-icon" style="width:54%; height:auto; display:block" loading="lazy" decoding="async">
+          <img class="logo"
+               src="assets/img/electric/logo.png"
+               alt="לוגו — חשמל"
+               loading="lazy" decoding="async">
         </div>
         <div class="label">לעמוד החשמל</div>
       </a>
 
-      <!-- Solar page card -->
-      <a class="card" data-variant="solar" href="solar.html" aria-label="מעבר לעמוד הסולארי" title="מעבר לעמוד הסולארי">
+      <!-- Solar -->
+      <a class="card" href="solar.html" aria-label="לעמוד הסולארי" title="לעמוד הסולארי">
         <div class="logoWrap" aria-hidden="true">
-          <!-- Image logo instead of SVG -->
-          <img src="assets/img/solar solution logos/rnrg.png" alt="לוגו החברה" class="logo-icon" style="width:54%; height:auto; display:block" loading="lazy" decoding="async">
+          <img class="logo"
+               src="assets/img/solar solution logos/rnrg.png"
+               alt="לוגו — סולארי"
+               loading="lazy" decoding="async">
         </div>
         <div class="label">לעמוד הסולארי</div>
       </a>
     </section>
-
-    <div class="footer" aria-hidden="true">
-    </div>
   </main>
-
-  <!-- No JavaScript needed; CSS handles animations & hover. -->
 </body>
 </html>
