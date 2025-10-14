@@ -235,24 +235,16 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-teal-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 lg:h-24 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 md:h-28 lg:h-32 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="shrink-0 h-35 sm:h-19 md:h-23 lg:h-27 max-w-[260px] overflow-hidden">
-                <a href="/energy">
+            <div className="shrink-0 h-20 sm:h-24 md:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[520px] overflow-hidden">
+              <a href="/energy" className="inline-block h-full">
                 <img
                   src={PUBLIC_URL + "/images/gallery/logo.svg"}
-                  className="h-29 sm:h-18 md:h-22 lg:h-26 w-full object-cover"
+                  className="block h-full w-auto object-contain"
                   alt="עבודת חשמל מקצועית – התקנות ובטיחות"
-                  // className="w-full h-full object-cover"
-                  // loading="lazy"
-                  // decoding="async"
-                  // referrerPolicy="no-referrer"
-                  // onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                  //   const t = e.currentTarget as HTMLImageElement;A
-                  //   if (t.src !== FALLBACK_IMG) t.src = FALLBACK_IMG;
-                  // }}
                 />
-                </a>
+              </a>
             </div>
             <div>
               <div className="font-bold text-lg tracking-tight">רוני אנרג'י הנדסת חשמל</div>
