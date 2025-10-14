@@ -235,9 +235,9 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-teal-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 md:h-28 lg:h-32 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 md:h-32 lg:h-36 xl:h-40 2xl:h-44 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="shrink-0 h-20 sm:h-24 md:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[520px] overflow-hidden">
+            <div className="shrink-0 h-24 sm:h-28 md:h-32 lg:h-36 xl:h-40 2xl:h-44 max-w-[80vw] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[640px] xl:max-w-[720px] 2xl:max-w-[820px] overflow-hidden">
               <a href="/energy" className="inline-block h-full">
                 <img
                   src={PUBLIC_URL + "/images/gallery/logo.svg"}
