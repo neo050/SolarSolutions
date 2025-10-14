@@ -238,7 +238,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 lg:h-24 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="shrink-0 h-35 sm:h-19 md:h-23 lg:h-27 max-w-[260px] overflow-hidden">
-                
+                <a href="/energy">
                 <img
                   src={PUBLIC_URL + "/images/gallery/logo.svg"}
                   className="h-29 sm:h-18 md:h-22 lg:h-26 w-full object-cover"
@@ -252,6 +252,7 @@ export default function LandingPage() {
                   //   if (t.src !== FALLBACK_IMG) t.src = FALLBACK_IMG;
                   // }}
                 />
+                </a>
             </div>
             <div>
               <div className="font-bold text-lg tracking-tight">רוני אנרג'י הנדסת חשמל</div>
