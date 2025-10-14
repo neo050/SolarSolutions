@@ -5,6 +5,7 @@
   "homepage": "https://rnrg.co.il/energy",
   "scripts": {
     "start": "react-scripts start",
+    "dev": "set PORT=3002 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

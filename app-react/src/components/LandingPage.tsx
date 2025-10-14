@@ -20,12 +20,12 @@ import {
 const BRAND = {
   name: "RNRG | רוני חג׳ג׳",
   tagline: "חשמלאי מוסמך וראשי · הנדסאי חשמל",
-  license: "מס׳ רישיון חשמלאי ראשי: ______",
+  license: "מס׳ רישיון חשמלאי ראשי: 991433",
   phone: "+972546656076", // E.164 format
   phonePretty: "054-665-6076",
   whatsapp: "+972546656076", // same number for WhatsApp
-  email: "roni.h1509@gmail.com",
-  siteUrl: "https://www.example.com", // ← change to your domain
+  email: "office@rnrg.co.il",
+  siteUrl: "https://rnrg.co.il/", // ← change to your domain
   areas: "מאזור מצפה רמון ועד עמק חפר",
   address: {
     country: "ישראל",
@@ -42,13 +42,16 @@ const BRAND = {
   leadEndpoint: "", // e.g. "/api/lead" | Google Apps Script URL | leave empty to disable
 };
 
+// Public base URL (CRA uses this when homepage is set)
+const PUBLIC_URL = process.env.PUBLIC_URL || "";
+
 /** Services, trust points, and gallery are extracted so content can be edited easily. */
 const SERVICES = [
   { title: "החלפת/חידוש לוחות חשמל", desc: "תכנון, חיווט מסודר, הגנות מתקדמות ותיוג מלא", icon: <Home className="w-6 h-6" /> },
-  { title: "שדרוג לתלת פאזי", desc: "כולל טיפול מול חברת החשמל ותיאום מול קבלנים", icon: <Zap className="w-6 h-6" /> },
-  { title: "בדיקות ואישורים לביטוח", desc: "בדיקת הארקה, לולאת תקלה, דו\"ח ואישור חשמלאי ראשי", icon: <ShieldCheck className="w-6 h-6" /> },
-  { title: "תאורה אדריכלית", desc: "עיצוב ותכנון גופי תאורה המייצרים תחושת יוקרה", icon: <Lightbulb className="w-6 h-6" /> },
-  { title: "חשמל תעשייתי ועסקי", desc: "לוחות קומתיים/ראשיים, מסלעות, תעלות, תחזוקה", icon: <Building2 className="w-6 h-6" /> },
+  { title: "שדרוג לתלת פאזי", desc: " כולל בדיקות מקדימות והתאמה לתקן עדכני", icon: <Zap className="w-6 h-6" /> },
+  { title: "בדיקות ואישורים לביטוח", desc: "בדיקת הארקה, לולאת תקלה, בדיקת התנגדות הבידוד", icon: <ShieldCheck className="w-6 h-6" /> },
+  { title: "תאורה אדריכלית", desc: "עיצוב ותכנון פריסת גופי תאורה", icon: <Lightbulb className="w-6 h-6" /> },
+  { title: "מסחרי/עסקי", desc: "תכנון והרכבה, תשתיות, לוחות, תעלות ותחזוקה", icon: <Building2 className="w-6 h-6" /> },
   { title: "מערכות סולאריות", desc: "תכנון והתקנה לצרכן הביתי והעסקי – חיסכון בחחשמל", icon: <Sun className="w-6 h-6" /> },
 ];
 
@@ -59,14 +62,14 @@ const TRUST_POINTS = [
 ];
 
 const GALLERY = [
-  { src: "/images/gallery/1.svg", alt: "לוח חשמל ביתי מסודר ואסתטי" },
-  { src: "/images/gallery/2.svg", alt: "לוח חשמל תעשייתי עם הגנות מתקדמות" },
-  { src: "/images/gallery/3.svg", alt: "תאורה לחלל מעוצב – תאורה אדריכלית" },
-  { src: "/images/gallery/4.svg", alt: "גופי תאורה יוקרתיים – עיצוב פנים" },
-  { src: "/images/gallery/5.svg", alt: "חשמלאי מוסמך בעבודת שטח מוקפדת" },
-  { src: "/images/gallery/6.svg", alt: "תאורת LED חסכונית – פתרונות חסכון באנרגיה" },
-  { src: "/images/gallery/7.svg", alt: "תשתיות חשמל במפעל ועסקים" },
-  { src: "/images/gallery/8.svg", alt: "חיווט מסודר ומאובטח – קופסת נתיכים" },
+  { src: PUBLIC_URL + "/images/gallery/1.svg", alt: "לוח חשמל ביתי מסודר ואסתטי" },
+  { src: PUBLIC_URL + "/images/gallery/2.svg", alt: "לוח חשמל תעשייתי עם הגנות מתקדמות" },
+  { src: PUBLIC_URL + "/images/gallery/3.svg", alt: "תאורה לחלל מעוצב – תאורה אדריכלית" },
+  { src: PUBLIC_URL + "/images/gallery/4.svg", alt: "גופי תאורה יוקרתיים – עיצוב פנים" },
+  { src: PUBLIC_URL + "/images/gallery/5.svg", alt: "חשמלאי מוסמך בעבודת שטח מוקפדת" },
+  { src: PUBLIC_URL + "/images/gallery/6.svg", alt: "תאורת LED חסכונית – פתרונות חסכון באנרגיה" },
+  { src: PUBLIC_URL + "/images/gallery/7.svg", alt: "תשתיות חשמל במפעל ועסקים" },
+  { src: PUBLIC_URL + "/images/gallery/8.svg", alt: "חיווט מסודר ומאובטח – קופסת נתיכים" },
 ];
 
 // Testimonials content
@@ -77,7 +80,7 @@ const TESTIMONIALS = [
     work: "חידוש לוח חשמל ותאורה",
     text:
       "רוני עשה עבודה מדהימה, מסודרת ואסתטית. קיבלנו הסבר מלא על כל שלב ובטיחות מעל הכול.",
-    img: "/images/testimonials/1.svg",
+    img: PUBLIC_URL + "/images/testimonials/1.svg",
   },
   {
     name: "דניאל ר.",
@@ -85,7 +88,7 @@ const TESTIMONIALS = [
     work: "שדרוג לתלת פאזי",
     text:
       "טיפול מלא מול חברת החשמל ותיאום באתר בזמן. העבודה נקייה ומקצועית, ממליץ בחום!",
-    img: "/images/testimonials/2.svg",
+    img: PUBLIC_URL + "/images/testimonials/2.svg",
   },
   {
     name: "גיל ל.",
@@ -93,7 +96,7 @@ const TESTIMONIALS = [
     work: "תאורה אדריכלית בסלון",
     text:
       "הצעת פתרונות חכמים ששדרגו את העיצוב. התוצאה נראית יוקרתית ומאירה את החלל בצורה מושלמת.",
-    img: "/images/testimonials/3.svg",
+    img: PUBLIC_URL + "/images/testimonials/3.svg",
   },
   {
     name: "אלמוג ק.",
@@ -101,7 +104,7 @@ const TESTIMONIALS = [
     work: "בדיקה ואישור לביטוח",
     text:
       "בדיקות תקן יסודיות וקיבלנו דו" + "\"" + "ח מסודר. השירות היה מהיר ומדויק.",
-    img: "/images/testimonials/4.svg",
+    img: PUBLIC_URL + "/images/testimonials/4.svg",
   },
   {
     name: "רותם ש.",
@@ -109,12 +112,12 @@ const TESTIMONIALS = [
     work: "תשתיות חשמל לעסק",
     text:
       "פרויקט מורכב שבוצע במקצועיות ובתיאום מלא עם הקבלנים. רוני זמין ושקוף לאורך כל הדרך.",
-    img: "/images/testimonials/5.svg",
+    img: PUBLIC_URL + "/images/testimonials/5.svg",
   },
 ];
 
 // Local fallback image for when remote images cannot load (e.g., network/CORS/AdBlock)
-const FALLBACK_IMG = "/images/placeholder.svg";
+const FALLBACK_IMG = PUBLIC_URL + "/images/placeholder.svg";
 
 /* =========================
    Helpers
@@ -232,15 +235,27 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-teal-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-2xl bg-teal-500 text-white shadow" aria-hidden>
-              <Zap className="w-5 h-5" />
+            <div className="shrink-0 h-12 sm:h-14 md:h-16 lg:h-20">
+                <img
+                  src={PUBLIC_URL + "/images/gallery/logo.svg"}
+                  className="h-full w-auto object-contain"
+                  alt="עבודת חשמל מקצועית – התקנות ובטיחות"
+                  // className="w-full h-full object-cover"
+                  // loading="lazy"
+                  // decoding="async"
+                  // referrerPolicy="no-referrer"
+                  // onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  //   const t = e.currentTarget as HTMLImageElement;
+                  //   if (t.src !== FALLBACK_IMG) t.src = FALLBACK_IMG;
+                  // }}
+                />
             </div>
-            <div>
+            {/* <div>
               <div className="font-bold text-lg tracking-tight">{BRAND.name}</div>
-              <div className="text-sm text-gray-600">{BRAND.tagline}</div>
-            </div>
+             
+            </div> */}
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm" aria-label="Primary">
             <a href="#services" className="hover:text-teal-700">
@@ -281,7 +296,6 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
-
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,rgba(13,148,136,0.15),transparent_40%),radial-gradient(ellipse_at_bottom_left,rgba(244,63,94,0.12),transparent_40%)]" />
@@ -289,14 +303,15 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
-                חשמלאי מוסמך וראשי · הנדסאי חשמל
-                <span className="block text-teal-700">מומחה בכל עבודות החשמל – ביתי, עסקי ותעשייתי</span>
+               הנדסאי חשמל בעל תעודת חשמלאי ראשי
+                <span className="block text-teal-700"> מבצע מגוון עבודות חשמל </span>
+                <span className="block text-teal-700">   ביתי • מסחרי • תעשייתי</span>
               </h1>
               <p className="mt-5 text-lg text-gray-700">
-                מעל 8 שנות ניסיון עם מיטב הקבלנים, הקפדה על תקן ישראלי, בטיחות ללא פשרות וגימור אסתטי. שירות מהיר, אמין ושקוף{" "}
-                {`(${BRAND.areas})`}.
+                מעל 8 שנות נסיון עם קבלנים, אדריכלים ופרטיים, הקפדה על תקן ישראלי, בטיחות ללא פשרות וגימור אסתטי. שירות מהיר, אמין ושקוף{" "}
+            
               </p>
-              <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">
+              {/* <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">
                 {[
                   { icon: <CheckCircle className="w-4 h-4 text-teal-600" />, txt: "לוחות חשמל – החלפה, חידוש ושדרוג לתלת פאזי" },
                   {
@@ -311,7 +326,7 @@ export default function LandingPage() {
                     <span>{i.txt}</span>
                   </li>
                 ))}
-              </ul>
+              </ul> */}
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <a
                   href={`tel:${BRAND.phone}`}
@@ -343,7 +358,7 @@ export default function LandingPage() {
             >
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-teal-100">
                 <img
-                  src="/images/hero.svg"
+                  src={PUBLIC_URL + "/images/hero.svg"}
                   alt="עבודת חשמל מקצועית – התקנות ובטיחות"
                   className="w-full h-full object-cover"
                   loading="lazy"
@@ -623,7 +638,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <div className="font-semibold">{BRAND.name}</div>
-              <div>{BRAND.tagline}</div>
+         
               <div className="text-xs mt-1">{BRAND.license}</div>
             </div>
             <div className="flex gap-3">
