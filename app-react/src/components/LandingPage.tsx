@@ -72,6 +72,22 @@ const GALLERY = [
   { src: PUBLIC_URL + "/images/gallery/8.svg", alt: "חיווט מסודר ומאובטח – קופסת נתיכים" },
 ];
 
+// Grouped topics for the gallery (3 cards, each auto-rotates its images)
+const TOPIC_GALLERIES: { title: string; images: string[] }[] = [
+  {
+    title: "לוחות חשמל",
+    images: [GALLERY[0].src, GALLERY[1].src, GALLERY[3].src].filter(Boolean),
+  },
+  {
+    title: "תשתיות ותעלות",
+    images: [GALLERY[4].src, GALLERY[6].src, GALLERY[7].src].filter(Boolean),
+  },
+  {
+    title: "התקנות תאורה",
+    images: [GALLERY[2].src, GALLERY[3].src, GALLERY[5].src].filter(Boolean),
+  },
+];
+
 // Testimonials content
 const TESTIMONIALS = [
   {
@@ -150,6 +166,51 @@ function makeWaLink(text: string) {
   const base = `https://wa.me/${e164(BRAND.whatsapp).replace("+", "")}`;
   const query = `?text=${encodeURIComponent(text)}`;
   return `${base}${query}`;
+}
+
+// Small rotating image component for topic cards
+function RotatingImage({
+  sources,
+  alt,
+  intervalMs = 3000,
+  heightClass = "h-52",
+}: {
+  sources: string[];
+  alt: string;
+  intervalMs?: number;
+  heightClass?: string;
+}) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!sources || sources.length <= 1) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % sources.length);
+    }, intervalMs);
+    return () => clearInterval(id);
+  }, [sources, intervalMs]);
+
+  if (!sources || sources.length === 0) return null;
+
+  return (
+    <div className={`relative ${heightClass}`}>
+      {sources.map((src, i) => (
+        <img
+          key={`${src}-${i}`}
+          src={src}
+          alt={alt}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 transition-transform ${i === index ? "opacity-100" : "opacity-0"} group-hover:scale-105`}
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            const t = e.currentTarget as HTMLImageElement;
+            if (t.src !== FALLBACK_IMG) t.src = FALLBACK_IMG;
+          }}
+        />
+      ))}
+    </div>
+  );
 }
 
 /* =========================
@@ -404,25 +465,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between mb-6">
             <h2 className="text-2xl sm:text-3xl font-extrabold">גלריית עבודות</h2>
-            <div className="text-sm text-gray-600">לוחות חשמל ביתיים ותעשייתיים · גופי תאורה מיוחדים · חללים מעוצבים</div>
+            <div className="text-sm text-gray-600">לוחות חשמל ביתיים ותעשייתיים  ·גופי תאורה מיוחדים · חללים מעוצבים</div>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {GALLERY.map((g, idx) => (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {TOPIC_GALLERIES.map((topic, idx) => (
               <div key={idx} className="group relative overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
-                <img
-                  src={g.src}
-                  alt={g.alt}
-                  className="h-52 w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                    const t = e.currentTarget as HTMLImageElement;
-                    if (t.src !== window.location.origin + FALLBACK_IMG) t.src = FALLBACK_IMG;
-                  }}
-                />
+                <RotatingImage sources={topic.images} alt={topic.title} heightClass="h-56 md:h-64" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition" />
-                <span className="absolute bottom-2 right-2 text-white text-xs bg-black/40 px-2 py-0.5 rounded-full">{g.alt}</span>
+                <span className="absolute bottom-2 right-2 text-white text-xs bg-black/40 px-2 py-0.5 rounded-full">{topic.title}</span>
               </div>
             ))}
           </div>
