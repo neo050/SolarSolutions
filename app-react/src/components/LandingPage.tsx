@@ -237,7 +237,8 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-teal-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 lg:h-24 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="shrink-0 h-14 sm:h-16 md:h-20 lg:h-24 max-w-[220px] overflow-hidden">
+            <div className="shrink-0 h-16 sm:h-18 md:h-22 lg:h-26 max-w-[260px] overflow-hidden">
+                
                 <img
                   src={PUBLIC_URL + "/images/gallery/logo.svg"}
                   className="h-full w-auto object-contain"
@@ -302,15 +303,18 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
-               הנדסאי חשמל בעל תעודת חשמלאי ראשי
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+                  חברת RNRG בבעלותו של רוני חג׳ג׳ - הנדסאי חשמל בעל תעודת ביצוע של חשמלאי ראשי.<br />
+                  החברה מבצעת  מגוון עבודות חשמל בסקטור ביתי • מסחרי • תעשייתי.<br />
+        
+               {/* הנדסאי חשמל בעל תעודת חשמלאי ראשי
                 <span className="block text-teal-700"> מבצע מגוון עבודות חשמל </span>
-                <span className="block text-teal-700">   ביתי • מסחרי • תעשייתי</span>
-              </h1>
-              <p className="mt-5 text-lg text-gray-700">
+                <span className="block text-teal-700">   ביתי • מסחרי • תעשייתי</span> */}
+              </h2>
+              <h2 className="mt-5 text-lg sm:text-xl text-gray-700 font-medium leading-relaxed">
                 מעל 8 שנות נסיון עם קבלנים, אדריכלים ופרטיים, הקפדה על תקן ישראלי, בטיחות ללא פשרות וגימור אסתטי. שירות מהיר, אמין ושקוף{" "}
             
-              </p>
+              </h2>
               {/* <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">
                 {[
                   { icon: <CheckCircle className="w-4 h-4 text-teal-600" />, txt: "לוחות חשמל – החלפה, חידוש ושדרוג לתלת פאזי" },
