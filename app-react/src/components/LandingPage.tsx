@@ -235,9 +235,9 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-teal-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 md:h-20 lg:h-24 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="shrink-0 h-12 sm:h-14 md:h-16 lg:h-20">
+            <div className="shrink-0 h-14 sm:h-16 md:h-20 lg:h-24 max-w-[200px] overflow-hidden">
                 <img
                   src={PUBLIC_URL + "/images/gallery/logo.svg"}
                   className="h-full w-auto object-contain"
