@@ -62,30 +62,30 @@ const TRUST_POINTS = [
 ];
 
 const GALLERY = [
-  { src: PUBLIC_URL + "/images/gallery/1.svg", alt: "לוח חשמל ביתי מסודר ואסתטי" },
-  { src: PUBLIC_URL + "/images/gallery/2.svg", alt: "לוח חשמל תעשייתי עם הגנות מתקדמות" },
-  { src: PUBLIC_URL + "/images/gallery/3.svg", alt: "תאורה לחלל מעוצב – תאורה אדריכלית" },
-  { src: PUBLIC_URL + "/images/gallery/4.svg", alt: "גופי תאורה יוקרתיים – עיצוב פנים" },
-  { src: PUBLIC_URL + "/images/gallery/5.svg", alt: "חשמלאי מוסמך בעבודת שטח מוקפדת" },
-  { src: PUBLIC_URL + "/images/gallery/6.svg", alt: "תאורת LED חסכונית – פתרונות חסכון באנרגיה" },
-  { src: PUBLIC_URL + "/images/gallery/7.svg", alt: "תשתיות חשמל במפעל ועסקים" },
-  { src: PUBLIC_URL + "/images/gallery/8.svg", alt: "חיווט מסודר ומאובטח – קופסת נתיכים" },
+  { src: PUBLIC_URL + "/images/gallery/לוח חשמל 1.jpeg", alt: "לוח חשמל ביתי מסודר ואסתטי" },
+  { src: PUBLIC_URL + "/images/gallery/לוח חשמל 2.jpeg", alt: "לוח חשמל תעשייתי עם הגנות מתקדמות" },
+  { src: PUBLIC_URL + "/images/gallery/לוח חשמל 3.jpeg", alt: "תאורה לחלל מעוצב – תאורה אדריכלית" },
+  { src: PUBLIC_URL + "/images/gallery/לוח חשמל 4.jpeg", alt: "גופי תאורה יוקרתיים – עיצוב פנים" },
+  { src: PUBLIC_URL + "/images/gallery/לוח חשמל 5.jpeg", alt: "חשמלאי מוסמך בעבודת שטח מוקפדת" },
+  { src: PUBLIC_URL + "/images/gallery/תאורה 1.jpeg", alt: "תאורת LED חסכונית – פתרונות חסכון באנרגיה" },
+  { src: PUBLIC_URL + "/images/gallery/תאורה 2.jpeg", alt: "תשתיות חשמל במפעל ועסקים" },
+  { src: PUBLIC_URL + "/images/gallery/תאורה 3.jpeg", alt: "חיווט מסודר ומאובטח – קופסת נתיכים" },
 ];
 
 // Grouped topics for the gallery (3 cards, each auto-rotates its images)
 const TOPIC_GALLERIES: { title: string; images: string[] }[] = [
   {
     title: "לוחות חשמל",
-    images: [GALLERY[0].src, GALLERY[1].src, GALLERY[3].src].filter(Boolean),
-  },
-  {
-    title: "תשתיות ותעלות",
-    images: [GALLERY[4].src, GALLERY[6].src, GALLERY[7].src].filter(Boolean),
+    images: [GALLERY[0].src, GALLERY[1].src, GALLERY[2].src,GALLERY[3].src, GALLERY[4].src].filter(Boolean),
   },
   {
     title: "התקנות תאורה",
-    images: [GALLERY[2].src, GALLERY[3].src, GALLERY[5].src].filter(Boolean),
+    images: [GALLERY[5].src, GALLERY[6].src, GALLERY[7].src].filter(Boolean),
   },
+  // {
+  //   title: "תשתיות ותעלות",
+  //   images: [GALLERY[2].src, GALLERY[3].src, GALLERY[5].src].filter(Boolean),
+  // },
 ];
 
 // Testimonials content
