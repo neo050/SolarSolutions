@@ -1,0 +1,738 @@
+{
+  "generatedAt": null,
+  "stats": {
+    "sourceTotal": 19,
+    "sourceAvailable": 14,
+    "awaitingUpload": 4,
+    "quarantined": 1,
+    "generateTotal": 8,
+    "generatable": 5,
+    "blockedOnPhoto": 3
+  },
+  "source": [
+    {
+      "id": "SRC-PANEL-001",
+      "category": "ELECTRICAL",
+      "path": "/images/gallery/panel-01-hero.jpeg",
+      "originalName": "לוח חשמל 1.jpeg",
+      "people": "ללא אנשים",
+      "contains": "לוח חשמל ביתי פתוח, שורת מאמתים CHINT, ממסר פחת, ותוויות מודפסות בעברית לכל מעגל (מזגן, כירה, דוד, מטבח, ראשי). מסודר ומתויג במלואו.",
+      "workType": [
+        "private",
+        "electrical"
+      ],
+      "quality": "high",
+      "dimensions": "1248×936 (נגזר מ-1600×1200)",
+      "potentialUse": [
+        "Hero",
+        "Service",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [
+        "Crop — בוצע"
+      ],
+      "notes": "התמונה המקורית כללה בקצה השמאלי ארגז כלים עם מספר טלפון של צד שלישי (050-3440004). נגזרו 22% משמאל והוא הוסר. זו התמונה הנוחה ביותר לשימוש: היחידה בפורמט לרוחב.",
+      "status": "IN USE",
+      "usedOn": [
+        "/",
+        "/electrical/",
+        "/electrical/panels/"
+      ]
+    },
+    {
+      "id": "SRC-PANEL-002",
+      "category": "ELECTRICAL",
+      "path": "/images/_quarantine/panel-02.jpeg",
+      "originalName": "לוח חשמל 2.jpeg",
+      "people": "ללא אנשים",
+      "contains": "שני לוחות סמוכים — ישן עם חיווט חשוף לצד חדש ומסודר. מתעד יפה 'לפני ואחרי'.",
+      "workType": [
+        "private",
+        "electrical"
+      ],
+      "quality": "medium",
+      "dimensions": "1600×1200",
+      "potentialUse": [
+        "Reference Only"
+      ],
+      "aiReference": false,
+      "treatment": [
+        "Blocked"
+      ],
+      "notes": "בידוד. על הארון שמתחת מודבקת מדבקה של חשמלאי אחר: 'חשמלאי מוסמך · רוני בורוכוב · 058-5442623'. התמונה שימשה כתמונה הראשית של דף הבית ושל עמוד הקבלנות. אסור לשימוש עד להבהרה — ראה gap provenance.panel-02.",
+      "status": "QUARANTINED",
+      "usedOn": []
+    },
+    {
+      "id": "SRC-PANEL-003",
+      "category": "ELECTRICAL",
+      "path": "/images/gallery/panel-03.jpeg",
+      "originalName": "לוח חשמל 3.jpeg",
+      "people": "ללא אנשים",
+      "contains": "לוח דירתי בבניין משותף, מסומן 'דירה 17'. מאמתים ABB, פחת ראשי, תוויות לבנות לכל מעגל.",
+      "workType": [
+        "private",
+        "contracting"
+      ],
+      "quality": "high",
+      "dimensions": "1131×1600 (לאורך)",
+      "potentialUse": [
+        "Service",
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "הסימון 'דירה 17' הוא ראיה שימושית לעבודה בבניין רב-דיירים, כלומר בהקשר קבלני ולא ביתי.",
+      "status": "IN USE",
+      "usedOn": [
+        "/electrical/panels/"
+      ]
+    },
+    {
+      "id": "SRC-PANEL-004",
+      "category": "ELECTRICAL",
+      "path": "/images/gallery/panel-04.jpeg",
+      "originalName": "לוח חשמל 4.jpeg",
+      "people": "ללא אנשים",
+      "contains": "לוח דירתי עם מונה NISKO, פחת ראשי, מפסק ראשי ופיצול פאזות (L3+0). תיוג מודפס בעברית לכל רכיב, כולל 'מונה דירה 2'.",
+      "workType": [
+        "private",
+        "contracting"
+      ],
+      "quality": "high",
+      "dimensions": "1131×1600 (לאורך)",
+      "potentialUse": [
+        "Service",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "התמונה הטובה ביותר להדגמת איכות התיוג. 'מונה דירה 2' מעיד שוב על הקשר רב-דיירים.",
+      "status": "IN USE",
+      "usedOn": [
+        "/electrical/panels/"
+      ]
+    },
+    {
+      "id": "SRC-PANEL-005",
+      "category": "CONTRACTING",
+      "path": "/images/gallery/panel-05.jpeg",
+      "originalName": "לוח חשמל 5.jpeg",
+      "people": "ללא אנשים",
+      "contains": "לוח מסחרי גדול בן 72 מודולים בארבע שורות — Hager, בקר בידוד ISO-2, מאמתים תלת-פאזיים, מגענים Eaton, ומספור מלא של המקומות. מותקן בקיר גבס בשלב גמר.",
+      "workType": [
+        "contracting",
+        "commercial"
+      ],
+      "quality": "high",
+      "dimensions": "1500×2000 (לאורך) · גזירה לרוחב 1500×1125",
+      "potentialUse": [
+        "Hero",
+        "Contracting",
+        "Service",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [
+        "Crop לרוחב — בוצע"
+      ],
+      "notes": "הנכס החזק ביותר בכל הספרייה להוכחת יכולת מעבר לביתי, והיה מתויג באתר כ'עבודת חיווט בלוח חשמל'. הועלה לתמונה הראשית של ענף הקבלנות.",
+      "status": "IN USE",
+      "usedOn": [
+        "/contracting/",
+        "/electrical/panels/"
+      ]
+    },
+    {
+      "id": "SRC-COMMERCIAL-001",
+      "category": "CONTRACTING",
+      "path": "/images/gallery/lighting-01.jpeg",
+      "originalName": "תאורה 1.jpeg",
+      "people": "ללא אנשים",
+      "contains": "פרויקט מסחרי בשלב בנייה: תקרת גבס פתוחה עם פתחים עגולים לגופי תאורה, צנרת שרשורית, מוליכים משוכים ומחכים, סולם, ותוכניות מודבקות על הקיר. במסגרת התחתונה נראה שילוט 'Luna Park of flavors'.",
+      "workType": [
+        "contracting",
+        "commercial",
+        "electrical"
+      ],
+      "quality": "high",
+      "dimensions": "1080×1353 (לאורך) · גזירה לרוחב 1080×810",
+      "potentialUse": [
+        "Hero",
+        "Contracting",
+        "Service",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [
+        "Crop לרוחב — בוצע"
+      ],
+      "notes": "מתעד שלב תשתית בפרויקט אמיתי. סותר את ההנחה הקודמת שאין באתר ולו תמונה אחת משלב בנייה. הפכה לתמונה הראשית של עמוד התשתיות.",
+      "status": "IN USE",
+      "usedOn": [
+        "/contracting/infrastructure/",
+        "/electrical/lighting/"
+      ]
+    },
+    {
+      "id": "SRC-COMMERCIAL-002",
+      "category": "CONTRACTING",
+      "path": "/images/gallery/lighting-02.jpeg",
+      "originalName": "תאורה 2.jpeg",
+      "people": "ללא אנשים",
+      "contains": "אותו חלל מסחרי לאחר גמר, בזווית רחבה: תקרה צבועה בפסים ורודים ולבנים, גופי תאורה שקועים, פסי תאורה שחורים, גלריה של קניון ברקע.",
+      "workType": [
+        "contracting",
+        "commercial",
+        "electrical"
+      ],
+      "quality": "high",
+      "dimensions": "2048×945 (פנורמי)",
+      "potentialUse": [
+        "Service",
+        "Marketing",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "יחס רחב מאוד — מתאים לבאנר או לרצועת רוחב מלא, פחות לכרטיס.",
+      "status": "IN USE",
+      "usedOn": [
+        "/electrical/lighting/"
+      ]
+    },
+    {
+      "id": "SRC-COMMERCIAL-003",
+      "category": "CONTRACTING",
+      "path": "/images/gallery/lighting-03.jpeg",
+      "originalName": "תאורה 3.jpeg",
+      "people": "ללא אנשים",
+      "contains": "פריסת גופי תאורה בתקרה מסחרית, זווית קרובה יותר.",
+      "workType": [
+        "commercial",
+        "electrical"
+      ],
+      "quality": "medium",
+      "dimensions": "1200×1600 (לאורך)",
+      "potentialUse": [
+        "Service",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "משלימה את הסדרה. פחות חזקה מ-001 ומ-004.",
+      "status": "IN USE",
+      "usedOn": [
+        "/electrical/lighting/"
+      ]
+    },
+    {
+      "id": "SRC-COMMERCIAL-004",
+      "category": "CONTRACTING",
+      "path": "/images/gallery/lighting-04.jpeg",
+      "originalName": "תאורה 4.jpeg",
+      "people": "ללא אנשים",
+      "contains": "החלל המסחרי הגמור, הזווית הטובה ביותר: תאורה שקועה, פסי תאורה על מסילה, תאורת הדגשה, דלפק שירות, ויטרינות. שילוט המותג נראה בבירור.",
+      "workType": [
+        "commercial",
+        "electrical"
+      ],
+      "quality": "high",
+      "dimensions": "1500×2000 (לאורך) · גזירה לרוחב 1500×1125",
+      "potentialUse": [
+        "Hero",
+        "Service",
+        "Marketing",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [
+        "Crop לרוחב — בוצע"
+      ],
+      "notes": "התמונה המסחרית המרשימה ביותר. מותג הלקוח גלוי — טעון אישור פרסום (gap consent.commercial-client-brand).",
+      "status": "IN USE",
+      "usedOn": [
+        "/electrical/lighting/",
+        "/contracting/commercial/"
+      ]
+    },
+    {
+      "id": "SRC-SOLAR-001",
+      "category": "SOLAR",
+      "path": "/images/projects/argaman-revivim.webp",
+      "people": "ללא אנשים",
+      "contains": "מערכת סולארית 22 קילוואט על גג בית פרטי, קיבוץ רביבים. המערכת הגדולה המתועדת.",
+      "workType": [
+        "solar"
+      ],
+      "quality": "high",
+      "dimensions": "1800×1200",
+      "potentialUse": [
+        "Hero",
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "משמשת כתמונה ראשית של ענף הסולארי.",
+      "status": "IN USE",
+      "usedOn": [
+        "/solar/",
+        "/projects/argaman-revivim/"
+      ]
+    },
+    {
+      "id": "SRC-SOLAR-002",
+      "category": "SOLAR",
+      "path": "/images/projects/yaakobi-beit-ezra.webp",
+      "people": "ללא אנשים",
+      "contains": "מערכת 20 קילוואט על גג רפת, מושב בית עזרא.",
+      "workType": [
+        "solar",
+        "agricultural"
+      ],
+      "quality": "high",
+      "dimensions": "1800×1200",
+      "potentialUse": [
+        "Hero",
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "ראיה למבנה חקלאי בהיקף. תמונה ראשית של עמוד הסולארי לעסקים.",
+      "status": "IN USE",
+      "usedOn": [
+        "/solar/commercial/",
+        "/projects/yaakobi-beit-ezra/"
+      ]
+    },
+    {
+      "id": "SRC-SOLAR-003",
+      "category": "SOLAR",
+      "path": "/images/projects/beit-knesset-yona-01.webp",
+      "people": "ללא אנשים",
+      "contains": "מערכת אוף-גריד עם אגירה, בית כנסת יונה בגני תקווה. שלוש תמונות בסדרה.",
+      "workType": [
+        "solar",
+        "institutional"
+      ],
+      "quality": "high",
+      "dimensions": "1800×1200",
+      "potentialUse": [
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [
+        "Re-encode — 309KB, כבד פי 3 משאר הסדרה"
+      ],
+      "notes": "הפרויקט המוסדי היחיד. קרוב ביותר להוכחה B2B מבין הפרויקטים הסולאריים.",
+      "status": "NEEDS RETOUCH",
+      "usedOn": [
+        "/projects/beit-knesset-yona-ganei-tikva/"
+      ]
+    },
+    {
+      "id": "SRC-SOLAR-004",
+      "category": "SOLAR",
+      "path": "/images/projects/saban-shtulim.webp",
+      "people": "ללא אנשים",
+      "contains": "מערכת 12 קילוואט על גג האנגר תעשייתי, מושב שתולים.",
+      "workType": [
+        "solar",
+        "commercial"
+      ],
+      "quality": "medium",
+      "dimensions": "1800×1200",
+      "potentialUse": [
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "סביבה תעשייתית — שימושי כרפרנס לסצנות סולאריות מסחריות.",
+      "status": "IN USE",
+      "usedOn": [
+        "/projects/saban-shtulim/"
+      ]
+    },
+    {
+      "id": "SRC-SOLAR-005",
+      "category": "SOLAR",
+      "path": "/images/projects/sigalon-yavne.webp",
+      "people": "ללא אנשים",
+      "contains": "מערכת 8 קילוואט על גג בניין משותף, רחוב סיגלון ביבנה.",
+      "workType": [
+        "solar",
+        "multi-tenant"
+      ],
+      "quality": "medium",
+      "dimensions": "1800×1200",
+      "potentialUse": [
+        "Project",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "רלוונטי ליזמים ולהתחדשות עירונית.",
+      "status": "IN USE",
+      "usedOn": [
+        "/projects/sigalon-yavne/"
+      ]
+    },
+    {
+      "id": "SRC-CUSTOMER-001",
+      "category": "PERSON",
+      "path": "/images/testimonials/nir-ravah.jpg",
+      "people": "לקוח — ניר רווח",
+      "contains": "דיוקן לקוח, גזירה מרובעת 320×320.",
+      "workType": [
+        "solar"
+      ],
+      "quality": "medium",
+      "dimensions": "320×320",
+      "potentialUse": [
+        "Testimonial"
+      ],
+      "aiReference": false,
+      "treatment": [],
+      "notes": "לקוחות, לא אנשי הצוות. אסור לשמש כרפרנס ל-AI — יצירת דמויות על בסיס פני לקוח היא שימוש שלא ניתנה לו הסכמה.",
+      "status": "IN USE",
+      "usedOn": [
+        "/reviews/",
+        "/"
+      ]
+    },
+    {
+      "id": "SRC-RONI-001",
+      "category": "PERSON",
+      "path": "/AI-ASSET-PACK/SOURCE-ASSETS/PERSON/ — טרם התקבל",
+      "people": "רוני חג׳ג׳",
+      "contains": "דיוקן — פנים ברורות, ביגוד עבודה, סביבה אמיתית. נדרשות 3–5 תמונות מזוויות שונות כדי לשמר זהות עקבית בין כל התמונות שייווצרו.",
+      "workType": [
+        "private",
+        "contracting",
+        "solar"
+      ],
+      "quality": "high",
+      "dimensions": "—",
+      "potentialUse": [
+        "Hero",
+        "About",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "הרפרנס הקריטי ביותר בכל החבילה. בלעדיו אי אפשר לייצר אף תמונה שבה מופיע בעל העסק, ולא ניתן לשמר עקביות זהות. להעלות ל-SOURCE-ASSETS/PERSON/.",
+      "status": "AWAITING UPLOAD",
+      "usedOn": []
+    },
+    {
+      "id": "SRC-TEAM-001",
+      "category": "TEAM",
+      "path": "/AI-ASSET-PACK/SOURCE-ASSETS/TEAM/ — טרם התקבל",
+      "people": "אנשי הצוות",
+      "contains": "צוות בעבודה — פנים, ביגוד, ציוד, סביבת עבודה.",
+      "workType": [
+        "contracting",
+        "solar"
+      ],
+      "quality": "high",
+      "dimensions": "—",
+      "potentialUse": [
+        "Contracting",
+        "About",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "קובע גם את מראה הצוות וגם את מספרו. חשוב: מספר האנשים בתמונות שייווצרו חייב להתאים לגודל הצוות האמיתי — ראה gap fact.team.size.",
+      "status": "AWAITING UPLOAD",
+      "usedOn": []
+    },
+    {
+      "id": "SRC-SITE-001",
+      "category": "CONTRACTING",
+      "path": "/AI-ASSET-PACK/SOURCE-ASSETS/CONTRACTING/ — טרם התקבל",
+      "people": "משתנה",
+      "contains": "אתר בנייה למגורים בשלב שלד — צנרת, שרוולים, קופסאות, הכנות לפני יציקה.",
+      "workType": [
+        "contracting"
+      ],
+      "quality": "high",
+      "dimensions": "—",
+      "potentialUse": [
+        "Hero",
+        "Contracting",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "קיים כבר תיעוד משלב תשתית מסחרי (SRC-COMMERCIAL-001). חסר המקבילה בבנייה למגורים.",
+      "status": "AWAITING UPLOAD",
+      "usedOn": []
+    },
+    {
+      "id": "SRC-SOLARWORK-001",
+      "category": "SOLAR",
+      "path": "/AI-ASSET-PACK/SOURCE-ASSETS/SOLAR/ — טרם התקבל",
+      "people": "צוות מתקין",
+      "contains": "התקנה סולארית תוך כדי עבודה — צוות על גג, מבנה נשיאה, פאנלים באמצע הרכבה.",
+      "workType": [
+        "solar",
+        "contracting"
+      ],
+      "quality": "high",
+      "dimensions": "—",
+      "potentialUse": [
+        "Hero",
+        "Solar",
+        "Reference"
+      ],
+      "aiReference": true,
+      "treatment": [],
+      "notes": "כל 12 תצלומי הסולארי הקיימים הם מערכות גמורות. אין ולו תמונה אחת של תהליך.",
+      "status": "AWAITING UPLOAD",
+      "usedOn": []
+    }
+  ],
+  "generate": [
+    {
+      "id": "GEN-PERSON-PORTRAIT-001",
+      "category": "PERSON",
+      "page": "/about/",
+      "section": "Team",
+      "component": "pending-block",
+      "purpose": "לתת לעסק פנים. אתר שירות ללא דמות אנושית אחת אינו מייצר אמון.",
+      "scene": "דיוקן מקצועי של בעל העסק בסביבת עבודה אמיתית",
+      "people": "רוני חג׳ג׳ בלבד",
+      "environment": "ליד לוח חשמל פתוח או ברכב העבודה",
+      "composition": "דמות בשליש הימני, מבט למצלמה, פלג גוף עליון",
+      "camera": "עדשה 50–85 מ״מ, גובה עיניים",
+      "lighting": "אור יום רך מהצד, ללא פלאש ישיר",
+      "references": [
+        "SRC-RONI-001",
+        "SRC-PANEL-001"
+      ],
+      "ratio": "4:5",
+      "resolution": "1600×2000",
+      "cropSafeArea": "לשמור 25% נקיים בצד שמאל — שם יושב הטקסט בעמוד האודות",
+      "filename": "roni-portrait.webp",
+      "destination": "/public/images/person/roni-portrait.webp",
+      "alt": "רוני חג׳ג׳, בעל RNRG — הנדסאי חשמל וחשמלאי ראשי",
+      "priority": "P0",
+      "status": "BLOCKED ON REAL PHOTO",
+      "assertsFact": true,
+      "factNote": "דיוקן של אדם אמיתי חייב להיות צילום. ניתן לשפר חיתוך, רקע וצבע — אך לא לייצר פנים.",
+      "cropSafeAreaEn": "Keep the left 25% of the frame visually quiet — body copy is set there."
+    },
+    {
+      "id": "GEN-TEAM-ONSITE-001",
+      "category": "TEAM",
+      "page": "/contracting/",
+      "section": "Hero / capacity",
+      "component": "pending-block",
+      "purpose": "לגבות את הטענה המרכזית של הענף הקבלני — שיש כאן צוות ולא איש אחד.",
+      "scene": "צוות חשמלאים בעבודה באתר",
+      "people": "מספר האנשים חייב להתאים לגודל הצוות האמיתי",
+      "environment": "אתר בנייה או מבנה מסחרי בשלב גמר",
+      "composition": "שני אנשים לפחות, פעולה אמיתית ולא פוזה",
+      "camera": "עדשה רחבה 28–35 מ״מ",
+      "lighting": "אור יום טבעי",
+      "references": [
+        "SRC-TEAM-001",
+        "SRC-SITE-001",
+        "SRC-COMMERCIAL-001"
+      ],
+      "ratio": "16:9",
+      "resolution": "2400×1350",
+      "cropSafeArea": "לשמור 40% נקיים בצד ימין לכותרת ול-CTA; המרכז נחתך במובייל",
+      "filename": "contracting-team-onsite.webp",
+      "destination": "/public/images/contracting/contracting-team-onsite.webp",
+      "alt": "צוות RNRG בעבודת חשמל באתר",
+      "priority": "P0",
+      "status": "BLOCKED ON REAL PHOTO",
+      "assertsFact": true,
+      "factNote": "תמונת צוות היא טענה עובדתית על גודל הצוות ועל יכולת הביצוע. זו בדיוק ההמצאה שהפרויקט הזה קיים כדי להסיר. חייבת צילום אמיתי.",
+      "cropSafeAreaEn": "Keep the right 40% clear for a headline and buttons. Do not place faces dead centre: mobile crops the middle of this frame."
+    },
+    {
+      "id": "GEN-CONTRACTING-SITE-001",
+      "category": "CONTRACTING",
+      "page": "/contracting/builders/",
+      "section": "Hero",
+      "component": "PageHero",
+      "purpose": "להראות לקבלן בניין שהעסק עובד בשלב שלו — שלד, לפני גמר.",
+      "scene": "תשתית חשמל באתר בנייה למגורים לפני יציקה",
+      "people": "ללא אנשים, או ידיים בלבד",
+      "environment": "שלד בטון, קירות בלוקים, צנרת שרשורית וקופסאות מותקנות",
+      "composition": "צנרת מובילה את העין לעומק הפריים",
+      "camera": "עדשה 24–35 מ״מ, גובה חזה",
+      "lighting": "אור יום דרך פתחים, ניגודיות בינונית",
+      "references": [
+        "SRC-SITE-001",
+        "SRC-COMMERCIAL-001",
+        "SRC-PANEL-005"
+      ],
+      "ratio": "16:9",
+      "resolution": "2400×1350",
+      "cropSafeArea": "40% ימין נקיים לכותרת; שליש תחתון עלול להיחתך במובייל",
+      "filename": "builders-hero-shell-stage.webp",
+      "destination": "/public/images/contracting/builders-hero-shell-stage.webp",
+      "alt": "תשתית חשמל בשלב שלד באתר בנייה",
+      "priority": "P1",
+      "status": "NEEDS AI GENERATION",
+      "assertsFact": false,
+      "promptEn": "Electrical first-fix inside a residential building under construction, before plastering. Bare concrete slab and grey block walls, orange corrugated conduit runs sweeping across the ceiling and down the walls, back-boxes fixed in place, sleeves through the slab. Conduit leads the eye into the depth of the frame. No people, or hands only. Shot at chest height on a 24-35mm lens, daylight entering through unglazed window openings, moderate contrast.",
+      "cropSafeAreaEn": "Keep the right 40% clear for a headline and buttons. The bottom third may be cropped away on mobile, so nothing essential belongs there."
+    },
+    {
+      "id": "GEN-SOLAR-INSTALL-001",
+      "category": "SOLAR",
+      "page": "/solar/contractors/",
+      "section": "Hero",
+      "component": "PageHero",
+      "purpose": "להראות תהליך התקנה ולא רק גג גמור.",
+      "scene": "התקנת מערכת סולארית תוך כדי עבודה על גג",
+      "people": "מתקינים בעבודה — מספר תואם לצוות האמיתי",
+      "environment": "גג שטוח או רעפים, מבנה נשיאה מותקן חלקית, פאנלים באמצע הרכבה",
+      "composition": "שורות פאנלים באלכסון, שמיים בשליש העליון",
+      "camera": "עדשה 24–35 מ״מ, גובה נמוך יחסית לגג",
+      "lighting": "שעת בוקר או אחר צהריים, שמש נמוכה",
+      "references": [
+        "SRC-SOLARWORK-001",
+        "SRC-SOLAR-001",
+        "SRC-SOLAR-002"
+      ],
+      "ratio": "16:9",
+      "resolution": "2400×1350",
+      "cropSafeArea": "לשמור 40% שמאל נקיים; אין להציב פנים במרכז",
+      "filename": "solar-contractors-install.webp",
+      "destination": "/public/images/solar/solar-contractors-install.webp",
+      "alt": "צוות מתקין מערכת סולארית על גג",
+      "priority": "P1",
+      "status": "BLOCKED ON REAL PHOTO",
+      "assertsFact": true,
+      "factNote": "מציג צוות בעבודה — טענה על כושר ביצוע. דורש צילום.",
+      "cropSafeAreaEn": "Keep the left 40% clear for a headline. Do not place faces at the centre of the frame."
+    },
+    {
+      "id": "GEN-ELECTRICAL-TEXTURE-001",
+      "category": "ICON-ABSTRACT",
+      "page": "/electrical/*",
+      "section": "Section background",
+      "component": "section--sunken",
+      "purpose": "רקע עדין שמוסיף עומק לעמודי השירות בלי להתחרות בתוכן.",
+      "scene": "מקרו מופשט של פסי צבירה מנחושת ומוליכים, מטושטש מאוד",
+      "people": "ללא",
+      "environment": "מקרו סטודיו",
+      "composition": "מרקם אחיד ללא נקודת מוקד",
+      "camera": "מקרו, עומק שדה רדוד מאוד",
+      "lighting": "אור צד רך שמדגיש את ברק הנחושת",
+      "references": [
+        "SRC-PANEL-005",
+        "SRC-PANEL-001"
+      ],
+      "ratio": "21:9",
+      "resolution": "2560×1097",
+      "cropSafeArea": "כל הפריים — טקסט יונח מעל, לכן ללא פרטים חדים",
+      "filename": "texture-copper-busbar.webp",
+      "destination": "/public/images/texture/texture-copper-busbar.webp",
+      "alt": "",
+      "priority": "P2",
+      "status": "NEEDS AI GENERATION",
+      "assertsFact": false,
+      "promptEn": "Extreme macro of polished copper busbar and stranded conductors, shot at a very shallow depth of field so the whole frame reads as texture rather than as an object. Warm copper highlights against dark steel. Even, uniform across the frame with no single focal point, because display type will be laid over it.",
+      "cropSafeAreaEn": "The entire frame carries text on top, so keep it uniform with no sharp detail anywhere."
+    },
+    {
+      "id": "GEN-OG-CONTRACTING-001",
+      "category": "OG-SOCIAL",
+      "page": "/contracting/",
+      "section": "Open Graph",
+      "component": "Base head",
+      "purpose": "תצוגה מקדימה בשיתוף בוואטסאפ ובלינקדאין, לקהל B2B.",
+      "scene": "לוח מסחרי גדול, עם שכבת כהות ומקום לכותרת",
+      "people": "ללא",
+      "environment": "חדר חשמל או קיר גמר",
+      "composition": "הלוח בצד ימין, שני שלישים שמאליים כהים לטקסט",
+      "camera": "חזיתי, ללא עיוות פרספקטיבה",
+      "lighting": "אחיד",
+      "references": [
+        "SRC-PANEL-005"
+      ],
+      "ratio": "1.91:1",
+      "resolution": "1200×630",
+      "cropSafeArea": "וואטסאפ חותך לריבוע מהמרכז — הלוח חייב להיות במרכז",
+      "filename": "og-contracting.png",
+      "destination": "/public/og/og-contracting.png",
+      "alt": "",
+      "priority": "P1",
+      "status": "NEEDS AI GENERATION",
+      "assertsFact": false,
+      "promptEn": "A large commercial distribution board photographed straight on, no perspective distortion, mounted in a finished plant room. The board occupies the right third of the frame; the left two thirds fall away into shadow, deliberately empty so a headline can be set over it. Even, undramatic lighting. Dark blue-black and galvanised grey palette with copper accents.",
+      "cropSafeAreaEn": "Social platforms crop this to a square from the centre, so the subject must sit centrally. Keep the left two thirds dark and empty for a headline."
+    },
+    {
+      "id": "GEN-OG-SOLAR-001",
+      "category": "OG-SOCIAL",
+      "page": "/solar/",
+      "section": "Open Graph",
+      "component": "Base head",
+      "purpose": "תצוגה מקדימה לשיתוף עמוד הסולארי.",
+      "scene": "שורות פאנלים על גג, שמיים נקיים, שכבת כהות לטקסט",
+      "people": "ללא",
+      "environment": "גג בית פרטי או מבנה חקלאי",
+      "composition": "פאנלים באלכסון מהפינה הימנית התחתונה",
+      "camera": "מוגבה מעט",
+      "lighting": "אור בוקר",
+      "references": [
+        "SRC-SOLAR-001",
+        "SRC-SOLAR-002"
+      ],
+      "ratio": "1.91:1",
+      "resolution": "1200×630",
+      "cropSafeArea": "מרכז נקי לחיתוך ריבועי",
+      "filename": "og-solar.png",
+      "destination": "/public/og/og-solar.png",
+      "alt": "",
+      "priority": "P1",
+      "status": "NEEDS AI GENERATION",
+      "assertsFact": false,
+      "promptEn": "Rows of dark blue photovoltaic panels running diagonally from the lower right corner across a residential or agricultural roof, clean sky above. Shot slightly elevated in early morning light. The centre of the frame stays uncluttered because social platforms crop this to a square from the middle.",
+      "cropSafeAreaEn": "Social platforms crop this to a square from the centre — keep the centre uncluttered."
+    },
+    {
+      "id": "GEN-ELECTRICAL-EV-001",
+      "category": "ELECTRICAL",
+      "page": "/electrical/homes/",
+      "section": "EV charging",
+      "component": "prose",
+      "purpose": "להמחיש התקנת עמדת טעינה לרכב חשמלי — נושא בעל כוונת חיפוש גבוהה.",
+      "scene": "עמדת טעינה ביתית מותקנת על קיר חניה, כבל מסודר",
+      "people": "ללא",
+      "environment": "חניה פרטית או חניון תת-קרקעי",
+      "composition": "העמדה בשליש הימני, קיר נקי משמאל",
+      "camera": "עדשה 35 מ״מ, גובה מותן",
+      "lighting": "אור יום עקיף",
+      "references": [
+        "SRC-PANEL-001",
+        "SRC-PANEL-004"
+      ],
+      "ratio": "3:2",
+      "resolution": "1800×1200",
+      "cropSafeArea": "ללא טקסט מעל — תמונת תוכן רגילה",
+      "filename": "ev-charger-install.webp",
+      "destination": "/public/images/electrical/ev-charger-install.webp",
+      "alt": "עמדת טעינה לרכב חשמלי מותקנת בחניה פרטית",
+      "priority": "P2",
+      "status": "NEEDS AI GENERATION",
+      "assertsFact": false,
+      "promptEn": "A wall-mounted electric vehicle charge point installed in a private Israeli carport, cable coiled neatly on its holster, short surface conduit run back to a small sub-board. Unit sits in the right third against a clean plastered wall. 35mm lens at waist height, indirect daylight.",
+      "cropSafeAreaEn": "No text is set over this one; it is ordinary body imagery. Keep the left half plain."
+    }
+  ]
+}

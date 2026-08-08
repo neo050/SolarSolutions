@@ -1,0 +1,9 @@
+﻿Asset ID,Final Filename,Destination Path,Alt Text,Status
+GEN-PERSON-PORTRAIT-001,roni-portrait.webp,/public/images/person/roni-portrait.webp,"רוני חג׳ג׳, בעל RNRG — הנדסאי חשמל וחשמלאי ראשי",BLOCKED ON REAL PHOTO
+GEN-TEAM-ONSITE-001,contracting-team-onsite.webp,/public/images/contracting/contracting-team-onsite.webp,צוות RNRG בעבודת חשמל באתר,BLOCKED ON REAL PHOTO
+GEN-CONTRACTING-SITE-001,builders-hero-shell-stage.webp,/public/images/contracting/builders-hero-shell-stage.webp,תשתית חשמל בשלב שלד באתר בנייה,NEEDS AI GENERATION
+GEN-SOLAR-INSTALL-001,solar-contractors-install.webp,/public/images/solar/solar-contractors-install.webp,צוות מתקין מערכת סולארית על גג,BLOCKED ON REAL PHOTO
+GEN-ELECTRICAL-TEXTURE-001,texture-copper-busbar.webp,/public/images/texture/texture-copper-busbar.webp,,NEEDS AI GENERATION
+GEN-OG-CONTRACTING-001,og-contracting.png,/public/og/og-contracting.png,,NEEDS AI GENERATION
+GEN-OG-SOLAR-001,og-solar.png,/public/og/og-solar.png,,NEEDS AI GENERATION
+GEN-ELECTRICAL-EV-001,ev-charger-install.webp,/public/images/electrical/ev-charger-install.webp,עמדת טעינה לרכב חשמלי מותקנת בחניה פרטית,NEEDS AI GENERATION
