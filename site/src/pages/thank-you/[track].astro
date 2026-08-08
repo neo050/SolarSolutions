@@ -1,0 +1,218 @@
+---
+/**
+ * Confirmation page — one route per conversion track.
+ *
+ * Previously a single route rendered all three variants with the inactive ones hidden,
+ * which put three <h1> elements in the DOM. The QA suite caught it. Separate routes give
+ * each variant one h1, correct copy with no JavaScript at all, and a distinct URL that is
+ * meaningful in analytics.
+ *
+ * `via=whatsapp` means the enquiry was handed to WhatsApp because no lead endpoint is
+ * configured yet. That is NOT confirmed receipt, and the page says so plainly rather than
+ * implying a lead arrived when nothing stored it.
+ */
+import Base from "~/layouts/Base.astro";
+import { BUSINESS, links } from "~/data/business";
+import { THANKS } from "~/data/thanks";
+import type { Track } from "~/data/business";
+
+export function getStaticPaths() {
+  return (["private", "contracting", "solar"] as Track[]).map((track) => ({
+    params: { track },
+    props: { track },
+  }));
+}
+
+interface Props {
+  track: Track;
+}
+const { track } = Astro.props as Props;
+const t = THANKS[track];
+---
+
+<Base title={t.heading} description={t.lede} noindex={true} track={track}>
+  <section class="section thanks">
+    <div class="container container--narrow">
+      <div class="thanks__mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2" opacity="0.28"></circle>
+          <path
+            d="M15 24.5 21 30.5 33 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </div>
+
+      <h1>{t.heading}</h1>
+      <p class="lede">{t.lede}</p>
+
+      <p class="thanks__ref">
+        מספר פנייה: <span class="mono" id="lead-ref">—</span>
+      </p>
+
+      <div class="alert alert--warning thanks__wa" id="wa-note" hidden>
+        <strong>הפנייה נפתחה בוואטסאפ.</strong> ודאו שההודעה אכן נשלחה — אם חלון וואטסאפ
+        לא נפתח, אפשר להתקשר ל־<a href={links.tel}>{BUSINESS.phonePretty}</a>.
+      </div>
+
+      <div class="thanks__block">
+        <h2>{t.nextTitle}</h2>
+        <ol>
+          {t.next.map((step) => <li>{step}</li>)}
+        </ol>
+      </div>
+
+      {
+        t.prepare && (
+          <div class="thanks__block thanks__block--prepare">
+            <h2>{t.prepareTitle}</h2>
+            <ul>
+              {t.prepare.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="thanks__urgent">
+        <p>{t.urgentNote}</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={links.tel} data-cta-location="thank-you">
+            {BUSINESS.phonePretty}
+          </a>
+          <a
+            class="btn btn--outline"
+            href={links.whatsapp()}
+            target="_blank"
+            rel="noopener"
+            data-cta-location="thank-you">וואטסאפ</a
+          >
+        </div>
+      </div>
+
+      <nav class="thanks__links" aria-label="קישורים נוספים">
+        {t.links.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    padding-block: var(--space-8);
+  }
+  .thanks__mark {
+    color: var(--success);
+    display: grid;
+    place-items: center;
+    margin-block-end: var(--space-5);
+  }
+  .thanks__mark svg {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+  .thanks h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-3);
+    text-align: center;
+  }
+  .thanks .lede {
+    text-align: center;
+    margin-inline: auto;
+  }
+  .thanks__ref {
+    text-align: center;
+    margin-block-start: var(--space-4);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .thanks__wa {
+    margin-block-start: var(--space-5);
+  }
+  .thanks__wa[hidden] {
+    display: none;
+  }
+
+  .thanks__block {
+    margin-block-start: var(--space-7);
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .thanks__block--prepare {
+    background: var(--bg-brand-soft);
+  }
+  .thanks__block h2 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-4);
+  }
+  .thanks__block ol,
+  .thanks__block ul {
+    display: grid;
+    gap: var(--space-3);
+    color: var(--text-muted);
+    padding-inline-start: 1.3em;
+    margin: 0;
+  }
+  .thanks__block li::marker {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .thanks__urgent {
+    margin-block-start: var(--space-6);
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--border);
+  }
+  .thanks__urgent p {
+    color: var(--text-muted);
+    margin-block-end: var(--space-4);
+  }
+
+  .thanks__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-start: var(--space-6);
+  }
+  .thanks__links a {
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .thanks__links a:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+  }
+</style>
+
+<script define:vars={{ track }}>
+  const params = new URLSearchParams(location.search);
+  const lead = params.get("lead");
+  const via = params.get("via");
+
+  const ref = document.getElementById("lead-ref");
+  if (ref) ref.textContent = lead ?? "—";
+
+  // Only for the WhatsApp fallback, where receipt is not confirmed by any server.
+  if (via === "whatsapp") {
+    const note = document.getElementById("wa-note");
+    if (note) note.hidden = false;
+  }
+
+  window.rnrgTrack?.("lead_confirmed", {
+    lead_id: lead ?? "",
+    track,
+    via: via ?? "form",
+    confirmed: via === "whatsapp" ? "handoff" : "server",
+  });
+</script>

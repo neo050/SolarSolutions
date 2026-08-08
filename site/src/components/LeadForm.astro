@@ -31,6 +31,12 @@ const { track } = Astro.props;
 const form = FORMS[track];
 
 const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
+
+// Cloudflare Turnstile. When the site key is present the widget renders and its token is
+// sent with the lead; the server verifies it (functions/api/lead.ts). Absent, the form
+// works unchanged — Turnstile is defence in depth on top of the honeypot, server-side
+// validation and rate limiting, not a dependency.
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
 ---
 
 <form
@@ -40,6 +46,7 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
   data-event={TRACKS[track].event}
   data-endpoint={LEAD_ENDPOINT}
   data-whatsapp={BUSINESS.whatsapp}
+  data-turnstile={TURNSTILE_SITE_KEY}
   novalidate
 >
   <div class="lead-form__head">
@@ -123,7 +130,15 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
     <input id={`hp-${track}`} type="text" name="_company_url" tabindex="-1" autocomplete="off" />
   </div>
 
-  <div class="alert alert--error lead-form__alert" role="alert" hidden></div>
+  {
+    TURNSTILE_SITE_KEY && (
+      <div class="lead-form__turnstile">
+        <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-language="he" />
+      </div>
+    )
+  }
+
+  <div class="alert alert--error lead-form__alert" role="alert" aria-live="polite" hidden></div>
 
   <div class="lead-form__actions">
     <button type="submit" class="btn btn--primary btn--lg">{form.submitLabel}</button>
@@ -136,7 +151,17 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
   </p>
 </form>
 
+{
+  TURNSTILE_SITE_KEY && (
+    <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
+  )
+}
+
 <style>
+  .lead-form__turnstile {
+    margin-block-start: var(--space-5);
+  }
+
   .lead-form {
     padding: var(--space-6);
     background: var(--bg-raised);
@@ -291,21 +316,63 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
     return ok;
   }
 
-  async function post(endpoint: string, lead: QueuedLead): Promise<boolean> {
-    for (let attempt = 0; attempt < 2; attempt++) {
+  interface PostResult {
+    ok: boolean;
+    status: number;
+    errorId?: string;
+    message?: string;
+  }
+
+  /**
+   * Posts a lead with bounded retries and a hard timeout.
+   *
+   * Retries only what is worth retrying: network failures and 5xx. A 4xx means the
+   * payload is wrong and will stay wrong, so it returns immediately and the caller
+   * surfaces it to the visitor instead of silently looping.
+   */
+  async function post(endpoint: string, lead: unknown, attempts = 3): Promise<PostResult> {
+    let last: PostResult = { ok: false, status: 0 };
+
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10_000);
       try {
         const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(lead),
+          signal: controller.signal,
+          keepalive: true,
         });
-        if (res.ok) return true;
+        clearTimeout(timer);
+
+        let payload: any = {};
+        try {
+          payload = await res.json();
+        } catch {
+          /* a non-JSON body still leaves res.ok meaningful */
+        }
+
+        last = {
+          ok: res.ok && payload.ok !== false,
+          status: res.status,
+          errorId: payload.errorId,
+          message: payload.error,
+        };
+
+        if (last.ok) return last;
+        // Client errors are terminal: the same payload will fail identically.
+        if (res.status >= 400 && res.status < 500) return last;
       } catch {
-        /* network error — fall through to retry */
+        clearTimeout(timer);
+        last = { ok: false, status: 0 }; // network failure or timeout
       }
-      if (attempt === 0) await new Promise((r) => setTimeout(r, 900));
+
+      if (attempt < attempts - 1) {
+        await new Promise((r) => setTimeout(r, 800 * Math.pow(2, attempt)));
+      }
     }
-    return false;
+    return last;
   }
 
   function whatsappHandoff(waNumber: string, lead: QueuedLead): string {
@@ -355,7 +422,7 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
 
       // Honeypot: a filled hidden field means a bot. Behave as if it worked.
       if ((data.get("_company_url") as string)?.trim()) {
-        window.location.href = "/thank-you/";
+        window.location.href = `/thank-you/${track}/`;
         return;
       }
 
@@ -387,33 +454,90 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
       (window as any).rnrgTrack?.(eventName, { track, lead_id: lead.leadId });
 
       if (!endpoint) {
-        // No endpoint configured yet. Complete the journey via WhatsApp rather than
-        // pretending the lead was received.
+        // No endpoint configured yet. Hand off to WhatsApp rather than pretending the
+        // lead was received — the thank-you page flags this as unconfirmed.
         window.location.href = whatsappHandoff(waNumber, lead);
         setTimeout(() => {
-          window.location.href = `/thank-you/?lead=${lead.leadId}&via=whatsapp`;
+          window.location.href =
+            `/thank-you/${track}/?lead=${lead.leadId}&via=whatsapp`;
         }, 1200);
         return;
       }
 
-      const sent = await post(endpoint, lead);
+      // Turnstile, when present. The widget writes its token into a hidden input.
+      const tsToken = (formEl.querySelector<HTMLInputElement>(
+        '[name="cf-turnstile-response"]'
+      )?.value || "").trim();
+      if (formEl.dataset.turnstile && !tsToken) {
+        submitBtn.dataset.loading = "false";
+        submitBtn.disabled = false;
+        alertEl.textContent = "אנא השלימו את אימות האבטחה ונסו שוב.";
+        alertEl.hidden = false;
+        return;
+      }
 
-      if (sent) {
+      const result = await post(endpoint, { ...lead, turnstileToken: tsToken });
+
+      // Success is the SERVER's decision, never the client's. Only a 2xx after the lead
+      // has been durably stored clears the queue and advances to the thank-you page.
+      if (result.ok) {
         writeQueue(readQueue().filter((l) => l.leadId !== lead.leadId));
-        window.location.href = `/thank-you/?lead=${lead.leadId}`;
+        window.location.href = `/thank-you/${track}/?lead=${lead.leadId}`;
         return;
       }
 
       submitBtn.dataset.loading = "false";
       submitBtn.disabled = false;
-      (window as any).rnrgTrack?.("form_error", { track, lead_id: lead.leadId });
+      (window as any).rnrgTrack?.("form_error", {
+        track,
+        lead_id: lead.leadId,
+        status: result.status,
+        error_id: result.errorId ?? "",
+      });
 
-      alertEl.innerHTML =
-        `לא הצלחנו לשלוח את הפנייה כרגע. הפרטים נשמרו והמערכת תנסה שוב אוטומטית. ` +
-        `אפשר גם <a href="${whatsappHandoff(waNumber, lead)}" target="_blank" rel="noopener">` +
-        `לשלוח בוואטסאפ עכשיו</a>.`;
+      // A 4xx means the payload itself is wrong — retrying it unchanged will fail again,
+      // so it is dropped from the queue and the visitor is told what to correct.
+      const isClientError = result.status >= 400 && result.status < 500 && result.status !== 429;
+      if (isClientError) {
+        writeQueue(readQueue().filter((l) => l.leadId !== lead.leadId));
+        alertEl.innerHTML =
+          `לא הצלחנו לקלוט את הפנייה: ${result.message || "אחד הפרטים אינו תקין"}. ` +
+          `אנא בדקו את השדות ונסו שוב.` +
+          (result.errorId ? ` <span class="mono">${result.errorId}</span>` : "");
+      } else {
+        alertEl.innerHTML =
+          `לא הצלחנו לשלוח את הפנייה כרגע. הפרטים נשמרו והמערכת תנסה שוב אוטומטית. ` +
+          `אפשר גם <a href="${whatsappHandoff(waNumber, lead)}" target="_blank" rel="noopener">` +
+          `לשלוח בוואטסאפ עכשיו</a>, או להתקשר.` +
+          (result.errorId ? ` <span class="mono">${result.errorId}</span>` : "");
+      }
       alertEl.hidden = false;
     });
+
+    /* ---- Abandonment: started filling, left without submitting ---- */
+    let submitted = false;
+    formEl.addEventListener("submit", () => {
+      submitted = true;
+    });
+    const reportAbandon = () => {
+      if (!started || submitted) return;
+      submitted = true; // fire at most once
+      const filled = Array.from(new FormData(formEl).entries()).filter(
+        ([k, v]) => !k.startsWith("_") && String(v).trim()
+      );
+      const lastField = filled.length ? filled[filled.length - 1][0] : "";
+      (window as any).rnrgTrack?.("form_abandon", {
+        track,
+        form_id: formEl.id,
+        fields_filled: filled.length,
+        last_field: lastField,
+      });
+    };
+    // visibilitychange is the reliable signal on mobile; pagehide covers desktop unload.
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") reportAbandon();
+    });
+    window.addEventListener("pagehide", reportAbandon);
   });
 
   /* Retry anything left in the queue from a previous visit. */
@@ -425,9 +549,24 @@ const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
 
     const remaining: QueuedLead[] = [];
     for (const lead of queue) {
-      if (lead.attempts >= 5) continue; // give up rather than retry forever
-      const ok = await post(endpoint, lead);
-      if (!ok) remaining.push({ ...lead, attempts: lead.attempts + 1 });
+      if (lead.attempts >= 5) {
+        // Give up rather than retry forever, but report it so the loss is visible in
+        // analytics rather than silent.
+        (window as any).rnrgTrack?.("lead_dropped", {
+          lead_id: lead.leadId,
+          track: lead.track,
+          attempts: lead.attempts,
+        });
+        continue;
+      }
+      const result = await post(endpoint, lead, 1);
+      if (result.ok) {
+        (window as any).rnrgTrack?.("lead_recovered", { lead_id: lead.leadId, track: lead.track });
+        continue;
+      }
+      // A terminal client error will never succeed; stop carrying it.
+      if (result.status >= 400 && result.status < 500 && result.status !== 429) continue;
+      remaining.push({ ...lead, attempts: lead.attempts + 1 });
     }
     writeQueue(remaining);
   })();

@@ -26,7 +26,7 @@
 # ---- Company ----
 /about.html                  /about/                      301
 /contact.html                /contact/                    301
-/success.html                /thank-you/                  301
+/success.html                /thank-you/private/          301
 
 # ---- Testimonial collection: two duplicate forms merge into one ----
 /recommendation.html         /reviews/#submit             301
