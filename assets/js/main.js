@@ -1,183 +1,258 @@
-/**************************************
- * 1) EmailJS INIT
- **************************************/
-// Initialize EmailJS (public key) if the library is loaded.
-// Some pages include main.js without loading EmailJS which caused
-// "emailjs is not defined" errors. Guarding the initialization ensures
-// that the script runs safely on every page.
+/**
+ * RNRG — shared site script.
+ *
+ * Loaded by every static page. Everything here must be defensive: a page that lacks a
+ * given element must not break the rest of the file. The previous version called
+ * `document.getElementById("year").innerText` unguarded, which threw a TypeError on any
+ * page without a #year element and silently killed every statement below it.
+ */
+
+/* ============================================================
+ * 1) Analytics
+ * ============================================================
+ * GA4 / GTM are loaded by assets/js/analytics.js, which reads the container id from
+ * window.RNRG_ANALYTICS. Until a real id is supplied it no-ops. `track()` below is safe
+ * to call regardless — events queue into dataLayer and flush once GTM loads.
+ */
+window.dataLayer = window.dataLayer || [];
+
+function track(eventName, params) {
+  try {
+    window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
+  } catch (err) {
+    // Never let a tracking failure break a user-facing interaction.
+  }
+}
+
+/** Attribution captured once per session, attached to every lead. */
+function getAttribution() {
+  var STORAGE_KEY = "rnrg_attribution";
+  try {
+    var stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch (err) {
+    /* sessionStorage can be unavailable in private mode — fall through */
+  }
+
+  var qs = new URLSearchParams(window.location.search);
+  var attribution = {
+    utm_source: qs.get("utm_source") || "",
+    utm_medium: qs.get("utm_medium") || "",
+    utm_campaign: qs.get("utm_campaign") || "",
+    utm_term: qs.get("utm_term") || "",
+    utm_content: qs.get("utm_content") || "",
+    gclid: qs.get("gclid") || "",
+    landing_page: window.location.pathname,
+    referrer: document.referrer || "",
+  };
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(attribution));
+  } catch (err) {
+    /* ignore */
+  }
+  return attribution;
+}
+
+/** Every lead gets an id so it can be matched between the inbox and analytics. */
+function makeLeadId() {
+  var rand = Math.random().toString(36).slice(2, 8);
+  return "L-" + Date.now().toString(36) + "-" + rand;
+}
+
+/* ============================================================
+ * 2) EmailJS
+ * ============================================================ */
 if (typeof emailjs !== "undefined") {
   emailjs.init("7BQ442uTTcxN1Owoa");
 }
 
-/**************************************
- * 2) CONTACT FORM (contact.html)
- **************************************/
-document.getElementById("contactForm")?.addEventListener("submit", function (e) {
-  e.preventDefault();
+var EMAILJS_SERVICE = "service_o5qssn5";
 
-  // EmailJS configuration
-  const serviceID = "service_o5qssn5";
-  const templateID = "template_y2az434";
+/**
+ * Wires a form to EmailJS with a lead id, attribution, a disabled-while-sending state
+ * and a visible error message. Returns silently if the form is not on this page.
+ */
+function wireEmailForm(formId, templateId, leadType) {
+  var form = document.getElementById(formId);
+  if (!form) return;
 
-  emailjs
-    .sendForm(serviceID, templateID, this)
-    .then((response) => {
-      console.log("SUCCESS!", response.status, response.text);
-      window.location.href = "success.html"; // Redirect on success
-    })
-    .catch((error) => {
-      console.error("FAILED...", error);
-      alert("שליחת הטופס נכשלה, אנא נסו שוב מאוחר יותר.");
-    });
-});
+  var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+  var originalLabel = submitBtn ? submitBtn.textContent : "";
 
-/**************************************
- * 3) COMPATIBILITY FORM (CompatibilityCheck.html)
- **************************************/
-// Example ID = "compatibilityForm"
-document
-  .getElementById("compatibilityForm")
-  ?.addEventListener("submit", function (e) {
+  // Hidden fields travel with the email so attribution is visible in the inbox,
+  // not only in analytics.
+  var attribution = getAttribution();
+  var hidden = Object.assign({ lead_id: makeLeadId(), lead_type: leadType, page: window.location.pathname }, attribution);
+  Object.keys(hidden).forEach(function (name) {
+    if (form.querySelector('[name="' + name + '"]')) return;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = hidden[name];
+    form.appendChild(input);
+  });
+
+  var started = false;
+  form.addEventListener(
+    "focusin",
+    function () {
+      if (started) return;
+      started = true;
+      track("form_start", { form_id: formId, lead_type: leadType });
+    },
+    { once: false }
+  );
+
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // You can reuse the same service/template, or use a different one
-    const serviceID = "service_o5qssn5";
-    const templateID = "template_0nrspxv"; 
-    // If you created a new template for these fields, use its ID
+    if (typeof emailjs === "undefined") {
+      showFormError(form, "לא ניתן לשלוח כרגע. אפשר להתקשר 054-665-6076 או לשלוח הודעה בוואטסאפ.");
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "שולח…";
+    }
+    clearFormError(form);
 
     emailjs
-      .sendForm(serviceID, templateID, this)
-      .then((response) => {
-        console.log("Compatibility Form SUCCESS!", response.status, response.text);
-        window.location.href = "success.html"; // or any other page
+      .sendForm(EMAILJS_SERVICE, templateId, form)
+      .then(function () {
+        track("generate_lead", { form_id: formId, lead_type: leadType, lead_id: hidden.lead_id });
+        track(leadType, { form_id: formId, lead_id: hidden.lead_id });
+        window.location.href = "success.html?lead=" + encodeURIComponent(hidden.lead_id);
       })
-      .catch((error) => {
-        console.error("Compatibility Form FAILED...", error);
-        alert("שליחת הטופס נכשלה, אנא נסו שוב מאוחר יותר.");
+      .catch(function (error) {
+        // eslint-disable-next-line no-console
+        console.error("Lead submission failed", error);
+        track("form_error", { form_id: formId, lead_type: leadType });
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+        showFormError(
+          form,
+          'השליחה נכשלה. אפשר לנסות שוב, להתקשר ל־054-665-6076, או לשלוח הודעה בוואטסאפ.'
+        );
       });
   });
-
-/**************************************
- * 4) SOLAR SAVINGS CALCULATOR
- **************************************/
-function calculateSavings() {
-  const monthlyUsage = parseFloat(document.getElementById("monthlyUsage").value);
-  const electricityCost = parseFloat(
-    document.getElementById("electricityCost").value
-  );
-  const resultDiv = document.getElementById("result");
-
-  if (
-    isNaN(monthlyUsage) ||
-    isNaN(electricityCost) ||
-    monthlyUsage <= 0 ||
-    electricityCost <= 0
-  ) {
-    resultDiv.innerHTML = "<p>נא להזין ערכים חוקיים.</p>";
-    return;
-  }
-
-  const monthlyCost = monthlyUsage * electricityCost;
-  const monthlySavings = monthlyCost * 0.9; // 90% discount
-  const yearlySavings = monthlySavings * 12;
-
-  resultDiv.innerHTML = `
-    <h3>תוצאות החיסכון:</h3>
-    <p>חיסכון חודשי: ${monthlySavings.toFixed(2)} ש"ח</p>
-    <p>חיסכון שנתי: ${yearlySavings.toFixed(2)} ש"ח</p>
-  `;
 }
 
-/**************************************
- * 5) OPTIONAL: GOOGLE PLACES AUTOCOMPLETE
- **************************************/
-// If you want to initialize Google Autocomplete for an address input
-// you can define a function and set it as the callback in the script URL:
-// e.g. <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places&language=he&callback=initAutocomplete" async defer></script>
+function showFormError(form, message) {
+  var box = form.querySelector(".form-error");
+  if (!box) {
+    box = document.createElement("p");
+    box.className = "form-error";
+    box.setAttribute("role", "alert");
+    box.style.cssText =
+      "margin:1rem 0 0;padding:.75rem 1rem;border:1px solid #b3261e;background:#f7e4e2;color:#8a1c16;border-radius:6px;";
+    form.appendChild(box);
+  }
+  box.textContent = message;
+}
+
+function clearFormError(form) {
+  var box = form.querySelector(".form-error");
+  if (box) box.remove();
+}
+
+/* ============================================================
+ * 3) Form wiring
+ * ============================================================ */
+wireEmailForm("contactForm", "template_y2az434", "lead_private");
+wireEmailForm("compatibilityForm", "template_0nrspxv", "lead_solar");
+
+/* ============================================================
+ * 4) Google Places autocomplete (address field on the solar form)
+ * ============================================================ */
 function initAutocomplete() {
-  const addressInput = document.getElementById("fullAddress"); 
-  // or whatever input ID you have in CompatibilityCheck.html
+  var addressInput = document.getElementById("fullAddress");
+  if (!addressInput || typeof google === "undefined") return;
 
-  if (!addressInput) return; // If there's no input on the page, do nothing
-
-  const options = {
+  var autocomplete = new google.maps.places.Autocomplete(addressInput, {
     componentRestrictions: { country: "il" },
-    fields: ["address_components", "geometry"],
+    fields: ["address_components", "geometry", "formatted_address"],
     types: ["address"],
-  };
-
-  const autocomplete = new google.maps.places.Autocomplete(addressInput, options);
-
-  // Listen for place changes
-  autocomplete.addListener("place_changed", () => {
-    const place = autocomplete.getPlace();
-    console.log("Selected address:", place);
-
-    // You could parse place.address_components to fill hidden fields
-    // For example:
-    // const cityField = document.getElementById("city");
-    // const streetField = document.getElementById("street");
-    // ...
   });
-}
 
-
-/**************************************
- * 1) EmailJS INIT
- **************************************/
-
-
-/**************************************
- * 2) TESTIMONIAL FORM SUBMISSION
- **************************************/
-
-
-/**************************************
- * 3) HAMBURGER MENU
- **************************************/
-// main.js
-// Hamburger Menu Toggle
-
-// Ensure DOM is fully loaded
-window.addEventListener('DOMContentLoaded', () => {
-  const hamburger = document.querySelector('.hamburger');
-  const navOverlay = document.querySelector('.nav-overlay');
-
-  if (hamburger && navOverlay) {
-    hamburger.addEventListener('click', () => {
-      navOverlay.classList.toggle('open');
-    });
-    // Close overlay when clicking outside menu
-    navOverlay.addEventListener('click', (e) => {
-      if (e.target === navOverlay) {
-        navOverlay.classList.remove('open');
-      }
-    });
-  }
-});
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // בודקים שזו באמת הכתובת של עמוד ההצלחה
-    if (window.location.pathname.endsWith('success.html')) {
-      const section = document.querySelector('.contact-success');
-      if (section) {
-        section.innerHTML = `
-          <h1>תודה על המלצתך!</h1>
-          <h2>שמחנו לקרוא את חוות הדעת שלך – ההמלצה התקבלה בהצלחה ותפורסום בקרוב באתר שלנו.</h2>
-          <p style="margin-top:1rem; text-align:center;">
-            נשמח תמיד לשמוע ממך – לכל שאלה נוספת, תוכל לפנות אלינו בווצאפ:
-            <a href="https://wa.me/972546656076" target="_blank" rel="noopener" style="display:inline-block;margin-left:0.5rem;">
-              <img src="assets/img/whatsapp-logo.png" alt="וואצאפ" style="width:32px;vertical-align:middle;">
-            </a>
-          </p>
-        `;
-      }
+  autocomplete.addListener("place_changed", function () {
+    var place = autocomplete.getPlace();
+    if (place && place.formatted_address) {
+      addressInput.value = place.formatted_address;
     }
   });
-document.getElementById("year").innerText= "© "+ new Date().getFullYear();
+}
 
+/* ============================================================
+ * 5) Outbound contact tracking — phone and WhatsApp
+ * ============================================================ */
+function wireContactTracking() {
+  document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
+    link.addEventListener("click", function () {
+      track("call_click", { page: window.location.pathname, link_text: (link.textContent || "").trim().slice(0, 60) });
+    });
+  });
 
+  document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp"]').forEach(function (link) {
+    link.addEventListener("click", function () {
+      track("whatsapp_click", { page: window.location.pathname });
+    });
+  });
+}
 
-// Expose the calculator function globally if you want to call it from HTML
-window.calculateSavings = calculateSavings;
+/* ============================================================
+ * 6) Hamburger navigation
+ * ============================================================ */
+function wireHamburger() {
+  var hamburger = document.querySelector(".hamburger");
+  var navOverlay = document.querySelector(".nav-overlay");
+  if (!hamburger || !navOverlay) return;
+
+  var setOpen = function (open) {
+    navOverlay.classList.toggle("open", open);
+    hamburger.setAttribute("aria-expanded", String(open));
+  };
+
+  hamburger.setAttribute("aria-expanded", "false");
+  hamburger.addEventListener("click", function () {
+    setOpen(!navOverlay.classList.contains("open"));
+  });
+  navOverlay.addEventListener("click", function (e) {
+    if (e.target === navOverlay) setOpen(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setOpen(false);
+  });
+}
+
+/* ============================================================
+ * 7) Footer year
+ * ============================================================ */
+function setFooterYear() {
+  var el = document.getElementById("year");
+  if (!el) return; // <- the guard that was missing
+  el.textContent = "© " + new Date().getFullYear();
+}
+
+/* ============================================================
+ * Boot
+ * ============================================================ */
+function boot() {
+  setFooterYear();
+  wireHamburger();
+  wireContactTracking();
+  getAttribution(); // capture UTM on first page of the session
+  track("page_view_enhanced", { page: window.location.pathname });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", boot);
+} else {
+  boot();
+}
+
 window.initAutocomplete = initAutocomplete;
+window.rnrgTrack = track;

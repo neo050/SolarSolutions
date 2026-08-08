@@ -4,19 +4,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>בחירת שירות — חשמל / סולארי</title>
-  <meta name="description" content="דף בחירה חד, מינימליסטי ומקצועי לשירותי חשמל וסולארי" />
+  <!--
+    The domain root previously had the title "בחירת שירות — חשמל / סולארי", no business
+    name, no H1 describing the business and no body copy — so rnrg.co.il itself could not
+    rank for anything, and every organic or Google Business Profile click landed on a fork
+    with no context. Copy and metadata below give the root something to be found by.
+    The full homepage rebuild replaces this page entirely.
+  -->
+  <title>RNRG — רוני חג׳ג׳ | חשמלאי ראשי, עבודות חשמל ומערכות סולאריות</title>
+  <meta name="description" content="RNRG — רוני חג׳ג׳, הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים, לעסקים ולפרויקטים, ומערכות סולאריות. שירות ממצפה רמון ועד עמק חפר." />
+  <link rel="canonical" href="https://rnrg.co.il/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:url" content="https://rnrg.co.il/" />
+  <meta property="og:title" content="RNRG — רוני חג׳ג׳ | חשמלאי ראשי, עבודות חשמל ומערכות סולאריות" />
+  <meta property="og:description" content="הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים, לעסקים ולפרויקטים, ומערכות סולאריות." />
 
   <!-- Heebo for crisp Hebrew -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/svg+xml" href="/energy/images/gallery/logo.svg" />
+  <!--
+    Favicon was /energy/images/gallery/logo.svg — a 494KB file, downloaded on every page
+    load purely to draw a 16px tab icon. Now an inline SVG (zero requests) with the PNG
+    logo as the touch icon.
+  -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230E2C33'/%3E%3Cpath d='M35 8 18 36h11l-3 20 20-30H35l4-18z' fill='%23F2B341'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="/energy/images/gallery/logo.png" />
-  <!-- Prevent default /favicon.ico 404s by providing an inline fallback -->
-  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%238B5CF6'/%3E%3Ctext x='32' y='38' text-anchor='middle' font-family='Heebo,Arial' font-size='28' fill='white'%3ER%3C/text%3E%3C/svg%3E" />
 
   <style>
     :root {
@@ -100,9 +116,53 @@
     }
 
     .subtitle {
-      margin: 0 0 2.2rem;
+      margin: 0 0 1.4rem;
       color: var(--muted);
       font-size: clamp(.95rem, .9rem + .4vw, 1.05rem);
+      max-width: 62ch;
+      line-height: 1.7;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0 0 2.2rem;
+    }
+
+    .quick {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: .98rem;
+      text-decoration: none;
+      background: var(--violet);
+      color: #fff;
+      border: 1px solid transparent;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .quick:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    .quick-alt {
+      background: transparent;
+      color: var(--violet-2);
+      border-color: var(--border);
+    }
+
+    .quick-alt:hover {
+      background: var(--whiteTint);
+    }
+
+    .quick:focus-visible {
+      outline: 2px solid var(--violet-2);
+      outline-offset: 3px;
     }
 
     .grid {
@@ -310,14 +370,23 @@
 
 <body>
   <main class="wrap">
-    <h1 class="title">בחירת שירות</h1>
-    <p class="subtitle"></p>
+    <h1 class="title">RNRG — רוני חג׳ג׳ הנדסת חשמל</h1>
+    <p class="subtitle">
+      הנדסאי חשמל ובעל רישיון חשמלאי ראשי (מס׳ 991433). עבודות חשמל לבתים פרטיים, לעסקים
+      ולפרויקטים — לוחות חשמל, שדרוג לתלת פאזי, בדיקות ואישורים ותאורה — לצד תכנון והתקנה
+      של מערכות סולאריות. שירות ממצפה רמון ועד עמק חפר.
+    </p>
+
+    <p class="quick-actions">
+      <a class="quick" href="tel:+972546656076">חייגו 054-665-6076</a>
+      <a class="quick quick-alt" href="https://wa.me/972546656076" target="_blank" rel="noopener">שלחו הודעה בוואטסאפ</a>
+    </p>
 
     <section class="grid" aria-label="קישורים לשירותים">
       <!-- Electric -->
       <a class="card" href="/energy/" aria-label="לעמוד החשמל" title="לעמוד החשמל">
         <div class="logoWrap" aria-hidden="true">
-          <img class="logo" src="/energy/images/gallery/logo.svg" alt="לוגו — חשמל" loading="lazy" decoding="async">
+          <img class="logo" src="/energy/images/gallery/logo.png" alt="לוגו — חשמל" loading="lazy" decoding="async">
         </div>
         <div class="label">לעמוד החשמל</div>
       </a>
@@ -332,6 +401,39 @@
       </a>
     </section>
   </main>
+
+  <!--
+    LocalBusiness structured data. Every field is verifiable: the licence number and
+    contact details come from the business, the service area from its own copy.
+    Deliberately absent: aggregateRating and opening hours — neither is confirmed.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Electrician",
+    "@id": "https://rnrg.co.il/#business",
+    "name": "RNRG — רוני חג׳ג׳ הנדסת חשמל",
+    "description": "הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים פרטיים, לעסקים ולפרויקטים, ומערכות סולאריות.",
+    "url": "https://rnrg.co.il/",
+    "telephone": "+972546656076",
+    "email": "office@rnrg.co.il",
+    "areaServed": "ממצפה רמון ועד עמק חפר",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "IL",
+      "addressRegion": "דרום",
+      "addressLocality": "אשדוד"
+    },
+    "hasCredential": {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "רישיון חשמלאי ראשי",
+      "identifier": "991433"
+    }
+  }
+  </script>
+
+  <script src="assets/js/analytics.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 
 </html>

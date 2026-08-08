@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RNRG sitemap.
+
+  This file did not exist before. Retired stubs (m.html, new.html, solar-calculator.html)
+  and success.html are deliberately excluded.
+
+  priority/changefreq are hints only; Google ignores them. They are kept minimal on purpose.
+  The rebuild generates this file at build time instead of maintaining it by hand.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://rnrg.co.il/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Electrical branch (React app mounted at /energy/) -->
+  <url>
+    <loc>https://rnrg.co.il/energy/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Solar branch -->
+  <url>
+    <loc>https://rnrg.co.il/solar.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://rnrg.co.il/solutions.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://rnrg.co.il/projects.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://rnrg.co.il/CompatibilityCheck.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <!-- Company -->
+  <url>
+    <loc>https://rnrg.co.il/about.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://rnrg.co.il/contact.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://rnrg.co.il/recommendation.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+
+</urlset>

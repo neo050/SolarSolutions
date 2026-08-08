@@ -1,26 +1,44 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-<meta http-equiv="Content-Security-Policy"
+  <!-- This page had no viewport tag, so it rendered zoomed-out on every phone. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--
+    Removed ws://127.0.0.1:3001 from connect-src — a local dev-server leftover shipped to
+    production. Added the Google Tag Manager and Fonts origins so analytics can load, and
+    maps.googleapis.com to img-src for Places assets.
+    Note this CSP is declared on this page only, not site-wide; the rebuild moves it to a
+    response header covering every route.
+  -->
+  <meta http-equiv="Content-Security-Policy"
       content="
         default-src 'self';
-        script-src  'self'
+        script-src  'self' 'unsafe-inline'
                     https://maps.googleapis.com
-                    https://cdn.jsdelivr.net;
+                    https://cdn.jsdelivr.net
+                    https://www.googletagmanager.com;
         connect-src 'self'
                     https://api.emailjs.com
                     https://maps.googleapis.com
-                    ws://127.0.0.1:3001;
+                    https://www.google-analytics.com
+                    https://*.analytics.google.com;
         img-src     'self' data:
-                    https://maps.gstatic.com;
+                    https://maps.gstatic.com
+                    https://maps.googleapis.com
+                    https://www.googletagmanager.com
+                    https://www.google-analytics.com;
         style-src   'self' 'unsafe-inline';
+        frame-src   https://www.googletagmanager.com;
         object-src  'none';
+        base-uri    'self';
+        form-action 'self' https://api.emailjs.com;
       ">
 
-
-  <title>בדיקת התאמה</title>
-  <!-- Link to your CSS if needed -->
+  <title>בדיקת התאמה למערכת סולארית | RNRG</title>
+  <meta name="description" content="בדיקת התאמה למערכת סולארית — שטח פנוי, סוג נכס והיתר בנייה. נחזור אליכם עם הערכה מבעל מקצוע.">
+  <link rel="canonical" href="https://rnrg.co.il/CompatibilityCheck.html">
   <link rel="stylesheet" href="assets/css/style-modern.css">
 </head>
 <body>
@@ -52,7 +70,7 @@
                 <input type="email" id="email" name="email" required>
           
                 <label for="phone">פלאפון:</label>
-                <input type="number" id="phone" name="phone" required>
+                <input type="tel" id="phone" name="phone" inputmode="tel" autocomplete="tel" pattern="[0-9\-+ ]{9,15}" placeholder="050-1234567" required>
                 <label for="hasPermit">האם יש היתר בנייה?</label>
                 <select id="hasPermit" name="hasPermit" required>
                     <option value="yes">כן</option>
@@ -75,7 +93,7 @@
 
                 <!-- Add more fields for your compatibility check if needed -->
                 <label for="roofArea">שטח פנוי (מ"ר):</label>
-                <input type="number" id="roofArea" name="roofArea" required />
+                <input type="number" id="roofArea" name="roofArea" inputmode="numeric" min="1" step="1" required />
 
                 <button type="submit">לבדיקה</button>
             </form>
@@ -108,6 +126,7 @@
 </script>
 
   <!-- Main JS with both forms logic -->
+  <script src="assets/js/analytics.js"></script>
   <script src="assets/js/main.js"></script>
 
   <script

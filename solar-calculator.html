@@ -1,59 +1,33 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="מחשבון חסכון סולארי להמחשת ההשפעה הכלכלית של התקנת מערכות סולאריות">
-  <meta name="keywords" content="מחשבון חסכון, מערכות סולאריות, חיסכון בחשמל">
-  <title>מחשבון חסכון סולארי</title>
-  <link rel="stylesheet" href="assets/css/style-modern.css">
+  <title>בדיקת התאמה למערכת סולארית — RNRG</title>
+
+  <!--
+    RETIRED PAGE — the savings calculator has been withdrawn.
+
+    The calculator computed  monthlyUsage × electricityCost × 0.9  and presented the result
+    as "חיסכון חודשי". That is a flat 90% savings promise issued to every visitor regardless
+    of roof area, consumption profile, system size, orientation or tariff — a quantified
+    financial claim the business cannot stand behind.
+
+    Visitors are sent to the compatibility check instead, which collects the inputs an actual
+    estimate requires and routes them to a person. Rebuild as a real estimator only on top of
+    a pricing model the business owner confirms.
+  -->
+  <link rel="canonical" href="https://rnrg.co.il/CompatibilityCheck.html">
+  <meta name="robots" content="noindex, follow">
+  <meta http-equiv="refresh" content="0; url=/CompatibilityCheck.html">
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; direction: rtl; background: #f0f4f8;
+           color: #333; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }
+    a { color: #00796b; }
+  </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="container">
-         <a href="solar.html" class="logo">
-
-        <img src="assets/img/solar solution logos/rnrg.png" alt="לוגו החברה" class="logo-icon">
-      </a>
-      <nav>
-        <ul>
-          <li><a href="solar.html">בית</a></li>
-          <li><a href="about.html">על החברה</a></li>
-          <li><a href="solutions.html">פתרונות סולאריים</a></li>
-          <li><a href="projects.html">פרויקטים</a></li>
-          <li><a href="contact.html">צור קשר</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main>
-    <section class="calculator">
-      <h1>מחשבון חסכון סולארי</h1>
-      <form id="calculatorForm">
-        <label for="monthlyUsage">צריכת חשמל חודשית (קוט"ש):</label>
-        <input type="number" id="monthlyUsage" name="monthlyUsage" required>
-        
-        <label for="electricityCost">עלות חשמל (ש"ח לקוט"ש):</label>
-        <input type="number" id="electricityCost" name="electricityCost" step="0.01" required>
-        
-        <button type="button" onclick="calculateSavings()" class="btn">חשב חסכון</button>
-      </form>
-      <div id="result"></div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-    <footer>
-    <div class="container">
-      <p> 
-           כל הזכויות שמורות - חברת <span class="RNRG">RNRG</span>   
-      </p>
-      <p id="year"></p>
-    </div>
-  </footer>
-  <script src="assets/js/main.js"></script>
+  <p>המחשבון הוחלף בבדיקת התאמה. <a href="/CompatibilityCheck.html">לבדיקת התאמה</a></p>
+  <script>window.location.replace("/CompatibilityCheck.html");</script>
 </body>
 </html>
