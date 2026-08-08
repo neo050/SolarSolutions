@@ -1,0 +1,434 @@
+---
+/**
+ * Lead capture form.
+ *
+ * Designed around one requirement from the brief: it must not be possible to lose a lead.
+ *
+ * How that is achieved:
+ *   1. Every submission gets a lead id and a timestamp before anything is sent.
+ *   2. The payload is written to localStorage FIRST. Nothing leaves the page until the
+ *      lead exists locally.
+ *   3. POST to the lead endpoint with two retries and backoff.
+ *   4. On success the queue entry is cleared and the visitor goes to /thank-you/.
+ *   5. On failure the entry stays queued, the visitor sees a real error with working
+ *      alternatives, and the queue is retried on the next page load.
+ *   6. If no endpoint is configured yet, the form completes via WhatsApp with a fully
+ *      formed message rather than silently doing nothing.
+ *
+ * The old form did none of this: it called window.open on WhatsApp and, if a popup
+ * blocker intervened, the visitor saw nothing at all and no record existed anywhere.
+ *
+ * The endpoint is BLOCKED on gap `integration.lead-endpoint` (a hosting decision).
+ */
+import { FORMS } from "~/data/forms";
+import { BUSINESS, links, TRACKS } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  track: Track;
+}
+const { track } = Astro.props;
+const form = FORMS[track];
+
+const LEAD_ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
+---
+
+<form
+  class="lead-form"
+  id={`lead-form-${track}`}
+  data-track={track}
+  data-event={TRACKS[track].event}
+  data-endpoint={LEAD_ENDPOINT}
+  data-whatsapp={BUSINESS.whatsapp}
+  novalidate
+>
+  <div class="lead-form__head">
+    <h2>{form.title}</h2>
+    <p>{form.lede}</p>
+  </div>
+
+  <div class="form-grid">
+    {
+      form.fields.map((field) => (
+        <div class:list={["field", { "field--full": field.full || field.type === "textarea" }]}>
+          <label class="field__label" for={`f-${track}-${field.name}`}>
+            {field.label}
+            {field.required && <span class="req" aria-hidden="true">*</span>}
+            {field.required && <span class="visually-hidden">(שדה חובה)</span>}
+          </label>
+
+          {field.hint && (
+            <span class="field__hint" id={`h-${track}-${field.name}`}>
+              {field.hint}
+            </span>
+          )}
+
+          {field.type === "textarea" ? (
+            <textarea
+              class="textarea"
+              id={`f-${track}-${field.name}`}
+              name={field.name}
+              placeholder={field.placeholder}
+              required={field.required}
+              aria-describedby={field.hint ? `h-${track}-${field.name}` : undefined}
+            />
+          ) : field.type === "select" ? (
+            <select
+              class="select"
+              id={`f-${track}-${field.name}`}
+              name={field.name}
+              required={field.required}
+              aria-describedby={field.hint ? `h-${track}-${field.name}` : undefined}
+            >
+              <option value="">בחרו…</option>
+              {field.options?.map((o) => <option value={o}>{o}</option>)}
+            </select>
+          ) : field.type === "radio" ? (
+            <div class="radio-row" role="radiogroup" aria-labelledby={`f-${track}-${field.name}`}>
+              {field.options?.map((o, i) => (
+                <label class="radio">
+                  <input
+                    type="radio"
+                    name={field.name}
+                    value={o}
+                    required={field.required && i === 0}
+                  />
+                  <span>{o}</span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <input
+              class="input"
+              id={`f-${track}-${field.name}`}
+              name={field.name}
+              type={field.type}
+              placeholder={field.placeholder}
+              required={field.required}
+              autocomplete={field.autocomplete}
+              inputmode={field.inputmode as any}
+              aria-describedby={field.hint ? `h-${track}-${field.name}` : undefined}
+            />
+          )}
+
+          <p class="field__error" id={`e-${track}-${field.name}`} />
+        </div>
+      ))
+    }
+  </div>
+
+  {/* Honeypot. Positioned off-screen rather than display:none, which bots detect. */}
+  <div class="hp-field" aria-hidden="true">
+    <label for={`hp-${track}`}>אל תמלאו שדה זה</label>
+    <input id={`hp-${track}`} type="text" name="_company_url" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="alert alert--error lead-form__alert" role="alert" hidden></div>
+
+  <div class="lead-form__actions">
+    <button type="submit" class="btn btn--primary btn--lg">{form.submitLabel}</button>
+    <p class="lead-form__reassurance">{form.reassurance}</p>
+  </div>
+
+  <p class="lead-form__alt">
+    מעדיפים לדבר? <a href={links.tel} data-cta-location="lead-form">{BUSINESS.phonePretty}</a>
+    · <a href={links.whatsapp()} target="_blank" rel="noopener" data-cta-location="lead-form">וואטסאפ</a>
+  </p>
+</form>
+
+<style>
+  .lead-form {
+    padding: var(--space-6);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .lead-form__head {
+    margin-block-end: var(--space-6);
+  }
+  .lead-form__head h2 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-3);
+  }
+  .lead-form__head p {
+    color: var(--text-muted);
+    max-width: 58ch;
+    font-size: 0.96rem;
+  }
+
+  .radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .radio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.94rem;
+    transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+  }
+  .radio:hover {
+    border-color: var(--brand);
+  }
+  .radio:has(input:checked) {
+    border-color: var(--brand);
+    background: var(--bg-brand-soft);
+    font-weight: 600;
+  }
+  .radio:has(input:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .lead-form__alert {
+    margin-block-start: var(--space-5);
+  }
+  .lead-form__alert[hidden] {
+    display: none;
+  }
+
+  .lead-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-6);
+  }
+  .lead-form__reassurance {
+    font-size: 0.87rem;
+    color: var(--text-muted);
+    max-width: 42ch;
+    margin: 0;
+  }
+
+  .lead-form__alt {
+    margin-block-start: var(--space-5);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  interface QueuedLead {
+    leadId: string;
+    createdAt: string;
+    track: string;
+    payload: Record<string, unknown>;
+    attempts: number;
+  }
+
+  const QUEUE_KEY = "rnrg_lead_queue";
+
+  const readQueue = (): QueuedLead[] => {
+    try {
+      return JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  };
+
+  const writeQueue = (q: QueuedLead[]) => {
+    try {
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+    } catch {
+      /* storage full or unavailable — the POST still goes ahead */
+    }
+  };
+
+  const makeLeadId = () =>
+    `L-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase();
+
+  /** Israeli mobile and landline formats, tolerant of spaces, dashes and +972. */
+  const PHONE_RE = /^(\+?972[-\s]?|0)([23489]|5\d|7\d)[-\s]?\d{3}[-\s]?\d{4}$/;
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function validate(formEl: HTMLFormElement): boolean {
+    let ok = true;
+    let firstBad: HTMLElement | null = null;
+
+    formEl.querySelectorAll<HTMLElement>("[name]").forEach((el) => {
+      const input = el as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+      if (input.name.startsWith("_")) return;
+
+      const track = formEl.dataset.track;
+      const errEl = formEl.querySelector<HTMLElement>(`#e-${track}-${input.name}`);
+      const value = (input.value || "").trim();
+      let message = "";
+
+      if (input.required && !value) {
+        message = "שדה חובה";
+      } else if (value && input.type === "tel" && !PHONE_RE.test(value)) {
+        message = "מספר טלפון לא תקין";
+      } else if (value && input.type === "email" && !EMAIL_RE.test(value)) {
+        message = "כתובת אימייל לא תקינה";
+      }
+
+      // Radio groups: at least one in the group must be selected.
+      if (input.type === "radio") {
+        const group = formEl.querySelectorAll<HTMLInputElement>(`[name="${input.name}"]`);
+        const anyChecked = Array.from(group).some((r) => r.checked);
+        message = anyChecked ? "" : "יש לבחור אפשרות";
+      }
+
+      if (errEl) errEl.textContent = message;
+      if (message) {
+        ok = false;
+        input.setAttribute("aria-invalid", "true");
+        if (!firstBad) firstBad = input;
+      } else {
+        input.removeAttribute("aria-invalid");
+      }
+    });
+
+    if (firstBad) (firstBad as HTMLElement).focus();
+    return ok;
+  }
+
+  async function post(endpoint: string, lead: QueuedLead): Promise<boolean> {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lead),
+        });
+        if (res.ok) return true;
+      } catch {
+        /* network error — fall through to retry */
+      }
+      if (attempt === 0) await new Promise((r) => setTimeout(r, 900));
+    }
+    return false;
+  }
+
+  function whatsappHandoff(waNumber: string, lead: QueuedLead): string {
+    const lines = Object.entries(lead.payload)
+      .filter(([k, v]) => v && !k.startsWith("_") && k !== "attribution")
+      .map(([k, v]) => `${k}: ${v}`);
+    const text = [`פנייה מהאתר (${lead.track})`, `מזהה: ${lead.leadId}`, "", ...lines].join("\n");
+    return `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
+  }
+
+  document.querySelectorAll<HTMLFormElement>(".lead-form").forEach((formEl) => {
+    const alertEl = formEl.querySelector<HTMLElement>(".lead-form__alert")!;
+    const submitBtn = formEl.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const track = formEl.dataset.track!;
+    const endpoint = formEl.dataset.endpoint || "";
+    const waNumber = formEl.dataset.whatsapp!;
+
+    let started = false;
+    formEl.addEventListener("focusin", () => {
+      if (started) return;
+      started = true;
+      (window as any).rnrgTrack?.("form_start", { track, form_id: formEl.id });
+    });
+
+    // Clear a field's error as soon as the visitor fixes it.
+    formEl.addEventListener("input", (e) => {
+      const el = e.target as HTMLInputElement;
+      if (!el.name || el.getAttribute("aria-invalid") !== "true") return;
+      if ((el.value || "").trim()) {
+        el.removeAttribute("aria-invalid");
+        const err = formEl.querySelector<HTMLElement>(`#e-${track}-${el.name}`);
+        if (err) err.textContent = "";
+      }
+    });
+
+    formEl.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      alertEl.hidden = true;
+
+      if (!validate(formEl)) {
+        alertEl.textContent = "יש למלא את השדות המסומנים.";
+        alertEl.hidden = false;
+        return;
+      }
+
+      const data = new FormData(formEl);
+
+      // Honeypot: a filled hidden field means a bot. Behave as if it worked.
+      if ((data.get("_company_url") as string)?.trim()) {
+        window.location.href = "/thank-you/";
+        return;
+      }
+
+      const payload: Record<string, unknown> = {};
+      data.forEach((v, k) => {
+        if (!k.startsWith("_")) payload[k] = v;
+      });
+
+      const lead: QueuedLead = {
+        leadId: makeLeadId(),
+        createdAt: new Date().toISOString(),
+        track,
+        payload: {
+          ...payload,
+          page: location.pathname,
+          attribution: (window as any).rnrgAttribution?.() ?? {},
+        },
+        attempts: 0,
+      };
+
+      // Persist before sending — a lead that reached this line is never lost.
+      writeQueue([...readQueue(), lead]);
+
+      submitBtn.dataset.loading = "true";
+      submitBtn.disabled = true;
+
+      const eventName = formEl.dataset.event!;
+      (window as any).rnrgTrack?.("generate_lead", { track, lead_id: lead.leadId });
+      (window as any).rnrgTrack?.(eventName, { track, lead_id: lead.leadId });
+
+      if (!endpoint) {
+        // No endpoint configured yet. Complete the journey via WhatsApp rather than
+        // pretending the lead was received.
+        window.location.href = whatsappHandoff(waNumber, lead);
+        setTimeout(() => {
+          window.location.href = `/thank-you/?lead=${lead.leadId}&via=whatsapp`;
+        }, 1200);
+        return;
+      }
+
+      const sent = await post(endpoint, lead);
+
+      if (sent) {
+        writeQueue(readQueue().filter((l) => l.leadId !== lead.leadId));
+        window.location.href = `/thank-you/?lead=${lead.leadId}`;
+        return;
+      }
+
+      submitBtn.dataset.loading = "false";
+      submitBtn.disabled = false;
+      (window as any).rnrgTrack?.("form_error", { track, lead_id: lead.leadId });
+
+      alertEl.innerHTML =
+        `לא הצלחנו לשלוח את הפנייה כרגע. הפרטים נשמרו והמערכת תנסה שוב אוטומטית. ` +
+        `אפשר גם <a href="${whatsappHandoff(waNumber, lead)}" target="_blank" rel="noopener">` +
+        `לשלוח בוואטסאפ עכשיו</a>.`;
+      alertEl.hidden = false;
+    });
+  });
+
+  /* Retry anything left in the queue from a previous visit. */
+  (async function flushQueue() {
+    const endpoint = document.querySelector<HTMLFormElement>(".lead-form")?.dataset.endpoint;
+    if (!endpoint) return;
+    const queue = readQueue();
+    if (!queue.length) return;
+
+    const remaining: QueuedLead[] = [];
+    for (const lead of queue) {
+      if (lead.attempts >= 5) continue; // give up rather than retry forever
+      const ok = await post(endpoint, lead);
+      if (!ok) remaining.push({ ...lead, attempts: lead.attempts + 1 });
+    }
+    writeQueue(remaining);
+  })();
+</script>

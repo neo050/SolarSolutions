@@ -1,0 +1,35 @@
+---
+/**
+ * Marks a place where a real fact or asset is missing.
+ *
+ * The brief is explicit that missing material must not stall the build: design the page
+ * correctly, mark the hole, keep going. This is that mechanism.
+ *
+ * It renders an honest visible marker rather than an invented number, and the id is
+ * validated against src/data/gaps.ts at build time — so a typo fails the build, and the
+ * report at /internal/gaps/ can never drift from what the pages actually need.
+ *
+ * `label` overrides the display text; otherwise a short form of the gap is shown.
+ */
+import { getGap } from "~/data/gaps";
+
+export interface Props {
+  id: string;
+  label?: string;
+  block?: boolean;
+}
+
+const { id, label, block = false } = Astro.props;
+const gap = getGap(id); // throws on an unknown id — deliberate
+---
+
+<span
+  class:list={["pending", { "pending--block": block }]}
+  data-gap={id}
+  data-priority={gap.priority}
+  title={`חסר: ${gap.what}`}
+>
+  <span aria-hidden="true">◆</span>
+  <span>{label ?? `[${gap.priority} — ממתין למידע]`}</span>
+  <span class="visually-hidden">פריט מידע שטרם התקבל: {gap.what}</span>
+</span>

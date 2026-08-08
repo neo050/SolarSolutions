@@ -1,0 +1,43 @@
+---
+import Base from "~/layouts/Base.astro";
+import { BUSINESS, links } from "~/data/business";
+import { PRIMARY_NAV } from "~/data/nav";
+---
+
+<Base title="הדף לא נמצא" description="הדף שחיפשתם לא קיים." noindex={true}>
+  <section class="section nf">
+    <div class="container container--narrow">
+      <p class="eyebrow mono">404</p>
+      <h1>הדף הזה לא קיים</h1>
+      <p class="lede">
+        ייתכן שהכתובת השתנתה. אלה העמודים המרכזיים באתר:
+      </p>
+      <ul class="nf__links">
+        {PRIMARY_NAV.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/">לדף הבית</a>
+        <a class="btn btn--outline" href={links.tel}>{BUSINESS.phonePretty}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { padding-block: var(--space-9); text-align: center; }
+  .nf h1 { font-size: var(--step-4); margin-block-end: var(--space-4); }
+  .nf .lede { margin-inline: auto; }
+  .nf__links {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3);
+    list-style: none; margin: var(--space-6) 0; padding: 0;
+  }
+  .nf__links a {
+    display: inline-block; padding: 0.5rem 1rem;
+    border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+    text-decoration: none; font-size: 0.92rem; font-weight: 600;
+  }
+  .nf__links a:hover { border-color: var(--brand); }
+  .nf .btn-row { justify-content: center; }
+</style>

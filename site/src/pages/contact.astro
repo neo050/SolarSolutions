@@ -1,0 +1,129 @@
+---
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import LeadForm from "~/components/LeadForm.astro";
+import Pending from "~/components/Pending.astro";
+import { BUSINESS, links } from "~/data/business";
+
+const trail = [{ label: "צור קשר", href: "/contact/" }];
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  mainEntity: { "@id": `${BUSINESS.siteUrl}/#business` },
+};
+---
+
+<Base
+  title="צור קשר"
+  description={`יצירת קשר עם RNRG — רוני חג׳ג׳ הנדסת חשמל. טלפון ${BUSINESS.phonePretty}, וואטסאפ ואימייל. שירות ${BUSINESS.areaServed}.`}
+  breadcrumbs={trail}
+  schema={[contactSchema]}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section contact-head">
+    <div class="container">
+      <p class="eyebrow">צור קשר</p>
+      <h1>נשמח לשמוע מכם</h1>
+      <p class="lede">
+        לתקלה דחופה — טלפון. לפנייה מפורטת או לפרויקט — טופס או מייל.
+      </p>
+    </div>
+  </section>
+
+  <div class="container contact-layout">
+    <div class="contact-methods">
+      <a class="method" href={links.tel} data-cta-location="contact">
+        <span class="method__label">טלפון</span>
+        <span class="method__value mono">{BUSINESS.phonePretty}</span>
+        <span class="method__note">הדרך המהירה ביותר לתקלה דחופה</span>
+      </a>
+
+      <a class="method" href={links.whatsapp()} target="_blank" rel="noopener" data-cta-location="contact">
+        <span class="method__label">וואטסאפ</span>
+        <span class="method__value mono">{BUSINESS.phonePretty}</span>
+        <span class="method__note">נוח לשליחת תמונות של לוח או תקלה</span>
+      </a>
+
+      <a class="method" href={links.mailto}>
+        <span class="method__label">אימייל</span>
+        <span class="method__value">{BUSINESS.email}</span>
+        <span class="method__note">לתוכניות, כתבי כמויות והצעות מחיר</span>
+      </a>
+
+      <div class="method method--static">
+        <span class="method__label">אזור פעילות</span>
+        <span class="method__value">{BUSINESS.areaServed}</span>
+        <span class="method__note">
+          <a href="/areas/">פירוט אזורי הפעילות</a>
+        </span>
+      </div>
+
+      <div class="method method--static">
+        <span class="method__label">שעות פעילות</span>
+        <span class="method__value"><Pending id="fact.opening-hours" label="ממתין לאישור" /></span>
+        <span class="method__note">בינתיים — השאירו הודעה ונחזור אליכם</span>
+      </div>
+
+      <div class="method method--static">
+        <span class="method__label">זמן תגובה</span>
+        <span class="method__value"><Pending id="fact.response-time" label="ממתין לנתון" /></span>
+        <span class="method__note">לא נתחייב לזמן לפני שנוכל לעמוד בו</span>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <LeadForm track="private" />
+      <p class="contact-form__alt">
+        פרויקט קבלני או מערכת סולארית? <a href="/quote/">יש טפסים ייעודיים</a> עם השאלות
+        הרלוונטיות.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .contact-head { padding-block: var(--space-7) var(--space-5); }
+  .contact-head h1 { font-size: var(--step-4); margin-block-end: var(--space-4); }
+
+  .contact-layout {
+    display: grid;
+    gap: var(--space-6);
+    padding-block-end: var(--section-y);
+    align-items: start;
+  }
+
+  .contact-methods { display: grid; gap: var(--space-3); }
+  .method {
+    display: grid;
+    gap: 0.25rem;
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  a.method:hover { border-color: var(--brand); }
+  .method--static { background: var(--bg-sunken); }
+  .method__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+  }
+  .method__value { font-size: 1.05rem; font-weight: 700; }
+  .method__note { font-size: 0.84rem; color: var(--text-muted); }
+
+  .contact-form__alt {
+    margin-block-start: var(--space-5);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 62rem) {
+    .contact-layout { grid-template-columns: minmax(0, 19rem) minmax(0, 1fr); gap: var(--space-7); }
+  }
+</style>

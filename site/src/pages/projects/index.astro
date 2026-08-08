@@ -1,0 +1,242 @@
+---
+/**
+ * Projects index.
+ *
+ * The old gallery was ten Bootstrap carousels — nine of them wrapping a single image —
+ * with the same meaningless alt text on nine of ten photos and no way to filter. The
+ * facts underneath were good: customer, town, system type and rated output for every one.
+ * This page keeps those facts, makes them filterable, and states plainly what is missing.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import ProjectCard from "~/components/ProjectCard.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Pending from "~/components/Pending.astro";
+import { PROJECTS, CUSTOMER_TYPE_LABEL, projectStats } from "~/data/projects";
+import { BUSINESS } from "~/data/business";
+
+const trail = [{ label: "פרויקטים", href: "/projects/" }];
+const stats = projectStats();
+
+const types = Array.from(new Set(PROJECTS.map((p) => p.customerType)));
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "פרויקטים שבוצעו",
+  numberOfItems: PROJECTS.length,
+  itemListElement: PROJECTS.map((p, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: `${p.title}, ${p.location}`,
+    url: new URL(`/projects/${p.slug}/`, BUSINESS.siteUrl).href,
+  })),
+};
+---
+
+<Base
+  title="פרויקטים — לוחות, תשתיות ומערכות סולאריות"
+  description="פרויקטים שבוצעו בפועל: בתים פרטיים, בניין משותף, גג רפת והאנגר תעשייתי. שם, מיקום, סוג מערכת והספק לכל פרויקט."
+  breadcrumbs={trail}
+  schema={[itemListSchema]}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section projects-head">
+    <div class="container">
+      <p class="eyebrow">עבודות שבוצעו</p>
+      <h1>פרויקטים</h1>
+      <p class="lede">
+        כל פרויקט כאן בוצע בפועל, עם שם, מיקום, סוג מערכת והספק. אין כאן תמונות מלאי
+        ואין פרויקטים לדוגמה.
+      </p>
+
+      <ul class="projects-stats">
+        <li class="stat">
+          <span class="stat__value">{stats.count}</span>
+          <span class="stat__label">פרויקטים מתועדים</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{Math.round(stats.totalKw)} kWp</span>
+          <span class="stat__label">הספק מותקן מצטבר</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.locations}</span>
+          <span class="stat__label">יישובים</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="group" aria-label="סינון לפי סוג לקוח">
+        <button type="button" class="filter" data-filter="all" aria-pressed="true">הכול</button>
+        {
+          types.map((t) => (
+            <button type="button" class="filter" data-filter={t} aria-pressed="false">
+              {CUSTOMER_TYPE_LABEL[t]}
+            </button>
+          ))
+        }
+      </div>
+
+      <ul class="projects-grid" id="projects-grid">
+        {
+          PROJECTS.map((project) => (
+            <li data-type={project.customerType}>
+              <ProjectCard project={project} featured={project.featured} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="projects-empty" hidden>אין פרויקטים בקטגוריה הזו.</p>
+    </div>
+  </section>
+
+  <!--
+    Stated plainly rather than hidden. Every documented project is solar and residential
+    or agricultural; there is not one contracting or commercial-electrical project on
+    record, which is the largest evidence gap in the rebuild.
+  -->
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="missing-note">
+        <h2>מה עוד לא מופיע כאן</h2>
+        <p>
+          כל הפרויקטים המתועדים הם סולאריים. עבודות החשמל והפרויקטים הקבלניים שבוצעו
+          פשוט לא תועדו בזמן אמת — ולכן הם לא מוצגים כאן, ולא נמציא אותם.
+        </p>
+        <ul>
+          <li>
+            <Pending id="case.contracting.first" label="P0" /> פרויקט קבלני מתועד
+          </li>
+          <li>
+            <Pending id="case.commercial.first" label="P1" /> פרויקט חשמל מסחרי
+          </li>
+          <li>
+            <Pending id="case.details.solar" label="P0" /> סיפור מלא לחמשת הפרויקטים המובילים
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand track="solar" />
+</Base>
+
+<style>
+  .projects-head {
+    padding-block: var(--space-7) var(--space-5);
+  }
+  .projects-head h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-4);
+  }
+  .projects-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-end: var(--space-6);
+  }
+  .filter {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all var(--dur-fast) var(--ease);
+  }
+  .filter:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+  }
+  .filter[aria-pressed="true"] {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: var(--brand-contrast);
+  }
+
+  .projects-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .projects-grid li[hidden] {
+    display: none;
+  }
+  .projects-empty {
+    margin-block-start: var(--space-6);
+    color: var(--text-muted);
+  }
+  .projects-empty[hidden] {
+    display: none;
+  }
+
+  .missing-note {
+    max-width: var(--measure);
+    padding: var(--space-6);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .missing-note h2 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-3);
+  }
+  .missing-note p {
+    color: var(--text-muted);
+    margin-block-end: var(--space-4);
+  }
+  .missing-note ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    font-size: 0.92rem;
+  }
+  .missing-note li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter");
+  const items = document.querySelectorAll<HTMLElement>("#projects-grid > li");
+  const empty = document.querySelector<HTMLElement>(".projects-empty");
+
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter!;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+
+      let visible = 0;
+      items.forEach((li) => {
+        const show = filter === "all" || li.dataset.type === filter;
+        li.hidden = !show;
+        if (show) visible++;
+      });
+
+      if (empty) empty.hidden = visible > 0;
+    })
+  );
+</script>

@@ -1,0 +1,69 @@
+name: Build & verify new site (staging gate)
+
+# Builds the rebuilt site and runs the QA suite on every change.
+#
+# Deliberately does NOT deploy to production. The existing deploy.yml still publishes the
+# current live site; cutover is a separate, explicit decision documented in
+# docs/migration.md. This workflow exists so the new site is provably green before that
+# decision is taken.
+
+on:
+  push:
+    paths:
+      - "site/**"
+      - ".github/workflows/site-ci.yml"
+  pull_request:
+    paths:
+      - "site/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck (astro check)
+        run: npx astro check
+
+      - name: Build
+        run: npx astro build
+
+      # Fails the run on: broken internal links, a page without exactly one h1, a missing
+      # canonical or description, an image without alt text, or any of the withdrawn
+      # unverified claims reappearing in the output.
+      - name: QA — links, headings, metadata, content honesty
+        run: node scripts/qa.mjs
+
+      - name: Report build size
+        run: |
+          echo "### Build output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "pages: $(find dist -name '*.html' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "total: $(du -sh dist | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "js:    $(find dist -name '*.js' -exec du -ch {} + | tail -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "css:   $(find dist -name '*.css' -exec du -ch {} + | tail -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload preview build
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-preview
+          path: site/dist
+          retention-days: 14

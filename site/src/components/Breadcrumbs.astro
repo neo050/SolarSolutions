@@ -1,0 +1,27 @@
+---
+export interface Props {
+  trail: { label: string; href: string }[];
+}
+const { trail } = Astro.props;
+---
+
+{
+  trail.length > 0 && (
+    <nav class="breadcrumbs container" aria-label="מיקום באתר">
+      <ol>
+        <li>
+          <a href="/">בית</a>
+        </li>
+        {trail.map((crumb, i) => (
+          <li>
+            {i === trail.length - 1 ? (
+              <span aria-current="page">{crumb.label}</span>
+            ) : (
+              <a href={crumb.href}>{crumb.label}</a>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

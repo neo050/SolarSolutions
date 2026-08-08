@@ -1,0 +1,333 @@
+---
+/**
+ * Missing Assets & Content Report — generated, not written.
+ *
+ * This is the live version of the report the brief requires as a formal deliverable. It
+ * renders from src/data/gaps.ts, which is the same registry the <Pending> markers on the
+ * public pages validate against — so the report cannot drift from what the site actually
+ * needs. Adding a <Pending> with an unknown id fails the build.
+ *
+ * noindex: this is a working document for the client and the studio, not public content.
+ */
+import Base from "~/layouts/Base.astro";
+import { GAPS, gapStats, type Gap, type Priority } from "~/data/gaps";
+import { UNVERIFIED } from "~/data/business";
+
+const stats = gapStats();
+
+const CATEGORY_LABEL: Record<Gap["category"], string> = {
+  "business-fact": "מידע עסקי",
+  copy: "תוכן",
+  photo: "תמונה",
+  video: "וידאו",
+  "case-study": "Case Study",
+  testimonial: "המלצה",
+  logo: "לוגו",
+  credential: "רישיון / הסמכה",
+  seo: "SEO",
+  integration: "אינטגרציה",
+};
+
+const OWNER_LABEL: Record<Gap["source"], string> = {
+  "business-owner": "בעל העסק",
+  client: "הלקוח",
+  studio: "הסטודיו",
+  ai: "AI",
+  research: "מחקר",
+};
+
+const AI_LABEL = { yes: "כן", partial: "חלקית", no: "לא" } as const;
+
+const order: Priority[] = ["P0", "P1", "P2"];
+const grouped = order.map((p) => ({ priority: p, items: GAPS.filter((g) => g.priority === p) }));
+
+// Owner-facing questionnaire, derived from the same registry so it can never fall behind.
+const ownerQuestions = GAPS.filter((g) => g.source === "business-owner");
+const clientActions = GAPS.filter((g) => g.source === "client");
+---
+
+<Base
+  title="דוח חוסרים — מסמך עבודה"
+  description="Missing Assets & Content Report — מסמך עבודה פנימי."
+  noindex={true}
+>
+  <section class="section report-head">
+    <div class="container">
+      <p class="eyebrow mono">INTERNAL · לא מאונדקס</p>
+      <h1>דוח חוסרים</h1>
+      <p class="lede">
+        הדוח נוצר אוטומטית מאותו מקור נתונים שממנו מוצגים סימוני "ממתין למידע" באתר.
+        כל פריט כאן חוסם משהו קונקרטי בעמוד אמיתי.
+      </p>
+
+      <ul class="report-stats">
+        <li class="stat">
+          <span class="stat__value">{stats.total}</span><span class="stat__label">סה״כ פריטים</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.blocksLaunch}</span><span class="stat__label">חוסמי עלייה (P0)</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.needsOwner}</span><span class="stat__label">דורשים את בעל העסק</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.open}</span><span class="stat__label">פתוחים</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  {
+    grouped.map(({ priority, items }) => (
+      <section class="section">
+        <div class="container">
+          <h2 class="report-group">
+            <span class:list={["pri", `pri--${priority.toLowerCase()}`]}>{priority}</span>
+            {priority === "P0" ? "חוסם עלייה לאוויר" : priority === "P1" ? "משמעותי" : "שיפור"}
+            <span class="report-group__count">{items.length}</span>
+          </h2>
+
+          <div class="table-scroll">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>מה חסר</th>
+                  <th>עמוד</th>
+                  <th>קטגוריה</th>
+                  <th>למה</th>
+                  <th>ממי</th>
+                  <th>אמת</th>
+                  <th>AI</th>
+                  <th>מה סוגר</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((g) => (
+                  <tr>
+                    <td class="report-what">
+                      {g.what}
+                      <code class="report-id">{g.id}</code>
+                    </td>
+                    <td class="report-page">{g.page}</td>
+                    <td>{CATEGORY_LABEL[g.category]}</td>
+                    <td class="report-why">{g.why}</td>
+                    <td>{OWNER_LABEL[g.source]}</td>
+                    <td>{g.needsTruth ? "חובה" : "—"}</td>
+                    <td>{AI_LABEL[g.aiFillable]}</td>
+                    <td class="report-closes">{g.closes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section section--sunken">
+    <div class="container">
+      <h2>שאלון לבעל העסק</h2>
+      <p class="lede">
+        {ownerQuestions.length} פריטים שרק בעל העסק יכול לסגור. מרוכזים לפגישה אחת.
+      </p>
+      <ol class="questions">
+        {
+          ownerQuestions.map((g) => (
+            <li>
+              <strong>{g.what}</strong>
+              <span class="questions__closes">מה נדרש: {g.closes}</span>
+              <span class:list={["pri", `pri--${g.priority.toLowerCase()}`]}>{g.priority}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>פעולות שדורשות גישה לחשבונות</h2>
+      <p class="lede">{clientActions.length} פריטים שאינם תוכן אלא הרשאות והחלטות תשתית.</p>
+      <ol class="questions">
+        {
+          clientActions.map((g) => (
+            <li>
+              <strong>{g.what}</strong>
+              <span class="questions__closes">מה נדרש: {g.closes}</span>
+              <span class:list={["pri", `pri--${g.priority.toLowerCase()}`]}>{g.priority}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--sunken">
+    <div class="container">
+      <h2>טענות שהוסרו מהאתר</h2>
+      <p class="lede">
+        תוכן שהופיע באתר הקודם ולא ניתן לאמת. הוסר, ולא יחזור בלי אישור.
+      </p>
+      <div class="table-scroll">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>הטענה</th>
+              <th>היכן הופיעה</th>
+              <th>הבעיה</th>
+              <th>מה מחזיר אותה</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              UNVERIFIED.map((u) => (
+                <tr>
+                  <td class="report-what">{u.claim}</td>
+                  <td><code class="report-id">{u.wasOn}</code></td>
+                  <td class="report-why">{u.problem}</td>
+                  <td class="report-closes">{u.closes}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .report-head {
+    padding-block: var(--space-7) var(--space-5);
+  }
+  .report-head h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-4);
+  }
+  .report-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+  }
+
+  .report-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--step-2);
+    margin-block-end: var(--space-5);
+  }
+  .report-group__count {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    font-weight: 400;
+  }
+
+  .pri {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid;
+  }
+  .pri--p0 {
+    color: var(--danger);
+    background: var(--danger-bg);
+    border-color: var(--danger-border);
+  }
+  .pri--p1 {
+    color: var(--warning);
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+  }
+  .pri--p2 {
+    color: var(--text-muted);
+    background: var(--bg-sunken);
+    border-color: var(--border-strong);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .report-table {
+    width: 100%;
+    min-width: 62rem;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .report-table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--bg-sunken);
+    text-align: start;
+    padding: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-block-end: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .report-table tbody td {
+    padding: var(--space-3);
+    border-block-start: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .report-what {
+    min-width: 18rem;
+    font-weight: 600;
+  }
+  .report-why,
+  .report-closes {
+    min-width: 16rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .report-page {
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .report-id {
+    display: block;
+    margin-block-start: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-subtle);
+    background: none;
+    padding: 0;
+  }
+
+  .questions {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+    padding-inline-start: 1.4em;
+  }
+  .questions li {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: start;
+  }
+  .questions li::marker {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  .questions__closes {
+    font-size: 0.87rem;
+    color: var(--text-muted);
+  }
+</style>

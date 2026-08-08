@@ -1,0 +1,426 @@
+---
+/**
+ * Homepage.
+ *
+ * Replaces the old splash page, which asked visitors to choose "electrical or solar"
+ * before telling them whose site they were on, and carried no H1, no body copy and no
+ * business name — so the domain root could not rank for anything.
+ *
+ * The job here is to let three very different audiences self-identify within a few
+ * seconds without any of them feeling the site is aimed at somebody else.
+ */
+import Base from "~/layouts/Base.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Testimonials from "~/components/Testimonials.astro";
+import ProjectCard from "~/components/ProjectCard.astro";
+import Pending from "~/components/Pending.astro";
+import { BUSINESS, links } from "~/data/business";
+import { featuredProjects, projectStats } from "~/data/projects";
+import { PRIMARY_NAV } from "~/data/nav";
+
+const stats = projectStats();
+const featured = featuredProjects().slice(0, 3);
+
+const tracks = [
+  {
+    id: "private",
+    eyebrow: "לבית ולדירה",
+    title: "עבודות חשמל פרטיות",
+    body:
+      "לוחות חשמל, שדרוג לתלת פאזי, בדיקות ואישורים לביטוח, תאורה, תשתיות ותיקונים — " +
+      "בבית קיים, בשיפוץ או בבנייה חדשה.",
+    href: "/electrical/",
+    cta: "לעבודות חשמל",
+    items: PRIMARY_NAV[0].children ?? [],
+  },
+  {
+    id: "contracting",
+    eyebrow: "לקבלנים, ליזמים ולמנהלי פרויקט",
+    title: "קבלנות ביצוע ופרויקטים",
+    body:
+      "ביצוע חשמל בפרויקט — משלב השלד ועד המסירה. תשתיות, לוחות, תיאום מול בעלי מקצוע " +
+      "ועמידה בלוחות הזמנים של האתר.",
+    href: "/contracting/",
+    cta: "לעבודות קבלניות",
+    items: PRIMARY_NAV[1].children ?? [],
+  },
+  {
+    id: "solar",
+    eyebrow: "ביתי, מסחרי וקבלני",
+    title: "מערכות סולאריות",
+    body:
+      "תכנון, אספקה והתקנה של מערכות מחוברות רשת ומנותקות רשת, כולל אגירת אנרגיה — " +
+      "לבתים, לעסקים ולמבנים חקלאיים.",
+    href: "/solar/",
+    cta: "למערכות סולאריות",
+    items: PRIMARY_NAV[2].children ?? [],
+  },
+];
+---
+
+<Base
+  title="חשמלאי ראשי, קבלנות ביצוע ומערכות סולאריות"
+  description="RNRG — רוני חג׳ג׳, הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים, קבלנות ביצוע לקבלנים וליזמים, ומערכות סולאריות. שירות ממצפה רמון ועד עמק חפר."
+>
+  <!-- ============================ Hero ============================ -->
+  <section class="home-hero">
+    <div class="container home-hero__inner">
+      <div class="home-hero__body">
+        <p class="eyebrow">{BUSINESS.ownerRole}</p>
+        <h1>עבודות חשמל, קבלנות ביצוע ומערכות סולאריות</h1>
+        <p class="lede">
+          RNRG מבצעת עבודות חשמל לבתים פרטיים, קבלנות ביצוע לפרויקטים מול קבלנים ויזמים,
+          והתקנת מערכות סולאריות — הכול תחת רישיון חשמלאי ראשי ובאחריות מלאה.
+        </p>
+
+        <div class="btn-row home-hero__actions">
+          <a class="btn btn--primary btn--lg" href="/quote/" data-cta="hero-primary" data-cta-location="hero">
+            לבקשת הצעת מחיר
+          </a>
+          <a class="btn btn--outline btn--lg" href={links.tel} data-cta-location="hero">
+            חייגו {BUSINESS.phonePretty}
+          </a>
+        </div>
+
+        <p class="home-hero__note">
+          לתקלת חשמל דחופה — עדיף להתקשר. לפרויקט — <a href="/quote/?track=contracting">שלחו את הפרטים</a>
+          ונחזור עם התייחסות מקצועית.
+        </p>
+      </div>
+
+      <div class="home-hero__media">
+        <img
+          src="/images/gallery/panel-02.jpeg"
+          alt="לוח חשמל עם הגנות מתקדמות, חיווט מסודר ותיוג מלא"
+          width="1200"
+          height="900"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="home-hero__card">
+          <span class="badge badge--mono">{BUSINESS.licenceLabel}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== Verified facts ======================== -->
+  <section class="section trust-strip">
+    <div class="container">
+      <ul class="trust-strip__list">
+        <li class="stat">
+          <span class="stat__value">{stats.count}</span>
+          <span class="stat__label">פרויקטים סולאריים מתועדים</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.largestKw} kWp</span>
+          <span class="stat__label">המערכת הגדולה שהותקנה</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.locations}</span>
+          <span class="stat__label">יישובים שבהם בוצעו עבודות</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value"><Pending id="fact.experience.years" label="—" /></span>
+          <span class="stat__label">שנות ניסיון בחשמל</span>
+        </li>
+      </ul>
+      <p class="trust-strip__note">
+        כל המספרים כאן נספרים מתוך עבודות שבוצעו בפועל ומתועדות באתר.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================= Three tracks ========================= -->
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="section-head">
+        <h2>שלושה תחומי פעילות, עסק אחד</h2>
+        <p>
+          בחרו את התחום הרלוונטי לכם — כל מסלול מוביל למידע, לעבודות שבוצעו ולדרך פנייה
+          שמתאימה לסוג העבודה.
+        </p>
+      </div>
+
+      <div class="tracks">
+        {
+          tracks.map((track) => (
+            <article class="track" data-track={track.id}>
+              <p class="eyebrow">{track.eyebrow}</p>
+              <h3>{track.title}</h3>
+              <p class="track__body">{track.body}</p>
+              <ul class="track__list">
+                {track.items.slice(0, 5).map((item) => (
+                  <li>
+                    <a href={item.href}>{item.label}</a>
+                  </li>
+                ))}
+              </ul>
+              <a class="btn btn--outline btn--block track__cta" href={track.href} data-cta={`track-${track.id}`}>
+                {track.cta}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Contracting spotlight ===================== -->
+  <section class="section section--inverse contracting-band">
+    <div class="container contracting-band__inner">
+      <div>
+        <p class="eyebrow">קבלנות ביצוע</p>
+        <h2>עובדים מול קבלנים, יזמים ומנהלי פרויקט</h2>
+        <p class="lede">
+          פרויקט הוא לא קריאת שירות גדולה. הוא דורש עמידה בלוח זמנים של אתר, תיאום מול
+          קבלנים אחרים, עבודה לפי תוכניות, ואיש קשר אחד שאפשר להשיג.
+        </p>
+        <ul class="contracting-band__points">
+          <li>ביצוע משלב השלד ועד המסירה — תשתיות, נקודות, לוחות ובדיקות</li>
+          <li>עבודה לפי תוכניות ומול יועץ חשמל</li>
+          <li>תיאום מול קבלן ראשי ובעלי מקצוע נוספים באתר</li>
+          <li>אחריות על החלק החשמלי בפרויקט, לא רק על הביצוע הנקודתי</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn--accent btn--lg" href="/contracting/" data-cta="contracting-band">
+            מה אנחנו לוקחים על עצמנו
+          </a>
+          <a class="btn btn--outline btn--lg" href="/contracting/process/">
+            איך עובדים איתנו
+          </a>
+        </div>
+      </div>
+
+      <aside class="contracting-band__aside">
+        <h3>מחפשים קבלן חשמל לפרויקט?</h3>
+        <p>
+          שלחו סוג פרויקט, מיקום, שלב והיקף — ונחזור אליכם עם התייחסות מקצועית ובדיקת
+          התאמה. אין צורך בתוכניות בשלב הראשון.
+        </p>
+        <a class="btn btn--primary btn--block" href="/quote/?track=contracting" data-cta="contracting-aside">
+          הצעת מחיר לפרויקט
+        </a>
+        <p class="contracting-band__small">
+          מעדיפים לדבר? <a href={links.tel}>{BUSINESS.phonePretty}</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================== Projects ========================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--row">
+        <div>
+          <h2>עבודות שבוצעו</h2>
+          <p>פרויקטים אמיתיים, עם מיקום, סוג מערכת והספק.</p>
+        </div>
+        <a class="btn btn--outline" href="/projects/">לכל הפרויקטים</a>
+      </div>
+
+      <div class="grid-auto" style="--col: 19rem">
+        {featured.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <Testimonials limit={3} />
+
+  <CtaBand track="private" />
+</Base>
+
+<style>
+  /* ---- Hero ---- */
+  .home-hero {
+    padding-block: clamp(2.5rem, 1.5rem + 5vw, 6rem);
+    background: linear-gradient(170deg, var(--bg-brand-soft), var(--bg) 70%);
+    border-block-end: 1px solid var(--border);
+  }
+  .home-hero__inner {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  .home-hero h1 {
+    margin-block-end: var(--space-4);
+  }
+  .home-hero__actions {
+    margin-block-start: var(--space-6);
+  }
+  .home-hero__note {
+    margin-block-start: var(--space-4);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .home-hero__media {
+    position: relative;
+  }
+  .home-hero__media img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  .home-hero__card {
+    position: absolute;
+    inset-block-end: var(--space-4);
+    inset-inline-start: var(--space-4);
+  }
+  .home-hero__card .badge {
+    background: color-mix(in srgb, var(--bg-raised) 94%, transparent);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 0.9rem;
+  }
+
+  @media (min-width: 62rem) {
+    .home-hero__inner {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: var(--space-8);
+    }
+  }
+
+  /* ---- Trust strip ---- */
+  .trust-strip {
+    padding-block: var(--space-6);
+    border-block-end: 1px solid var(--border);
+  }
+  .trust-strip__list {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 45%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .trust-strip__note {
+    margin-block-start: var(--space-5);
+    font-size: 0.84rem;
+    color: var(--text-subtle);
+  }
+
+  /* ---- Track cards ---- */
+  .tracks {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+  }
+  .track {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    /* The copper rail marks the track; it is the one accent on the card. */
+    border-block-start: 3px solid var(--accent);
+    transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .track:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+  .track h3 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-3);
+  }
+  .track__body {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .track__list {
+    display: grid;
+    gap: var(--space-2);
+    list-style: none;
+    margin: var(--space-5) 0;
+    padding: 0;
+    border-block-start: 1px solid var(--border);
+    padding-block-start: var(--space-4);
+  }
+  .track__list a {
+    display: block;
+    padding-block: 0.15rem;
+    font-size: 0.92rem;
+    text-decoration: none;
+    color: var(--text-muted);
+  }
+  .track__list a:hover {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  .track__cta {
+    margin-block-start: auto;
+  }
+
+  /* ---- Contracting band ---- */
+  .contracting-band__inner {
+    display: grid;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  .contracting-band__points {
+    display: grid;
+    gap: var(--space-3);
+    list-style: none;
+    margin: var(--space-5) 0 var(--space-6);
+    padding: 0;
+  }
+  .contracting-band__points li {
+    position: relative;
+    padding-inline-start: 1.6rem;
+    color: var(--text-on-dark-muted);
+    font-size: 0.96rem;
+  }
+  .contracting-band__points li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0.65em;
+    width: 0.6rem;
+    height: 2px;
+    background: var(--copper-500);
+  }
+  .contracting-band__aside {
+    padding: var(--space-6);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-inverse);
+    border-radius: var(--radius-lg);
+  }
+  .contracting-band__aside h3 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-3);
+    color: var(--text-on-dark);
+  }
+  .contracting-band__aside p {
+    color: var(--text-on-dark-muted);
+    font-size: 0.94rem;
+    margin-block-end: var(--space-5);
+  }
+  .contracting-band__small {
+    margin-block-start: var(--space-4);
+    margin-block-end: 0;
+    font-size: 0.86rem;
+  }
+  .contracting-band__small a {
+    color: var(--copper-400);
+  }
+
+  @media (min-width: 62rem) {
+    .contracting-band__inner {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+      gap: var(--space-8);
+    }
+  }
+
+  /* ---- Section head with trailing action ---- */
+  .section-head--row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    max-width: none;
+  }
+</style>

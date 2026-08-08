@@ -1,0 +1,160 @@
+---
+/**
+ * Standard page hero for service and hub pages.
+ *
+ * One headline that states the offer, one supporting line, and the actions for that
+ * track. The old electrical hero packed the licence, sectors and experience claim into a
+ * single H2 running three lines deep — a wall of text above the fold on mobile.
+ */
+import { links, BUSINESS } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  lede: string;
+  track?: Track;
+  /** Optional supporting image. Omitted rather than filled with a placeholder. */
+  image?: { src: string; alt: string };
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  /** Short factual points shown under the actions. Verified facts only. */
+  points?: string[];
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  track = "private",
+  image,
+  primaryCta,
+  secondaryCta,
+  points = [],
+} = Astro.props;
+
+const isContracting = track === "contracting";
+
+const primary = primaryCta ?? {
+  label: isContracting ? "הצעת מחיר לפרויקט" : "לבקשת הצעת מחיר",
+  href: `/quote/?track=${track}`,
+};
+const secondary =
+  secondaryCta ??
+  (isContracting
+    ? { label: "שיחה מקצועית", href: links.tel }
+    : { label: `חייגו ${BUSINESS.phonePretty}`, href: links.tel });
+---
+
+<section class:list={["page-hero", { "page-hero--with-image": !!image }]}>
+  <div class="container page-hero__inner">
+    <div class="page-hero__body">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      <p class="lede">{lede}</p>
+
+      <div class="btn-row page-hero__actions">
+        <a class="btn btn--primary btn--lg" href={primary.href} data-cta="hero-primary" data-cta-location="hero">
+          {primary.label}
+        </a>
+        <a class="btn btn--outline btn--lg" href={secondary.href} data-cta-location="hero">
+          {secondary.label}
+        </a>
+      </div>
+
+      {
+        points.length > 0 && (
+          <ul class="page-hero__points">
+            {points.map((p) => (
+              <li>
+                <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <path
+                    d="M4 10.5 8 14.5 16 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>{p}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    {
+      image && (
+        <div class="page-hero__media">
+          <img src={image.src} alt={image.alt} width="1200" height="900" fetchpriority="high" decoding="async" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    background: linear-gradient(180deg, var(--bg-brand-soft), var(--bg) 75%);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .page-hero__body {
+    max-width: var(--measure);
+  }
+
+  .page-hero h1 {
+    margin-block-end: var(--space-4);
+  }
+
+  .page-hero__actions {
+    margin-block-start: var(--space-6);
+  }
+
+  .page-hero__points {
+    display: grid;
+    gap: var(--space-3);
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+  }
+  .page-hero__points li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: 0.96rem;
+    color: var(--text-muted);
+  }
+  .page-hero__points svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 auto;
+    margin-block-start: 0.15rem;
+    color: var(--accent);
+  }
+
+  .page-hero__media img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (min-width: 60rem) {
+    .page-hero--with-image .page-hero__inner {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: var(--space-8);
+    }
+  }
+</style>

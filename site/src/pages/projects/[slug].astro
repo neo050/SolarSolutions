@@ -1,0 +1,234 @@
+---
+/**
+ * Project detail page.
+ *
+ * Renders the facts that exist and is explicit about the ones that don't. A project
+ * without a story still gets a real page — the structure is designed so that filling in
+ * `challenge`, `solution` and `outcome` in src/data/projects.ts turns it into a full case
+ * study with no code or design change.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Pending from "~/components/Pending.astro";
+import { PROJECTS, CUSTOMER_TYPE_LABEL, hasStory, type Project } from "~/data/projects";
+import { BUSINESS } from "~/data/business";
+
+export function getStaticPaths() {
+  return PROJECTS.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props as Props;
+
+const trail = [
+  { label: "פרויקטים", href: "/projects/" },
+  { label: `${project.title}, ${project.location}`, href: `/projects/${project.slug}/` },
+];
+
+const gallery = project.gallery ?? [project.image];
+const complete = hasStory(project);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: `${project.title}, ${project.location}`,
+  about: project.systemType,
+  description: project.summary,
+  creator: { "@id": `${BUSINESS.siteUrl}/#business` },
+  contentLocation: { "@type": "Place", name: project.location },
+};
+---
+
+<Base
+  title={`${project.title}, ${project.location} — ${project.systemType}`}
+  description={`${project.summary} פרויקט שבוצע ב${project.location}${project.sizeKw ? `, ${project.sizeKw} קילוואט` : ""}.`}
+  track="solar"
+  breadcrumbs={trail}
+  schema={[schema]}
+>
+  <Breadcrumbs trail={trail} />
+
+  <article>
+    <header class="project-head">
+      <div class="container">
+        <p class="eyebrow">{CUSTOMER_TYPE_LABEL[project.customerType]}</p>
+        <h1>{project.title}</h1>
+        <p class="project-head__location">{project.location}</p>
+        <p class="lede">{project.summary}</p>
+
+        <dl class="project-specs">
+          <div>
+            <dt>סוג מערכת</dt>
+            <dd>{project.systemType}</dd>
+          </div>
+          {
+            project.sizeKw && (
+              <div>
+                <dt>הספק</dt>
+                <dd class="mono">{project.sizeKw} kWp</dd>
+              </div>
+            )
+          }
+          <div>
+            <dt>סוג לקוח</dt>
+            <dd>{CUSTOMER_TYPE_LABEL[project.customerType]}</dd>
+          </div>
+          <div>
+            <dt>משך ביצוע</dt>
+            <dd>
+              {project.durationDays ? `${project.durationDays} ימים` : <Pending id="case.details.solar" label="—" />}
+            </dd>
+          </div>
+          <div>
+            <dt>גודל צוות</dt>
+            <dd>
+              {project.crewSize ? `${project.crewSize} אנשים` : <Pending id="case.details.solar" label="—" />}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <ul class="project-gallery">
+          {
+            gallery.map((src, i) => (
+              <li>
+                <img
+                  src={src}
+                  alt={`${project.title}, ${project.location} — ${project.systemType}${i > 0 ? ` (${i + 1})` : ""}`}
+                  width="1200"
+                  height="900"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    {
+      complete ? (
+        <section class="section">
+          <div class="container">
+            <div class="prose">
+              <h2>האתגר</h2>
+              <p>{project.challenge}</p>
+              <h2>הפתרון</h2>
+              <p>{project.solution}</p>
+              <h2>התוצאה</h2>
+              <p>{project.outcome}</p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section class="section">
+          <div class="container">
+            <div class="pending-block">
+              <h2>הסיפור המלא של הפרויקט</h2>
+              <p>
+                העובדות שלמעלה מדויקות ומתועדות. מה שחסר כדי להפוך את זה ל-Case Study מלא הוא
+                הסיפור: מה היה האתגר בנכס הזה, למה נבחר הפתרון הספציפי, כמה זמן לקח הביצוע,
+                מי היה בצוות ומה התוצאה בפועל.
+              </p>
+              <p>
+                לא נכתוב את זה מדמיון. מבנה העמוד בנוי ומחכה — ברגע שהמידע יתקבל הוא ייכנס לכאן.
+              </p>
+              <p class="pending-block__meta">
+                <Pending id="case.details.solar" label="ממתין למידע · P0" />
+                <span>נדרש: שיחה קצרה על הפרויקט עם בעל העסק</span>
+              </p>
+            </div>
+          </div>
+        </section>
+      )
+    }
+  </article>
+
+  <CtaBand track="solar" />
+</Base>
+
+<style>
+  .project-head {
+    padding-block: var(--space-7) var(--space-5);
+    background: linear-gradient(180deg, var(--bg-brand-soft), var(--bg) 80%);
+    border-block-end: 1px solid var(--border);
+  }
+  .project-head h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-2);
+  }
+  .project-head__location {
+    font-weight: 600;
+    color: var(--accent);
+    margin-block-end: var(--space-4);
+  }
+
+  .project-specs {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem, 45%), 1fr));
+    margin: var(--space-6) 0 0;
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--border);
+  }
+  .project-specs dt {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    margin-block-end: 0.25rem;
+  }
+  .project-specs dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .project-gallery {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .project-gallery img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  .pending-block {
+    max-width: var(--measure);
+    padding: var(--space-6);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .pending-block h2 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-3);
+  }
+  .pending-block p {
+    color: var(--text-muted);
+    margin-block-end: var(--space-3);
+  }
+  .pending-block__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+    font-size: 0.87rem;
+  }
+</style>

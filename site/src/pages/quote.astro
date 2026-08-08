@@ -1,0 +1,228 @@
+---
+/**
+ * Quote request — the single lead entry point for all three tracks.
+ *
+ * The track is chosen either by the ?track= parameter (so every CTA on the site lands on
+ * the right form) or by the visitor picking one. All three forms are rendered and the
+ * inactive ones hidden, which keeps this a static page with no JavaScript required to
+ * see content — and means a visitor with JS disabled still gets all three forms.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import LeadForm from "~/components/LeadForm.astro";
+import { BUSINESS, links, TRACKS } from "~/data/business";
+
+const trail = [{ label: "בקשת הצעת מחיר", href: "/quote/" }];
+const tracks = ["private", "contracting", "solar"] as const;
+---
+
+<Base
+  title="בקשת הצעת מחיר"
+  description="בקשת הצעת מחיר לעבודת חשמל, לפרויקט קבלני או לבדיקת התאמה למערכת סולארית. שלושה מסלולים, כל אחד עם הפרטים שבאמת נדרשים."
+  breadcrumbs={trail}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section quote-intro">
+    <div class="container">
+      <h1>בקשת הצעת מחיר</h1>
+      <p class="lede">
+        בחרו את המסלול המתאים. לכל סוג עבודה יש שאלות אחרות — כך נוכל לחזור אליכם עם
+        תשובה ולא עם בקשה לעוד פרטים.
+      </p>
+    </div>
+  </section>
+
+  <div class="container quote-layout">
+    <nav class="track-picker" aria-label="בחירת סוג פנייה">
+      {
+        tracks.map((t) => (
+          <button
+            type="button"
+            class="track-picker__btn"
+            data-track-btn={t}
+            aria-pressed={t === "private" ? "true" : "false"}
+          >
+            {TRACKS[t].label}
+          </button>
+        ))
+      }
+    </nav>
+
+    <div class="quote-forms">
+      {
+        tracks.map((t) => (
+          <div class="quote-panel" data-track-panel={t} hidden={t !== "private"}>
+            <LeadForm track={t} />
+          </div>
+        ))
+      }
+    </div>
+
+    <aside class="quote-aside">
+      <h2>מעדיפים לדבר?</h2>
+      <p>
+        לתקלת חשמל דחופה — שיחה מהירה יותר מכל טופס.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary btn--block" href={links.tel} data-cta-location="quote-aside">
+          {BUSINESS.phonePretty}
+        </a>
+        <a
+          class="btn btn--outline btn--block"
+          href={links.whatsapp()}
+          target="_blank"
+          rel="noopener"
+          data-cta-location="quote-aside">הודעה בוואטסאפ</a
+        >
+      </div>
+
+      <dl class="quote-facts">
+        <div>
+          <dt>רישיון</dt>
+          <dd class="mono">{BUSINESS.licenceNumber}</dd>
+        </div>
+        <div>
+          <dt>אזור פעילות</dt>
+          <dd>{BUSINESS.areaServed}</dd>
+        </div>
+        <div>
+          <dt>אימייל</dt>
+          <dd><a href={links.mailto}>{BUSINESS.email}</a></dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .quote-intro {
+    padding-block: var(--space-6) var(--space-5);
+  }
+  .quote-intro h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-4);
+  }
+
+  .quote-layout {
+    display: grid;
+    gap: var(--space-6);
+    padding-block-end: var(--section-y);
+  }
+
+  .track-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    gap: var(--space-2);
+    padding: var(--space-2);
+    background: var(--bg-sunken);
+    border-radius: var(--radius-lg);
+    grid-column: 1 / -1;
+  }
+  .track-picker__btn {
+    padding: 0.85rem 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .track-picker__btn:hover {
+    color: var(--text);
+  }
+  .track-picker__btn[aria-pressed="true"] {
+    background: var(--bg-raised);
+    border-color: var(--border);
+    color: var(--brand);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .quote-panel[hidden] {
+    display: none;
+  }
+
+  .quote-aside {
+    align-self: start;
+    padding: var(--space-6);
+    background: var(--bg-brand-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .quote-aside h2 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-3);
+  }
+  .quote-aside p {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    margin-block-end: var(--space-5);
+  }
+  .quote-aside .btn-row {
+    flex-direction: column;
+  }
+
+  .quote-facts {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 0;
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--border-strong);
+    font-size: 0.88rem;
+  }
+  .quote-facts div {
+    display: flex;
+    gap: var(--space-3);
+  }
+  .quote-facts dt {
+    flex: 0 0 7rem;
+    color: var(--text-muted);
+  }
+  .quote-facts dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  @media (min-width: 62rem) {
+    .quote-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+      gap: var(--space-7);
+      align-items: start;
+    }
+  }
+</style>
+
+<script>
+  const VALID = ["private", "contracting", "solar"] as const;
+  type Track = (typeof VALID)[number];
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-track-btn]");
+  const panels = document.querySelectorAll<HTMLElement>("[data-track-panel]");
+
+  function show(track: Track, pushState = true) {
+    buttons.forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.trackBtn === track))
+    );
+    panels.forEach((p) => {
+      p.hidden = p.dataset.trackPanel !== track;
+    });
+
+    if (pushState) {
+      const url = new URL(location.href);
+      url.searchParams.set("track", track);
+      history.replaceState(null, "", url);
+    }
+    (window as any).rnrgTrack?.("quote_start", { track });
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener("click", () => show(b.dataset.trackBtn as Track))
+  );
+
+  // Honour ?track= so every CTA across the site lands on the right form.
+  const requested = new URLSearchParams(location.search).get("track");
+  if (requested && (VALID as readonly string[]).includes(requested)) {
+    show(requested as Track, false);
+  }
+</script>

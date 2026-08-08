@@ -1,0 +1,319 @@
+---
+/**
+ * About.
+ *
+ * The old page was a single paragraph with no numbers, no credentials beyond a licence
+ * number buried in a landing page, and no photograph of anyone. The origin story —
+ * starting with solar systems for caravans in 2018 — is a genuine differentiator and was
+ * buried mid-paragraph; here it leads.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Testimonials from "~/components/Testimonials.astro";
+import Pending from "~/components/Pending.astro";
+import { BUSINESS } from "~/data/business";
+import { LICENCE_CLASSES, LICENCE_NOTE } from "~/data/regulatory";
+import { projectStats } from "~/data/projects";
+
+const trail = [{ label: "אודות", href: "/about/" }];
+const stats = projectStats();
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: BUSINESS.owner,
+  jobTitle: BUSINESS.ownerRole,
+  worksFor: { "@id": `${BUSINESS.siteUrl}/#business` },
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "רישיון חשמלאי ראשי",
+    identifier: BUSINESS.licenceNumber,
+  },
+};
+---
+
+<Base
+  title="רוני חג׳ג׳ — הנדסאי חשמל וחשמלאי ראשי 991433"
+  description="מי עומד מאחורי RNRG: הנדסאי חשמל ובעל רישיון חשמלאי ראשי מס׳ 991433. מה מותר לכל דרגת רישיון, ואיך אפשר לאמת אותה."
+  breadcrumbs={trail}
+  schema={[personSchema]}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section about-head">
+    <div class="container">
+      <p class="eyebrow">אודות</p>
+      <h1>{BUSINESS.owner}</h1>
+      <p class="lede">{BUSINESS.ownerRole} · {BUSINESS.licenceLabel}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-layout">
+      <div class="prose">
+        <h2>איך זה התחיל</h2>
+        <p>
+          RNRG התחילה בשנת {BUSINESS.solarSince} ממקום לא שגרתי: התקנת מערכות סולאריות
+          קטנות לקרוואנים ולרכבים ניידים. זו עבודה שמלמדת דברים שקשה ללמוד אחרת — מערכת
+          מנותקת רשת חייבת לעבוד בלי גיבוי, במקום שאין בו טכנאי, ועם כל קילוואט־שעה נחשב.
+        </p>
+        <p>
+          משם ההתרחבות הייתה טבעית: מערכות סולאריות לבתים פרטיים, אחר כך למבנים חקלאיים
+          ומסחריים, ובמקביל עבודות החשמל עצמן — לוחות, תשתיות, בדיקות ופרויקטים.
+        </p>
+        <p>
+          היום העסק פועל בשלושה תחומים: עבודות חשמל לבתים ולדירות, קבלנות ביצוע לפרויקטים
+          מול קבלנים ויזמים, ומערכות סולאריות. המשותף לכולם הוא שהם מבוצעים תחת אותו
+          רישיון ובאותה אחריות.
+        </p>
+
+        <h2>מה זה אומר, רישיון חשמלאי ראשי</h2>
+        <p>
+          דרגת רישיון החשמל אינה תואר כבוד — היא קובעת בדיוק עד איזה גודל חיבור מותר
+          לתכנן ולבצע. הרבה בעלי מקצוע כותבים "חשמלאי ראשי" בלי לציין מספר רישיון ובלי
+          להסביר מה הדרגה מתירה. המספר שלנו הוא <strong>{BUSINESS.licenceNumber}</strong>,
+          והוא מופיע בתחתית כל עמוד באתר.
+        </p>
+      </div>
+
+      <aside class="about-facts">
+        <h2>עובדות</h2>
+        <dl>
+          <div>
+            <dt>עוסק בחשמל מאז</dt>
+            <dd><Pending id="fact.experience.years" label="ממתין לנתון" /></dd>
+          </div>
+          <div>
+            <dt>העסק פועל מאז</dt>
+            <dd class="mono">{BUSINESS.solarSince}</dd>
+          </div>
+          <div>
+            <dt>רישיון</dt>
+            <dd class="mono">{BUSINESS.licenceNumber}</dd>
+          </div>
+          <div>
+            <dt>פרויקטים מתועדים</dt>
+            <dd class="mono">{stats.count}</dd>
+          </div>
+          <div>
+            <dt>הספק מותקן מצטבר</dt>
+            <dd class="mono">{Math.round(stats.totalKw)} kWp</dd>
+          </div>
+          <div>
+            <dt>גודל צוות</dt>
+            <dd><Pending id="fact.team.size" label="ממתין לנתון" /></dd>
+          </div>
+          <div>
+            <dt>אזור פעילות</dt>
+            <dd>{BUSINESS.areaServed}</dd>
+          </div>
+        </dl>
+        <p class="about-facts__note">
+          המספרים כאן נספרים מעבודות מתועדות. מה שעדיין לא ידוע מסומן ככזה ולא מוערך.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="section-head">
+        <h2>דרגות רישיון חשמל בישראל</h2>
+        <p>
+          הטבלה מבוססת על תקנות החשמל (רישיונות), התשמ״ה-1985. שווה לבדוק את הדרגה מול כל
+          בעל מקצוע שאתם שוקלים — לא רק מולנו.
+        </p>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>דרגת רישיון</th>
+              <th>מותר לתכנן ולבצע</th>
+              <th>עד גודל חיבור</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              LICENCE_CLASSES.map((row) => (
+                <tr class:list={{ "is-ours": row.isOurs }}>
+                  <td>
+                    {row.grade}
+                    {row.isOurs && <span class="badge badge--accent">הרישיון שלנו</span>}
+                  </td>
+                  <td>{row.scope}</td>
+                  <td class="mono">{row.capacity}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="table-source">{LICENCE_NOTE}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="pending-block">
+        <h2>הצוות</h2>
+        <p>
+          כאן אמורים להופיע תמונות של רוני ושל הצוות בעבודה, מספר אנשי הצוות, והסמכות
+          נוספות מעבר לרישיון 991433.
+        </p>
+        <p>
+          אין באתר הזה ולו תמונה אחת של אדם — כל 78 הנכסים הוויזואליים שהיו באתר הקודם הם
+          תוצרים: לוחות גמורים וגגות עם פאנלים. עסק שמבקש מקבלן לסמוך עליו שיביא צוות צריך
+          להראות שיש צוות.
+        </p>
+        <p class="pending-block__meta">
+          <Pending id="photo.owner.portrait" label="P0 — צילום בעל העסק" />
+          <Pending id="photo.team.onsite" label="P0 — צילום צוות" />
+          <Pending id="fact.credentials.extra" label="P1 — הסמכות נוספות" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Testimonials limit={3} />
+  <CtaBand track="private" />
+</Base>
+
+<style>
+  .about-head {
+    padding-block: var(--space-7) var(--space-4);
+  }
+  .about-head h1 {
+    font-size: var(--step-5);
+    margin-block-end: var(--space-3);
+  }
+
+  .about-layout {
+    display: grid;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  .about-layout h2 {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-6);
+  }
+  .about-layout .prose > h2:first-child {
+    margin-block-start: 0;
+  }
+
+  .about-facts {
+    padding: var(--space-6);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .about-facts h2 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-5);
+  }
+  .about-facts dl {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+  .about-facts dt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    margin-block-end: 0.25rem;
+  }
+  .about-facts dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .about-facts__note {
+    margin-block-start: var(--space-5);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-subtle);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .data-table {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+  .data-table thead th {
+    background: var(--bg-sunken);
+    text-align: start;
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-block-end: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: var(--space-3) var(--space-4);
+    border-block-start: 1px solid var(--border);
+  }
+  .data-table tbody tr:first-child td {
+    border-block-start: none;
+  }
+  .data-table tbody td:first-child {
+    font-weight: 600;
+  }
+  .data-table tr.is-ours {
+    background: var(--bg-accent-soft);
+  }
+  .data-table tr.is-ours td:first-child {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .table-source {
+    margin-block-start: var(--space-3);
+    font-size: 0.83rem;
+    color: var(--text-subtle);
+    max-width: var(--measure);
+  }
+
+  .pending-block {
+    max-width: var(--measure);
+    padding: var(--space-6);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .pending-block h2 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-3);
+  }
+  .pending-block p {
+    color: var(--text-muted);
+    margin-block-end: var(--space-3);
+  }
+  .pending-block__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+  }
+
+  @media (min-width: 62rem) {
+    .about-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+      gap: var(--space-8);
+    }
+  }
+</style>

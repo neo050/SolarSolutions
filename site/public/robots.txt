@@ -1,0 +1,9 @@
+# RNRG — rnrg.co.il
+User-agent: *
+Allow: /
+
+# Working documents and confirmation pages: no search value.
+Disallow: /internal/
+Disallow: /thank-you/
+
+Sitemap: https://rnrg.co.il/sitemap-index.xml

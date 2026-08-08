@@ -1,0 +1,243 @@
+/* ============================================================================
+   RNRG Design System — tokens
+   ============================================================================
+
+   One visual language for the whole business. The previous site ran three
+   unrelated ones: a purple splash page with animated sparkles, a teal-and-rose
+   pastel landing page, and a yellow-on-Bootstrap solar site.
+
+   The palette is drawn from the trade's own materials rather than from a generic
+   "professional services" swatch: the blue-black of a photovoltaic panel and a
+   powder-coated meter cabinet, the copper of bus bars and conductors, galvanised
+   steel grey, and the yellow of warning tape.
+
+   Rules that must hold:
+   - Red and green are reserved for system state (error, success). They are never
+     brand colours, so a form error can never be mistaken for decoration.
+   - Copper is the single accent. It is used sparingly to keep its value.
+   - Every colour used by a component comes from a token, so both themes resolve
+     as a complete set.
+   ========================================================================= */
+
+:root {
+  /* ---- Brand ---------------------------------------------------------- */
+  --panel-950: #08171b;
+  --panel-900: #0e2c33;
+  --panel-800: #143d47;
+  --panel-700: #16505d;
+  --panel-600: #0e4f5c;
+  --panel-500: #1c7183;
+  --panel-400: #3f9cae;
+  --panel-300: #7cc2d0;
+  --panel-100: #d7eaef;
+  --panel-50: #eef7f9;
+
+  --copper-700: #7d3f14;
+  --copper-600: #9c4f1c;
+  --copper-500: #b87333;
+  --copper-400: #cf9358;
+  --copper-200: #eccfae;
+  --copper-50: #faf1e6;
+
+  /* ---- Neutrals -------------------------------------------------------
+     Biased slightly toward the panel hue so they read as chosen, not default. */
+  --ink-900: #0b1113;
+  --ink-800: #101619;
+  --ink-700: #1d272b;
+  --ink-600: #33434a;
+  --ink-500: #4a5b63;
+  --ink-400: #6c7d85;
+  --ink-300: #97a5ab;
+  --ink-200: #c3cdd1;
+  --ink-100: #dfe6e8;
+  --ink-50: #f1f4f4;
+  --white: #ffffff;
+
+  /* ---- Semantic surfaces (light) -------------------------------------- */
+  --bg: var(--ink-50);
+  --bg-raised: var(--white);
+  --bg-sunken: #e6ecec;
+  --bg-inverse: var(--panel-950);
+  --bg-accent-soft: var(--copper-50);
+  --bg-brand-soft: var(--panel-50);
+
+  --text: var(--ink-800);
+  --text-muted: var(--ink-500);
+  --text-subtle: var(--ink-400);
+  --text-on-dark: #e8f0f2;
+  --text-on-dark-muted: #a6bcc2;
+  --text-on-brand: var(--white);
+
+  --border: var(--ink-100);
+  --border-strong: var(--ink-200);
+  --border-inverse: #24424a;
+
+  --brand: var(--panel-600);
+  --brand-hover: var(--panel-700);
+  --brand-contrast: var(--white);
+  --accent: var(--copper-600);
+  --accent-hover: var(--copper-700);
+
+  /* ---- System state — never used decoratively -------------------------- */
+  --danger: #b3261e;
+  --danger-bg: #fbeceb;
+  --danger-border: #e8a9a4;
+  --success: #14663f;
+  --success-bg: #e4f2ea;
+  --success-border: #97ccb0;
+  --warning: #8a6100;
+  --warning-bg: #fbf1dc;
+  --warning-border: #dcbc76;
+
+  --focus-ring: var(--copper-500);
+
+  /* ---- Type ------------------------------------------------------------ */
+  --font-display: "Rubik Variable", "Rubik", "Segoe UI", "Arial Hebrew", system-ui, sans-serif;
+  --font-body: "Assistant", "Segoe UI", "Arial Hebrew", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+
+  --step--1: clamp(0.83rem, 0.81rem + 0.09vw, 0.89rem);
+  --step-0: clamp(1rem, 0.96rem + 0.18vw, 1.11rem);
+  --step-1: clamp(1.2rem, 1.13rem + 0.33vw, 1.39rem);
+  --step-2: clamp(1.44rem, 1.32rem + 0.57vw, 1.73rem);
+  --step-3: clamp(1.73rem, 1.55rem + 0.9vw, 2.16rem);
+  --step-4: clamp(2.07rem, 1.8rem + 1.36vw, 2.7rem);
+  --step-5: clamp(2.49rem, 2.08rem + 2.03vw, 3.38rem);
+
+  --leading-tight: 1.12;
+  --leading-snug: 1.3;
+  --leading-normal: 1.65;
+  --leading-relaxed: 1.8;
+
+  --measure: 68ch;
+  --measure-narrow: 54ch;
+
+  /* ---- Space — 4px base ------------------------------------------------ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --section-y: clamp(3rem, 2rem + 5vw, 6rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --container: 76rem;
+  --container-narrow: 46rem;
+
+  /* ---- Shape ----------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(11, 17, 19, 0.06), 0 1px 3px rgba(11, 17, 19, 0.05);
+  --shadow: 0 2px 4px rgba(11, 17, 19, 0.05), 0 6px 16px rgba(11, 17, 19, 0.07);
+  --shadow-lg: 0 4px 8px rgba(11, 17, 19, 0.05), 0 16px 40px rgba(11, 17, 19, 0.1);
+
+  --ring: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 45%, transparent);
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0, 0.1, 1);
+  --dur-fast: 140ms;
+  --dur: 220ms;
+  --dur-slow: 380ms;
+
+  --header-h: 4.5rem;
+  --z-header: 100;
+  --z-sticky-cta: 90;
+  --z-overlay: 200;
+}
+
+/* ---- Dark, for viewers whose OS asks for it and who have not chosen light -- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1214;
+    --bg-raised: #111c20;
+    --bg-sunken: #060e10;
+    --bg-inverse: #060e10;
+    --bg-accent-soft: #241608;
+    --bg-brand-soft: #0d2329;
+
+    --text: #e7eef0;
+    --text-muted: #a3b4ba;
+    --text-subtle: #7d8f96;
+    --text-on-dark: #e7eef0;
+    --text-on-dark-muted: #a3b4ba;
+    --text-on-brand: #04191e;
+
+    --border: #1e2f34;
+    --border-strong: #2d444b;
+    --border-inverse: #1e2f34;
+
+    /* The light-theme brand is too dark to read on a dark ground; step up the ramp. */
+    --brand: var(--panel-300);
+    --brand-hover: #a3d6e0;
+    --brand-contrast: #04191e;
+    --accent: var(--copper-400);
+    --accent-hover: var(--copper-200);
+
+    --danger: #f28b83;
+    --danger-bg: #2b1513;
+    --danger-border: #7a3c37;
+    --success: #79c9a1;
+    --success-bg: #10241b;
+    --success-border: #35674f;
+    --warning: #dcb45f;
+    --warning-bg: #251d0c;
+    --warning-border: #6b5624;
+
+    --focus-ring: var(--copper-400);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 6px 16px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.45), 0 16px 40px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* ---- Dark, chosen explicitly — wins over a light OS ---------------------- */
+:root[data-theme="dark"] {
+  --bg: #0a1214;
+  --bg-raised: #111c20;
+  --bg-sunken: #060e10;
+  --bg-inverse: #060e10;
+  --bg-accent-soft: #241608;
+  --bg-brand-soft: #0d2329;
+
+  --text: #e7eef0;
+  --text-muted: #a3b4ba;
+  --text-subtle: #7d8f96;
+  --text-on-dark: #e7eef0;
+  --text-on-dark-muted: #a3b4ba;
+  --text-on-brand: #04191e;
+
+  --border: #1e2f34;
+  --border-strong: #2d444b;
+  --border-inverse: #1e2f34;
+
+  --brand: var(--panel-300);
+  --brand-hover: #a3d6e0;
+  --brand-contrast: #04191e;
+  --accent: var(--copper-400);
+  --accent-hover: var(--copper-200);
+
+  --danger: #f28b83;
+  --danger-bg: #2b1513;
+  --danger-border: #7a3c37;
+  --success: #79c9a1;
+  --success-bg: #10241b;
+  --success-border: #35674f;
+  --warning: #dcb45f;
+  --warning-bg: #251d0c;
+  --warning-border: #6b5624;
+
+  --focus-ring: var(--copper-400);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.45), 0 16px 40px rgba(0, 0, 0, 0.55);
+}

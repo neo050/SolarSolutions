@@ -1,0 +1,107 @@
+---
+/**
+ * Mobile sticky action bar.
+ *
+ * The old site had one of these on the electrical page and nothing at all on the solar
+ * side, where the only way to make contact was to scroll to the bottom or open a menu.
+ *
+ * The actions differ by track, because the tracks convert differently: a private customer
+ * with a fault wants to call now; a contractor is not going to phone a stranger from a
+ * building site — they want to send a scoped brief.
+ */
+import { BUSINESS, links } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  track?: Track;
+}
+const { track = "private" } = Astro.props;
+
+const isContracting = track === "contracting";
+---
+
+<div class="sticky-cta" data-track={track} hidden>
+  {
+    isContracting ? (
+      <>
+        <a class="btn btn--primary btn--sm" href="/quote/?track=contracting" data-cta="quote" data-cta-location="sticky">
+          הצעת מחיר לפרויקט
+        </a>
+        <a class="btn btn--outline btn--sm" href={links.tel} data-cta-location="sticky">
+          שיחה מקצועית
+        </a>
+      </>
+    ) : (
+      <>
+        <a class="btn btn--primary btn--sm" href={links.tel} data-cta-location="sticky">
+          חייגו {BUSINESS.phonePretty}
+        </a>
+        <a
+          class="btn btn--outline btn--sm"
+          href={links.whatsapp()}
+          target="_blank"
+          rel="noopener"
+          data-cta-location="sticky"
+        >
+          וואטסאפ
+        </a>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset-inline: var(--space-3);
+    inset-block-end: var(--space-3);
+    z-index: var(--z-sticky-cta);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    background: color-mix(in srgb, var(--bg-raised) 96%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(calc(100% + var(--space-4)));
+    transition: transform var(--dur-slow) var(--ease);
+  }
+
+  .sticky-cta[hidden] {
+    display: grid; /* keep it laid out; visibility is driven by the transform */
+  }
+
+  .sticky-cta[data-visible="true"] {
+    transform: translateY(0);
+  }
+
+  .sticky-cta .btn {
+    min-height: 2.9rem; /* comfortable thumb target */
+  }
+
+  @media (min-width: 48rem) {
+    .sticky-cta {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Appears once the visitor has committed to the page, rather than covering the hero.
+  const bar = document.querySelector<HTMLElement>(".sticky-cta");
+  if (bar) {
+    bar.hidden = false;
+    let shown = false;
+    const onScroll = () => {
+      const past = window.scrollY > window.innerHeight * 0.6;
+      if (past !== shown) {
+        shown = past;
+        bar.dataset.visible = String(past);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+</script>

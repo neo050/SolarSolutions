@@ -1,0 +1,86 @@
+---
+/**
+ * Google Tag Manager loader plus the shared event helpers.
+ *
+ * Inert until GTM_ID is set — but `dataLayer` and `rnrgTrack` exist regardless, so every
+ * event in the tracking plan is already firing into the queue. Supplying the container id
+ * is the only step needed to start collecting.
+ *
+ * BLOCKED on gap `integration.gtm` — see src/data/gaps.ts.
+ */
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID ?? "";
+---
+
+<script is:inline define:vars={{ GTM_ID }}>
+  window.dataLayer = window.dataLayer || [];
+
+  /** Safe in all cases: queues when GTM is absent, flushes when it loads. */
+  window.rnrgTrack = function (event, params) {
+    try {
+      window.dataLayer.push(Object.assign({ event }, params || {}));
+    } catch (_) {
+      /* tracking must never break an interaction */
+    }
+  };
+
+  /* ---- Session attribution, captured once and attached to every lead ---- */
+  (function () {
+    var KEY = "rnrg_attribution";
+    try {
+      if (sessionStorage.getItem(KEY)) return;
+      var qs = new URLSearchParams(location.search);
+      sessionStorage.setItem(
+        KEY,
+        JSON.stringify({
+          utm_source: qs.get("utm_source") || "",
+          utm_medium: qs.get("utm_medium") || "",
+          utm_campaign: qs.get("utm_campaign") || "",
+          utm_term: qs.get("utm_term") || "",
+          utm_content: qs.get("utm_content") || "",
+          gclid: qs.get("gclid") || "",
+          landing_page: location.pathname,
+          referrer: document.referrer || "",
+          first_seen: new Date().toISOString(),
+        })
+      );
+    } catch (_) {
+      /* private mode */
+    }
+  })();
+
+  window.rnrgAttribution = function () {
+    try {
+      return JSON.parse(sessionStorage.getItem("rnrg_attribution") || "{}");
+    } catch (_) {
+      return {};
+    }
+  };
+
+  /* ---- Outbound contact tracking, delegated so it covers every link ---- */
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    var where = a.getAttribute("data-cta-location") || "";
+    if (href.indexOf("tel:") === 0) {
+      window.rnrgTrack("call_click", { page: location.pathname, cta_location: where });
+    } else if (href.indexOf("wa.me") > -1) {
+      window.rnrgTrack("whatsapp_click", { page: location.pathname, cta_location: where });
+    } else if (a.hasAttribute("data-cta")) {
+      window.rnrgTrack("cta_click", {
+        page: location.pathname,
+        cta: a.getAttribute("data-cta"),
+        cta_location: where,
+      });
+    }
+  });
+
+  /* ---- GTM ---- */
+  if (GTM_ID) {
+    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
+    document.head.appendChild(s);
+  }
+</script>

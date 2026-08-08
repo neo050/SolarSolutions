@@ -1,0 +1,39 @@
+# RNRG — redirect map for the migration from the old site.
+#
+# Format: Netlify / Cloudflare Pages `_redirects`. If the site stays on GitHub Pages,
+# these must be reproduced as meta-refresh stubs instead, because GitHub Pages cannot
+# issue a real 301 — see docs/migration.md.
+#
+# Rule: no old URL is deleted without a destination. Every line below was a real,
+# reachable page on the previous site.
+
+# ---- The two disconnected properties merge into one site ----
+/energy                      /electrical/                 301
+/energy/                     /electrical/                 301
+/energy/*                    /electrical/                 301
+
+# ---- Solar branch ----
+/solar.html                  /solar/                      301
+/solutions.html              /solar/                      301
+/projects.html               /projects/                   301
+/CompatibilityCheck.html     /quote/?track=solar          301
+
+# The savings calculator was withdrawn: it multiplied any bill by 0.9 and presented the
+# result as guaranteed savings. Its traffic has genuine solar intent, so it goes to the
+# compatibility check rather than to a dead end.
+/solar-calculator.html       /quote/?track=solar          301
+
+# ---- Company ----
+/about.html                  /about/                      301
+/contact.html                /contact/                    301
+/success.html                /thank-you/                  301
+
+# ---- Testimonial collection: two duplicate forms merge into one ----
+/recommendation.html         /reviews/#submit             301
+/m.html                      /reviews/#submit             301
+
+# ---- Abandoned draft ----
+/new.html                    /solar/                      301
+
+# ---- Legacy asset paths, kept so old links in messages and posts still resolve ----
+/assets/img/*                /images/:splat               301
