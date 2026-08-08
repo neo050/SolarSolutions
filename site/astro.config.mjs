@@ -25,7 +25,12 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         // Confirmation pages have no search value and must never be landing pages.
-        !page.includes("/thank-you/") && !page.includes("/404"),
+        // /internal/ is noindex and Disallow-ed in robots.txt; listing it in the
+        // sitemap too would contradict that and produce "Submitted URL blocked by
+        // robots.txt" errors in Search Console.
+        !page.includes("/thank-you/") &&
+        !page.includes("/404") &&
+        !page.includes("/internal/"),
       serialize(item) {
         // The three branch hubs and the homepage are the entry points we most want crawled.
         if (/\/(electrical|contracting|solar)\/$/.test(item.url) || item.url === "https://rnrg.co.il/") {
@@ -42,9 +47,17 @@ export default defineConfig({
     responsiveStyles: true,
   },
 
+  /*
+   * Deliberately NOT prefetchAll with a viewport strategy. The header exposes 25 links
+   * and the footer 23; on viewport strategy every one of them is fetched as soon as it
+   * scrolls into view, which is ~26 speculative page loads per visit — most of the site,
+   * downloaded on every page, largely on mobile data.
+   *
+   * Hover intent is a real signal. Links opt in with data-astro-prefetch.
+   */
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
+    prefetchAll: false,
+    defaultStrategy: "hover",
   },
 
   vite: {

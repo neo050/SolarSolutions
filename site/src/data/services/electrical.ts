@@ -27,7 +27,7 @@ export const ELECTRICAL: ServicePage[] = [
       "עבודה לפי התקן הישראלי לחשמל",
       "הסבר מה חובה, מה מומלץ ומה אפשר לדחות",
     ],
-    heroImage: { src: "/images/gallery/panel-01.jpeg", alt: "לוח חשמל ביתי מסודר עם תיוג מלא" },
+    heroImage: { src: "/images/gallery/panel-01-hero.jpeg", alt: "לוח חשמל ביתי לאחר חידוש, עם תיוג מלא של כל מעגל" },
     sections: [
       {
         kind: "bullets",
@@ -84,7 +84,7 @@ export const ELECTRICAL: ServicePage[] = [
     related: [
       { label: "לוחות חשמל", href: "/electrical/panels/" },
       { label: "בדיקות ואישורים", href: "/electrical/inspection/" },
-      { label: "שדרוג לתלת פאזי", href: "/electrical/three-phase/" },
+      { label: "קבלנות ביצוע", href: "/contracting/" },
     ],
   },
 
@@ -148,7 +148,7 @@ export const ELECTRICAL: ServicePage[] = [
     ],
     related: [
       { label: "לוחות חשמל", href: "/electrical/panels/" },
-      { label: "שדרוג לתלת פאזי", href: "/electrical/three-phase/" },
+      { label: "תאורה אדריכלית", href: "/electrical/lighting/" },
       { label: "מערכות סולאריות", href: "/solar/residential/" },
     ],
   },
@@ -203,10 +203,10 @@ export const ELECTRICAL: ServicePage[] = [
         id: "gallery",
         title: "לוחות שבוצעו",
         images: [
-          { src: "/images/gallery/panel-01.jpeg", alt: "לוח חשמל ביתי מסודר עם תיוג מלא" },
-          { src: "/images/gallery/panel-02.jpeg", alt: "לוח חשמל עם הגנות מתקדמות" },
-          { src: "/images/gallery/panel-04.jpeg", alt: "לוח חשמל לאחר חידוש" },
-          { src: "/images/gallery/panel-05.jpeg", alt: "עבודת חיווט בלוח חשמל" },
+          { src: "/images/gallery/panel-01-hero.jpeg", alt: "לוח חשמל ביתי לאחר חידוש, עם תיוג מלא של כל מעגל" },
+          { src: "/images/gallery/panel-05.jpeg", alt: "לוח חשמל מסחרי בן 72 מודולים עם בקרת בידוד" },
+          { src: "/images/gallery/panel-04.jpeg", alt: "לוח דירתי עם מונה, פחת ראשי ופיצול פאזות — מתויג בעברית" },
+          { src: "/images/gallery/panel-03.jpeg", alt: "לוח דירתי בבניין משותף, מתויג לפי מעגלים" },
         ],
       },
     ],
@@ -397,7 +397,7 @@ export const ELECTRICAL: ServicePage[] = [
       "תאורה שקועה, מוסתרת ותאורת חוץ",
       "הכנה לעמעום ולבקרה",
     ],
-    heroImage: { src: "/images/gallery/lighting-01.jpeg", alt: "תאורה מותקנת בחלל מעוצב" },
+    heroImage: { src: "/images/gallery/lighting-04-wide.jpeg", alt: "תאורה אדריכלית בחלל מסחרי גמור — תאורה שקועה, פסי תאורה ותאורת הדגשה" },
     sections: [
       {
         kind: "steps",
@@ -416,10 +416,10 @@ export const ELECTRICAL: ServicePage[] = [
         id: "gallery",
         title: "עבודות תאורה",
         images: [
-          { src: "/images/gallery/lighting-01.jpeg", alt: "תאורה בחלל מעוצב" },
-          { src: "/images/gallery/lighting-02.jpeg", alt: "תאורת LED חסכונית" },
-          { src: "/images/gallery/lighting-03.jpeg", alt: "פריסת תאורה בתקרה" },
-          { src: "/images/gallery/lighting-04.jpeg", alt: "גופי תאורה מותקנים" },
+          { src: "/images/gallery/lighting-01.jpeg", alt: "שלב הכנה — תקרת גבס עם פתחי גופי תאורה, מובילים וחיווט לפני גמר" },
+          { src: "/images/gallery/lighting-02.jpeg", alt: "אותו חלל מסחרי לאחר גמר — תאורה שקועה ופסי תאורה" },
+          { src: "/images/gallery/lighting-03.jpeg", alt: "פריסת גופי תאורה בתקרה מסחרית" },
+          { src: "/images/gallery/lighting-04.jpeg", alt: "בית עסק לאחר השלמת התאורה — תאורה שקועה, פסי תאורה ותאורת הדגשה" },
         ],
       },
     ],

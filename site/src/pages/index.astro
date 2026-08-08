@@ -90,8 +90,8 @@ const tracks = [
 
       <div class="home-hero__media">
         <img
-          src="/images/gallery/panel-02.jpeg"
-          alt="לוח חשמל עם הגנות מתקדמות, חיווט מסודר ותיוג מלא"
+          src="/images/gallery/panel-01-hero.jpeg"
+          alt="לוח חשמל ביתי לאחר חידוש — הגנות מדורגות, חיווט מסודר ותיוג מלא של כל מעגל"
           width="1200"
           height="900"
           fetchpriority="high"
@@ -219,7 +219,7 @@ const tracks = [
         <a class="btn btn--outline" href="/projects/">לכל הפרויקטים</a>
       </div>
 
-      <div class="grid-auto" style="--col: 19rem">
+      <div class="grid-auto" style="--col: 18rem">
         {featured.map((project) => <ProjectCard project={project} />)}
       </div>
     </div>
@@ -302,10 +302,16 @@ const tracks = [
   }
 
   /* ---- Track cards ---- */
+  /*
+   * 18rem, not 19rem. Three columns at 19rem need 3x304 + 2x24 = 960px, but the
+   * container at a 1024px viewport gives 956.8px — a 3.2px shortfall that dropped the
+   * third track card into a half-width orphan row on exactly the most common laptop
+   * width. The projects grid above has the same three-up shape and the same fix.
+   */
   .tracks {
     display: grid;
     gap: var(--space-5);
-    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
   }
   .track {
     display: flex;

@@ -60,6 +60,9 @@ const text = body ?? copy.body;
         {BUSINESS.phonePretty}
       </a>
     </div>
+    <p class="cta-band__alt">
+      מעדיפים דרך אחרת? <a href="/contact/">כל דרכי יצירת הקשר</a>
+    </p>
   </div>
 </section>
 
@@ -96,6 +99,17 @@ const text = body ?? copy.body;
   }
   .cta-band--brand p {
     color: var(--text-muted);
+  }
+
+  .cta-band__alt {
+    margin-block-start: var(--space-4);
+    font-size: 0.9rem;
+  }
+  .cta-band--inverse .cta-band__alt {
+    color: var(--text-on-dark-muted);
+  }
+  .cta-band--inverse .cta-band__alt a {
+    color: var(--copper-400);
   }
 
   @media (min-width: 56rem) {

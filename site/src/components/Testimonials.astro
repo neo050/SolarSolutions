@@ -27,9 +27,12 @@ const isEmpty = items.length === 0;
 
 <section class="section testimonials">
   <div class="container">
-    <div class="section-head">
-      <h2>{title}</h2>
-      <p>המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.</p>
+    <div class="section-head section-head--row">
+      <div>
+        <h2>{title}</h2>
+        <p>המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.</p>
+      </div>
+      <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>
     </div>
 
     {
@@ -79,10 +82,21 @@ const isEmpty = items.length === 0;
 </section>
 
 <style>
+  .section-head--row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    max-width: none;
+  }
+
   .testimonials__grid {
     display: grid;
     gap: var(--space-5);
-    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    /* 18rem so three testimonials still fit at a 1024px viewport (3x288+48=912
+       against 956.8px available); 20rem needed 1008px and left an orphan card. */
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     list-style: none;
     margin: 0;
     padding: 0;

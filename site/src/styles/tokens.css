@@ -63,13 +63,19 @@
 
   --text: var(--ink-800);
   --text-muted: var(--ink-500);
-  --text-subtle: var(--ink-400);
+  /* Darkened from --ink-400 (#6c7d85): that was 4.28:1 on white and 3.58:1 on the
+     sunken surface, and every use of this token is small text, where 4.5:1 applies. */
+  --text-subtle: #5a6b73;
   --text-on-dark: #e8f0f2;
   --text-on-dark-muted: #a6bcc2;
   --text-on-brand: var(--white);
 
   --border: var(--ink-100);
-  --border-strong: var(--ink-200);
+  /* Solved, not guessed. --ink-200 (#c3cdd1) gave form controls a 1.62:1 border and
+     --ink-300 only reached 2.53:1; both fail the 3:1 minimum for non-text UI
+     boundaries (WCAG 1.4.11). This value clears 3:1 against all three light
+     surfaces — white 3.59:1, --bg 3.25:1, --bg-sunken 3.01:1. */
+  --border-strong: #7d898f;
   --border-inverse: #24424a;
 
   --brand: var(--panel-600);
@@ -77,6 +83,9 @@
   --brand-contrast: var(--white);
   --accent: var(--copper-600);
   --accent-hover: var(--copper-700);
+  /* Foreground for solid accent fills. Must flip in dark mode, where --accent
+     becomes a light copper that white text cannot sit on. */
+  --accent-contrast: var(--white);
 
   /* ---- System state — never used decoratively -------------------------- */
   --danger: #b3261e;
@@ -165,13 +174,15 @@
 
     --text: #e7eef0;
     --text-muted: #a3b4ba;
-    --text-subtle: #7d8f96;
+    --text-subtle: #8fa2a9;
     --text-on-dark: #e7eef0;
     --text-on-dark-muted: #a3b4ba;
     --text-on-brand: #04191e;
 
     --border: #1e2f34;
-    --border-strong: #2d444b;
+    /* Solved for 3:1 against both dark surfaces: --bg-raised 3.02:1, --bg 3.30:1.
+       #2d444b was 1.68:1 and #46606a still only 2.59:1. */
+    --border-strong: #5c686e;
     --border-inverse: #1e2f34;
 
     /* The light-theme brand is too dark to read on a dark ground; step up the ramp. */
@@ -180,6 +191,8 @@
     --brand-contrast: #04191e;
     --accent: var(--copper-400);
     --accent-hover: var(--copper-200);
+    /* Dark ink on light copper: 8.1:1. White here would be 2.64:1. */
+    --accent-contrast: #2a1608;
 
     --danger: #f28b83;
     --danger-bg: #2b1513;
@@ -210,13 +223,15 @@
 
   --text: #e7eef0;
   --text-muted: #a3b4ba;
-  --text-subtle: #7d8f96;
+  --text-subtle: #8fa2a9;
   --text-on-dark: #e7eef0;
   --text-on-dark-muted: #a3b4ba;
   --text-on-brand: #04191e;
 
   --border: #1e2f34;
-  --border-strong: #2d444b;
+  /* Solved for 3:1 against both dark surfaces: --bg-raised 3.02:1, --bg 3.30:1.
+     #2d444b was 1.68:1 and #46606a still only 2.59:1. */
+  --border-strong: #5c686e;
   --border-inverse: #1e2f34;
 
   --brand: var(--panel-300);
@@ -224,6 +239,8 @@
   --brand-contrast: #04191e;
   --accent: var(--copper-400);
   --accent-hover: var(--copper-200);
+  /* Dark ink on light copper: 8.1:1. White here would be 2.64:1. */
+  --accent-contrast: #2a1608;
 
   --danger: #f28b83;
   --danger-bg: #2b1513;

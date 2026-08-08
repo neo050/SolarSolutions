@@ -33,8 +33,11 @@ export const CONTRACTING: ServicePage[] = [
       "אחריות על החלק החשמלי בפרויקט",
     ],
     heroImage: {
-      src: "/images/gallery/panel-02.jpeg",
-      alt: "לוח חשמל עם הגנות מתקדמות וחיווט מסודר",
+      // A 72-module commercial board with an insulation monitor and contactors — the
+      // strongest evidence of non-domestic capability in the whole asset library, and it
+      // was previously captioned merely "wiring work in a panel".
+      src: "/images/gallery/panel-05-wide.jpeg",
+      alt: "לוח חשמל מסחרי בן 72 מודולים — הגנות מדורגות, מנתקים ובקרת בידוד",
     },
     sections: [
       {
@@ -181,8 +184,9 @@ export const CONTRACTING: ServicePage[] = [
     ],
     related: [
       { label: "לקבלני בניין", href: "/contracting/builders/" },
+      { label: "לקבלני שיפוצים", href: "/contracting/renovation/" },
+      { label: "ביצוע סולארי לקבלנים", href: "/solar/contractors/" },
       { label: "איך עובדים איתנו", href: "/contracting/process/" },
-      { label: "תשתיות חשמל", href: "/contracting/infrastructure/" },
     ],
   },
 
@@ -402,6 +406,10 @@ export const CONTRACTING: ServicePage[] = [
     lede:
       "במבנה מסחרי, השבתה עולה כסף. לכן מה שקובע הוא לא רק הביצוע אלא גם התכנון של מתי " +
       "עובדים, על מה מפסיקים מתח ולכמה זמן.",
+    heroImage: {
+      src: "/images/gallery/lighting-04-wide.jpeg",
+      alt: "חלל מסחרי לאחר השלמת עבודות החשמל והתאורה",
+    },
     heroPoints: [
       "עבודה במבנה פעיל, כולל מחוץ לשעות הפעילות",
       "לוחות מסחריים ותשתיות בהיקף",
@@ -486,6 +494,10 @@ export const CONTRACTING: ServicePage[] = [
     lede:
       "תשתית היא החלק שאף אחד לא רואה אחרי המסירה, ובדיוק לכן היא החלק שהכי יקר לתקן. " +
       "כאן ההבדל בין עבודה מסודרת לעבודה מהירה מתגלה רק כעבור שנים.",
+    heroImage: {
+      src: "/images/gallery/lighting-01-wide.jpeg",
+      alt: "שלב תשתית בפרויקט מסחרי — תקרת גבס פתוחה, מובילים וחיווט לפני גמר",
+    },
     heroPoints: [
       "הזנות ראשיות וחדרי חשמל",
       "תעלות, סולמות כבלים ומובילים",

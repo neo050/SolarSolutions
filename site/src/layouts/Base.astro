@@ -61,6 +61,9 @@ const organisationSchema = {
   "@id": `${BUSINESS.siteUrl}/#business`,
   name: BUSINESS.displayName,
   url: `${BUSINESS.siteUrl}/`,
+  // Google lists `image` among the expected properties for a LocalBusiness; without it
+  // the Rich Results Test warns on every page, since this node is emitted site-wide.
+  image: new URL("/og/default.png", BUSINESS.siteUrl).href,
   telephone: BUSINESS.phone,
   email: BUSINESS.email,
   areaServed: BUSINESS.areaServed,

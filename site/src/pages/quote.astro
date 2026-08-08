@@ -34,7 +34,7 @@ const tracks = ["private", "contracting", "solar"] as const;
   </section>
 
   <div class="container quote-layout">
-    <nav class="track-picker" aria-label="בחירת סוג פנייה">
+    <div class="track-picker" role="group" aria-label="בחירת סוג פנייה">
       {
         tracks.map((t) => (
           <button
@@ -47,7 +47,7 @@ const tracks = ["private", "contracting", "solar"] as const;
           </button>
         ))
       }
-    </nav>
+    </div>
 
     <div class="quote-forms">
       {
@@ -110,9 +110,11 @@ const tracks = ["private", "contracting", "solar"] as const;
     padding-block-end: var(--section-y);
   }
 
+  /* Always three-up or one-up, never 2+1: auto-fit produced an orphan third button
+     across 414px-606px, which reads as a broken segmented control. */
   .track-picker {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-2);
     padding: var(--space-2);
     background: var(--bg-sunken);
@@ -141,6 +143,12 @@ const tracks = ["private", "contracting", "solar"] as const;
 
   .quote-panel[hidden] {
     display: none;
+  }
+
+  @media (max-width: 26rem) {
+    .track-picker {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .quote-aside {

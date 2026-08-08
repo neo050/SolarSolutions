@@ -210,6 +210,13 @@ hr {
   color: var(--text-on-dark-muted);
 }
 
+/* --accent is dark copper in light mode, giving only 3.03:1 on the near-black
+   inverse ground. Small bold text needs 4.5:1, so step to the light copper. */
+.section--inverse .eyebrow,
+.cta-band--inverse .eyebrow {
+  color: var(--copper-400);
+}
+
 .muted {
   color: var(--text-muted);
 }
@@ -282,9 +289,18 @@ hr {
 }
 
 /* Bottom padding so the mobile sticky CTA never covers the last element. */
-@media (max-width: 47.99rem) {
+/*
+ * Reserve room for the mobile action bar. The breakpoint matches StickyCta's, which
+ * in turn matches the header's — between 48rem and 64rem the sticky bar used to be
+ * hidden while the header's own phone and quote buttons had not yet appeared, so
+ * tablet widths had no visible call to action at all.
+ *
+ * 5.5rem, not 4.75rem: at 320px the button labels wrap to two lines and the bar grows
+ * to 5.16rem, which the old reserve did not cover.
+ */
+@media (max-width: 63.999rem) {
   body {
-    padding-block-end: 4.75rem;
+    padding-block-end: 5.5rem;
   }
 }
 

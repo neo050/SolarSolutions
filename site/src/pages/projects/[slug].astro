@@ -35,7 +35,7 @@ const schema = {
   "@context": "https://schema.org",
   "@type": "CreativeWork",
   name: `${project.title}, ${project.location}`,
-  about: project.systemType,
+  about: { "@type": "Thing", name: project.systemType },
   description: project.summary,
   creator: { "@id": `${BUSINESS.siteUrl}/#business` },
   contentLocation: { "@type": "Place", name: project.location },
@@ -104,6 +104,7 @@ const schema = {
                   width="1200"
                   height="900"
                   loading={i === 0 ? "eager" : "lazy"}
+                  fetchpriority={i === 0 ? "high" : undefined}
                   decoding="async"
                 />
               </li>

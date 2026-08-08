@@ -60,9 +60,11 @@
   --btn-bg: var(--brand-hover);
 }
 
+/* --btn-fg was hard-coded #fff. In dark mode --accent is a light copper, making
+   white text 2.64:1 — below even the large-text threshold. The token flips. */
 .btn--accent {
   --btn-bg: var(--accent);
-  --btn-fg: #fff;
+  --btn-fg: var(--accent-contrast);
 }
 .btn--accent:hover {
   --btn-bg: var(--accent-hover);
@@ -302,14 +304,20 @@
   line-height: var(--leading-normal);
 }
 
+/*
+ * The arrow is drawn with background-position, which is purely physical: its
+ * percentages resolve from the left edge and are unaffected by `direction`. Under
+ * dir="rtl" the padding is reserved on the right while the arrow was painted on the
+ * left, so it overlapped the option text. Anchored to the right edge instead.
+ */
 .select {
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
     linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(0% + 1rem) calc(50% + 2px), calc(0% + 1.35rem) calc(50% + 2px);
+  background-position: calc(100% - 1.35rem) calc(50% + 2px), calc(100% - 1rem) calc(50% + 2px);
   background-size: 6px 6px;
   background-repeat: no-repeat;
-  padding-inline-start: 2.4rem;
+  padding-inline-end: 2.4rem;
 }
 
 /* Invalid only after the user has left the field, never while typing. */

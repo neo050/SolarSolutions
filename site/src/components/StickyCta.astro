@@ -79,9 +79,18 @@ const isContracting = track === "contracting";
 
   .sticky-cta .btn {
     min-height: 2.9rem; /* comfortable thumb target */
+    /* At 320px each column leaves ~102px for the label, and both labels measure ~114px,
+       so they wrapped to two lines and pushed the bar over its reserved space. */
+    padding-inline: var(--space-2);
+    font-size: 0.86rem;
   }
 
-  @media (min-width: 48rem) {
+  /*
+   * 64rem matches the header breakpoint, where its own phone and quote buttons appear.
+   * At 48rem this bar disappeared while those had not yet arrived, so every width from
+   * 768px to 1023px had no visible call to action anywhere on the page.
+   */
+  @media (min-width: 64rem) {
     .sticky-cta {
       display: none !important;
     }

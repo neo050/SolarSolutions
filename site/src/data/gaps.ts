@@ -77,30 +77,41 @@ export const GAPS: Gap[] = [
     closes: "תמונה מכל פרויקט שבו עבדו יותר מאדם אחד",
   },
   {
+    // CORRECTED. A previous entry claimed there was no construction-phase photograph at
+    // all. lighting-01 is exactly that — an open plasterboard ceiling with downlight
+    // cut-outs, ducting, pulled wiring and drawings taped to the wall — and it is now the
+    // hero of the infrastructure page. What is still missing is residential new-build.
     id: "photo.site.construction",
     page: "/contracting/builders/",
     category: "photo",
-    what: "אתר בנייה בשלב שלד — תשתיות חשמל לפני גמר, צנרת, קופסאות, הכנות.",
-    why: "מוכיח לקבלן בניין שהעסק עובד בשלב שלו ולא רק בבית גמור.",
-    source: "business-owner",
-    needsTruth: true,
-    aiFillable: "no",
-    priority: "P0",
-    status: "missing",
-    closes: "תמונות מאתר בנייה פעיל",
-  },
-  {
-    id: "photo.panel.commercial",
-    page: "/contracting/commercial/ · /contracting/infrastructure/",
-    category: "photo",
-    what: "לוח חשמל מסחרי או תעשייתי בהיקף שאינו ביתי.",
-    why: "חמשת תצלומי הלוחות הקיימים הם ביתיים. אין הוכחה ויזואלית ליכולת בהיקף מסחרי.",
+    what:
+      "אתר בנייה למגורים בשלב שלד — צנרת ושרוולים לפני יציקה, קופסאות, הכנות. " +
+      "(שלב תשתית בפרויקט מסחרי כבר מתועד בתמונה אחת ומשמש בעמוד התשתיות.)",
+    why:
+      "קבלן בניין רוצה לראות עבודה בשלב שלו. יש כבר תיעוד משלב תשתית מסחרי; חסר המקבילה " +
+      "בבנייה למגורים, שהיא הסגמנט המרכזי בענף הקבלני.",
     source: "business-owner",
     needsTruth: true,
     aiFillable: "no",
     priority: "P1",
     status: "missing",
-    closes: "תמונה מפרויקט מסחרי שבוצע",
+    closes: "תמונות מאתר בנייה למגורים",
+  },
+  {
+    id: "photo.panel.commercial",
+    page: "/contracting/commercial/ · /contracting/infrastructure/",
+    category: "photo",
+    what:
+      "תמונות נוספות של לוחות מסחריים ותעשייתיים, ובמיוחד לוח ראשי או חדר חשמל בהיקף גדול.",
+    why:
+      "תוקן: קיים כבר תצלום של לוח מסחרי בן 72 מודולים עם בקרת בידוד ומנתקים — הוא הועלה " +
+      "לתמונה הראשית של עמוד הקבלנות. חסרות תמונות נוספות כדי להראות שזה לא מקרה יחיד.",
+    source: "business-owner",
+    needsTruth: true,
+    aiFillable: "no",
+    priority: "P2",
+    status: "missing",
+    closes: "2–3 תמונות נוספות מלוחות מסחריים"
   },
   {
     id: "photo.solar.install-team",
@@ -263,17 +274,63 @@ export const GAPS: Gap[] = [
     closes: "פרויקט אחד. הניסוח ייכתב מהעובדות שיימסרו.",
   },
   {
+    // CORRECTED after visually inspecting every source photograph.
+    // The earlier entry claimed no commercial electrical work was documented. That was
+    // wrong: four photographs record a single real retail fit-out — ceiling infrastructure
+    // during construction, then the finished space — and panel-05 is a 72-module
+    // commercial board. The evidence existed; nobody had looked at it.
+    // What is genuinely missing is the story and the client's consent to name them.
     id: "case.commercial.first",
     page: "/contracting/commercial/",
     category: "case-study",
-    what: "פרויקט חשמל מסחרי אחד עם פרטים.",
-    why: "אין הוכחה לפעילות מסחרית בחשמל, רק בסולארי.",
+    what:
+      "הסיפור של פרויקט התאורה המסחרי שכבר מתועד בארבע תמונות: מי הלקוח, מה היה ההיקף, " +
+      "כמה זמן, ומה כלל הביצוע. בנוסף — אישור הלקוח לציין את שמו.",
+    why:
+      "יש כבר תיעוד ויזואלי מלא של הפרויקט הזה, כולל שלב הבנייה וגמר. חסר רק הסיפור " +
+      "שהופך אותו מגלריה ל-Case Study, ואישור לפרסום שם העסק שמופיע בתמונות.",
     source: "business-owner",
     needsTruth: true,
     aiFillable: "partial",
     priority: "P1",
     status: "missing",
-    closes: "פרויקט אחד",
+    closes: "שיחה קצרה על הפרויקט + אישור הלקוח",
+  },
+  {
+    id: "consent.commercial-client-brand",
+    page: "/electrical/lighting/ · /contracting/commercial/",
+    category: "credential",
+    what:
+      'אישור מבעל העסק המסחרי שמופיע בתמונות התאורה (מותג גלוי בשילוט: "Luna Park of ' +
+      'Flavors") לפרסם את התמונות ולציין את שמו.',
+    why:
+      "התמונות מציגות מותג מזוהה של צד שלישי. פרסום עבודה אצל לקוח מזוהה בלי אישורו הוא " +
+      "סיכון מיותר, ועם אישורו זו הוכחה מסחרית חזקה מאוד.",
+    source: "business-owner",
+    needsTruth: true,
+    aiFillable: "no",
+    priority: "P1",
+    status: "missing",
+    closes: "אישור בכתב, גם בהודעת וואטסאפ",
+  },
+  {
+    id: "provenance.panel-02",
+    page: "— (הוסרה מהאתר)",
+    category: "photo",
+    what:
+      'הבהרה על התמונה שהייתה תמונת ה-Hero של דף הבית: היא כוללת מדבקה של חשמלאי אחר — ' +
+      '"חשמלאי מוסמך · רוני בורוכוב · 058-5442623". האם זו עבודה שלנו בלוח שכבר נשא מדבקה ' +
+      "קודמת, או שהתמונה הגיעה ממקור אחר?",
+    why:
+      "התמונה שימשה כתמונה הראשית של דף הבית ושל עמוד הקבלנות, והציגה שם וטלפון של בעל " +
+      "מקצוע אחר. הוסרה מיידית לבידוד. אם העבודה שלנו — אפשר לצלם מחדש. אם לא — היא לא " +
+      "יכולה להופיע באתר כלל.",
+    source: "business-owner",
+    needsTruth: true,
+    aiFillable: "no",
+    priority: "P0",
+    status: "missing",
+    closes: "תשובה של משפט אחד",
   },
   {
     id: "case.details.solar",

@@ -141,7 +141,7 @@ export const SOLAR: ServicePage[] = [
     related: [
       { label: "סולארי לבתים פרטיים", href: "/solar/residential/" },
       { label: "סולארי לעסקים", href: "/solar/commercial/" },
-      { label: "אגירת אנרגיה", href: "/solar/storage/" },
+      { label: "עבודות חשמל", href: "/electrical/" },
     ],
   },
 
@@ -211,8 +211,8 @@ export const SOLAR: ServicePage[] = [
     ],
     related: [
       { label: "אגירת אנרגיה", href: "/solar/storage/" },
+      { label: "שדרוג לתלת פאזי", href: "/electrical/three-phase/" },
       { label: "פרויקטים", href: "/projects/" },
-      { label: "בדיקת התאמה", href: "/quote/?track=solar" },
     ],
   },
 

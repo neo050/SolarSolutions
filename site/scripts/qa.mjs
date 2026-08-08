@@ -131,9 +131,113 @@ for (const file of htmlFiles) {
   }
 }
 
+/* ---- orphan pages ----
+ *
+ * A page nothing links to is invisible to crawlers and to visitors, and the broken-link
+ * check cannot see it — there is no broken link, just no link at all. All ten project
+ * detail pages were orphaned this way until a card was made clickable.
+ *
+ * Inbound links from the header and footer do not count: those appear on every page and
+ * would mask a genuinely unreachable one. Only links from within <main> count.
+ */
+const EXPECT_NO_INBOUND = new Set([
+  "/", // the root is reached directly
+  "/404/", // emitted as dist/404.html; served by the host on any unmatched path
+  "/accessibility/", // legal page: a footer link on every page is the correct treatment
+  "/internal/gaps/", // working document, deliberately unlinked from the public site
+  "/thank-you/", // reached only by redirect from the retired success page
+  "/thank-you/private/",
+  "/thank-you/contracting/",
+  "/thank-you/solar/",
+]);
+
+const inbound = new Map([...routes].map((r) => [r, 0]));
+
+for (const file of htmlFiles) {
+  const html = readFileSync(file, "utf8");
+  const from = "/" + relative(DIST, file).split("\\").join("/").replace(/index\.html$/, "");
+  // Count only links inside <main>, so chrome-wide navigation cannot hide an orphan.
+  const main = html.match(/<main[\s\S]*?<\/main>/i)?.[0] ?? "";
+  for (const [, href] of main.matchAll(/href="([^"]+)"/g)) {
+    if (!href.startsWith("/") || href.startsWith("//")) continue;
+    const clean = decodeURI(href.split("#")[0].split("?")[0]);
+    const target = routes.has(clean) ? clean : routes.has(clean + "/") ? clean + "/" : null;
+    if (target && target !== from) inbound.set(target, (inbound.get(target) ?? 0) + 1);
+  }
+}
+
+for (const [route, count] of inbound) {
+  if (count === 0 && !EXPECT_NO_INBOUND.has(route)) {
+    failures.push(`${route} — orphan: no inbound link from any page's <main>`);
+  }
+}
+
+/* ---- structured data ---- */
+for (const file of htmlFiles) {
+  const html = readFileSync(file, "utf8");
+  const label = "/" + relative(DIST, file).split("\\").join("/").replace(/index\.html$/, "");
+  const blocks = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
+
+  let faqPages = 0;
+  for (const [, raw] of blocks) {
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      failures.push(`${label} — invalid JSON-LD (does not parse)`);
+      continue;
+    }
+    const items = Array.isArray(parsed) ? parsed : [parsed];
+    for (const item of items) {
+      if (!item["@context"]) failures.push(`${label} — JSON-LD block without @context`);
+      if (!item["@type"]) failures.push(`${label} — JSON-LD block without @type`);
+      if (item["@type"] === "FAQPage") faqPages++;
+      if (item["@type"] === "BreadcrumbList") {
+        const list = item.itemListElement ?? [];
+        if (list[0]?.position !== 1) failures.push(`${label} — BreadcrumbList must start at position 1`);
+        for (const crumb of list) {
+          if (!/^https?:\/\//.test(crumb.item ?? "")) {
+            failures.push(`${label} — BreadcrumbList item is not an absolute URL: ${crumb.item}`);
+          }
+        }
+      }
+    }
+  }
+  // More than one FAQPage on a page is a structured-data violation Google flags.
+  if (faqPages > 1) failures.push(`${label} — ${faqPages} FAQPage blocks (only one allowed)`);
+}
+
 /* ---- required artefacts ---- */
-for (const required of ["sitemap-index.xml", "404.html", "robots.txt"]) {
+for (const required of ["sitemap-index.xml", "404.html", "robots.txt", "_headers", "_redirects"]) {
   if (!existsSync(join(DIST, required))) failures.push(`missing build artefact: ${required}`);
+}
+
+/* ---- redirect map covers every retired URL ---- */
+const redirects = existsSync(join(DIST, "_redirects"))
+  ? readFileSync(join(DIST, "_redirects"), "utf8")
+  : "";
+const RETIRED = [
+  "/energy/",
+  "/solar.html",
+  "/solutions.html",
+  "/projects.html",
+  "/about.html",
+  "/contact.html",
+  "/success.html",
+  "/recommendation.html",
+  "/m.html",
+  "/new.html",
+  "/solar-calculator.html",
+  "/CompatibilityCheck.html",
+];
+for (const old of RETIRED) {
+  if (!redirects.includes(old)) failures.push(`redirect map is missing the retired URL ${old}`);
+}
+// Redirects must be 301, not 302 — a temporary redirect passes no link equity.
+for (const line of redirects.split("\n")) {
+  const t = line.trim();
+  if (!t || t.startsWith("#")) continue;
+  if (/\s30[2378]\s*$/.test(t)) failures.push(`redirect is not a 301: ${t}`);
 }
 
 /* ---- report ---- */
