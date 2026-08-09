@@ -1,0 +1,18 @@
+# Jekyll configuration.
+#
+# GitHub Pages runs Jekyll against the repository root unless told not to. Since the
+# rebuilt site was added under site/, Jekyll started trying to parse every .astro file as
+# a Jekyll document — Astro's `---` frontmatter delimiter is the same one Jekyll uses for
+# YAML, so the build failed on "mapping values are not allowed in this context".
+#
+# .nojekyll at the root disables Jekyll processing entirely, which is what a pre-built
+# static site wants. These exclusions are belt and braces for the case where Pages is
+# configured to build from a branch and .nojekyll is not honoured.
+exclude:
+  - site/
+  - AI-ASSET-PACK/
+  - app-react/
+  - docs/
+  - node_modules/
+  - "*.md"
+  - .github/

@@ -148,7 +148,7 @@ const serviceSchema = {
                 <h2>{section.title}</h2>
                 {section.intro && <p>{section.intro}</p>}
               </div>
-              <div class="table-scroll">
+              <div class="table-scroll" tabindex="0" role="region" aria-label="טבלת נתונים">
                 {section.variant === "licence" ? (
                   <table class="data-table">
                     <thead>

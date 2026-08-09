@@ -87,7 +87,7 @@ const clientActions = GAPS.filter((g) => g.source === "client");
             <span class="report-group__count">{items.length}</span>
           </h2>
 
-          <div class="table-scroll">
+          <div class="table-scroll" tabindex="0" role="region" aria-label="טבלת חוסרים">
             <table class="report-table">
               <thead>
                 <tr>
@@ -169,7 +169,7 @@ const clientActions = GAPS.filter((g) => g.source === "client");
       <p class="lede">
         תוכן שהופיע באתר הקודם ולא ניתן לאמת. הוסר, ולא יחזור בלי אישור.
       </p>
-      <div class="table-scroll">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="טבלת חוסרים">
         <table class="report-table">
           <thead>
             <tr>

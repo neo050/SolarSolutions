@@ -117,6 +117,9 @@ const year = new Date().getFullYear();
     gap: var(--space-3);
     text-decoration: none;
     color: var(--text-on-dark);
+    /* Comfortable tap target. Passes WCAG 2.5.8 either way, but 36px is tight on a
+       phone for a link people reach for to get home. */
+    min-height: 2.75rem;
   }
   .brand__mark {
     width: 2.25rem;
