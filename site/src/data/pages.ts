@@ -502,6 +502,116 @@ export const DIMENSION_LABEL: Record<keyof Reviews, string> = {
   seo: "SEO",
 };
 
+/* -------------------------------------------------------------------------
+ * Design review, August 2026
+ *
+ * 105 findings across 31 routes, judged from screenshots of the built pages
+ * rather than from reading the source. Recorded as data and applied below, so
+ * the review states cannot drift from the evidence and a re-review is a
+ * one-table change. Full write-up: docs/review-2026-08.md.
+ *
+ * Every registered route was looked at. A route absent from this table was
+ * reviewed and had nothing raised against it — which is why absence promotes a
+ * dimension to "passed" rather than leaving it "pending". Those two are
+ * different claims and the registry should not confuse them.
+ * ---------------------------------------------------------------------- */
+
+type Severity = "high" | "medium" | "low";
+
+interface ReviewOutcome {
+  worst: Severity;
+  count: number;
+  /** The finding areas raised, which decide which dimensions are affected. */
+  areas: string[];
+}
+
+const REVIEWED: Record<string, ReviewOutcome> = {
+  "/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "spacing", "typography"] },
+  "/about/": { worst: "high", count: 7, areas: ["cta", "imagery", "other", "section-order", "typography"] },
+  "/areas/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "section-order"] },
+  "/contact/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
+  "/contracting/": { worst: "high", count: 8, areas: ["cta", "imagery", "other", "section-order", "spacing"] },
+  "/contracting/builders/": { worst: "high", count: 8, areas: ["cta", "hero", "hierarchy", "imagery", "other", "section-order"] },
+  "/contracting/commercial/": { worst: "high", count: 4, areas: ["hierarchy", "imagery", "other", "spacing"] },
+  "/contracting/infrastructure/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
+  "/contracting/process/": { worst: "high", count: 5, areas: ["hierarchy", "other", "typography"] },
+  "/contracting/renovation/": { worst: "medium", count: 4, areas: ["mobile", "section-order", "spacing", "typography"] },
+  "/electrical/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "section-order"] },
+  "/electrical/homes/": { worst: "high", count: 6, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
+  "/electrical/inspection/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
+  "/electrical/lighting/": { worst: "medium", count: 4, areas: ["cta", "imagery", "other", "spacing"] },
+  "/electrical/panels/": { worst: "high", count: 4, areas: ["cta", "imagery", "other"] },
+  "/electrical/three-phase/": { worst: "high", count: 6, areas: ["cta", "hero", "imagery", "other", "spacing"] },
+  // The two /faq/ groups in the raw output were merged: one arrived inside a
+  // comma-joined cross-page label and parsed as its own route.
+  "/faq/": { worst: "high", count: 5, areas: ["cta", "hierarchy", "other", "section-order"] },
+  // Same for the mobile-only finding filed separately from /projects/.
+  "/projects/": { worst: "high", count: 4, areas: ["imagery", "mobile", "other"] },
+  "/quote/": { worst: "high", count: 4, areas: ["hero", "other", "section-order"] },
+  "/reviews/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "section-order"] },
+  "/solar/": { worst: "high", count: 5, areas: ["hero", "imagery", "other", "spacing", "typography"] },
+  "/solar/commercial/": { worst: "medium", count: 4, areas: ["other", "spacing"] },
+  "/solar/contractors/": { worst: "high", count: 5, areas: ["imagery", "other", "section-order", "spacing"] },
+  "/solar/residential/": { worst: "high", count: 5, areas: ["hero", "hierarchy", "imagery", "other", "spacing"] },
+  "/solar/storage/": { worst: "high", count: 5, areas: ["imagery", "other", "spacing"] },
+  "/thank-you/": { worst: "medium", count: 2, areas: ["other", "typography"] },
+  "/thank-you/private/": { worst: "medium", count: 2, areas: ["other", "typography"] },
+  "/thank-you/contracting/": { worst: "medium", count: 1, areas: ["typography"] },
+  "/thank-you/solar/": { worst: "medium", count: 1, areas: ["typography"] },
+};
+
+/** Which judged dimension each finding area belongs to. */
+const AREA_DIMENSION: Record<string, keyof Reviews> = {
+  hierarchy: "ui",
+  spacing: "ui",
+  typography: "ui",
+  imagery: "ui",
+  hero: "ui",
+  mobile: "ui",
+  "section-order": "ux",
+  cta: "conversion",
+  // "other" covers missing proof, unfilled facts and copy that states the wrong
+  // thing — all content problems in practice.
+  other: "content",
+};
+
+const JUDGED: (keyof Reviews)[] = ["ui", "ux", "content", "conversion"];
+
+/**
+ * Applies the review to the registry.
+ *
+ * A high-severity finding blocks its dimension: the page cannot be called ready
+ * while it is open. Medium and low mark it in-progress. Dimensions the review
+ * raised nothing against pass.
+ *
+ * SEO is untouched here — it has its own pass and is not what this review looked at.
+ */
+// Families are keyed by `pattern` rather than `route` — /projects/[slug]/ and the like —
+// so the lookup accepts either.
+function applyReview(page: { route?: string; pattern?: string; reviews: Reviews }): void {
+  const key = page.route ?? page.pattern ?? "";
+  const outcome = REVIEWED[key];
+  if (!outcome) {
+    for (const d of JUDGED) if (page.reviews[d] === "pending") page.reviews[d] = "passed";
+    return;
+  }
+  const affected = new Set(
+    outcome.areas.map((a) => AREA_DIMENSION[a]).filter(Boolean) as (keyof Reviews)[]
+  );
+  const state: ReviewState = outcome.worst === "high" ? "blocked" : "in-progress";
+  for (const d of JUDGED) {
+    page.reviews[d] = affected.has(d) ? state : "passed";
+  }
+}
+
+for (const page of PAGES) applyReview(page);
+for (const family of PAGE_FAMILIES) applyReview(family);
+
+/** For the dashboard: how many findings a route carries, and how severe. */
+export function reviewFindings(route: string): ReviewOutcome | undefined {
+  return REVIEWED[route];
+}
+
 export function pageIsDone(p: { reviews: Reviews }): boolean {
   return DIMENSIONS.every((d) => p.reviews[d] === "passed");
 }
