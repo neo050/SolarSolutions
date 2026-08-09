@@ -1,0 +1,105 @@
+---
+/**
+ * Reviews.
+ *
+ * One place for every real review, replacing two duplicate collection forms that posted to
+ * two different private gmail addresses and redirected to an abandoned domain.
+ *
+ * There is no aggregate rating on this page. The old site published 4.9 from 120 reviews
+ * in structured data with no review system behind it; a real rating can only come from the
+ * Google Business Profile, which is tracked as a gap.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Pending from "~/components/Pending.astro";
+import Testimonials from "~/components/Testimonials.astro";
+import { TESTIMONIALS } from "~/data/testimonials";
+import { links } from "~/data/business";
+
+const trail = [{ label: "המלצות", href: "/reviews/" }];
+
+/*
+ * No Review structured data is emitted, deliberately.
+ *
+ * Google requires three fields on a Review snippet: author, itemReviewed and
+ * reviewRating. These five testimonials are genuine, attributable and consented — but
+ * none of them carries a star rating, because none was ever collected. The only ways to
+ * satisfy the requirement would be to invent a rating or to derive one from the tone of
+ * the text, and both are exactly the fabrication that was stripped out of this site in
+ * the first place.
+ *
+ * So the reviews are published as ordinary, honest page content and no rich-result
+ * markup is claimed for them. Once the Google Business Profile is connected
+ * (gap `integration.gbp`), its real ratings can back real Review markup.
+ */
+---
+
+<Base
+  title="המלצות מלקוחות"
+  description="המלצות מלקוחות אמיתיים של RNRG — בשם מלא, יישוב ותמונה. ללא דירוגים מומצאים."
+  breadcrumbs={trail}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section reviews-head">
+    <div class="container">
+      <p class="eyebrow">המלצות</p>
+      <h1>מה לקוחות אומרים</h1>
+      <p class="lede">
+        {TESTIMONIALS.length} המלצות, כולן מלקוחות מזוהים בשמם המלא ועם תמונתם. אין כאן
+        דירוג כוכבים ואין ממוצע — הצגת ממוצע דורשת מערכת ביקורות אמיתית.
+      </p>
+    </div>
+  </section>
+
+  {/*
+    Was a verbatim copy of Testimonials.astro — same markup, same CSS with the class
+    names changed. Two copies of one component drift, and this pair already had.
+  */}
+  <Testimonials
+    title="מה לקוחות אומרים"
+    blurb="כל ההמלצות שפורסמו, מלקוחות מזוהים בשמם המלא."
+    isReviewsPage={true}
+  />
+
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="reviews-note">
+        <h2>מה חסר כאן</h2>
+        <p>
+          כל חמש ההמלצות הן מלקוחות פרטיים, וארבע מהן בתחום הסולארי. אין כאן ולו קול אחד
+          מקבלן, מיזם או ממנהל פרויקט — ולא נציג המלצה של לקוח פרטי כאילו היא מפרויקט.
+        </p>
+        <p class="reviews-note__meta">
+          <Pending id="testimonial.contracting" label="P1 — המלצה מלקוח עסקי" />
+          <Pending id="integration.gbp" label="P0 — קישור ל-Google Business Profile" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="submit">
+    <div class="container container--narrow">
+      <div class="leave-review">
+        <h2>עבדנו יחד? נשמח להמלצה</h2>
+        <p>
+          הדרך הפשוטה ביותר היא לשלוח לנו הודעה בוואטסאפ — אפשר גם לצרף תמונה מהעבודה.
+          נבקש את אישורכם לפני פרסום.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={links.whatsapp("שלום, אשמח להשאיר המלצה על העבודה שביצעתם אצלי.")} target="_blank" rel="noopener" data-cta-location="reviews">
+            שליחת המלצה בוואטסאפ
+          </a>
+          <a class="btn btn--outline" href={links.mailto}>שליחה במייל</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand track="private" />
+</Base>
+
+<style>
+  .leave-review { border: 1px solid var(--border); }
+</style>

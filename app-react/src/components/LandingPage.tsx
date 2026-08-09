@@ -42,8 +42,15 @@ const BRAND = {
   leadEndpoint: "", // e.g. "/api/lead" | Google Apps Script URL | leave empty to disable
 };
 
-// Public base URL (CRA uses this when homepage is set)
+// Public base URL (CRA uses this when homepage is set) — resolves to /energy in production
 const PUBLIC_URL = process.env.PUBLIC_URL || "";
+
+// Shared assets that live at the site root, outside this app's build output.
+// Customer photos are published once under /assets/img and reused by both branches.
+const SITE_ASSETS = "/assets/img";
+
+// The canonical address of THIS page. The app is mounted at /energy/.
+const PAGE_URL = "https://rnrg.co.il/energy/";
 
 /** Services, trust points, and gallery are extracted so content can be edited easily. */
 const SERVICES = [
@@ -52,7 +59,7 @@ const SERVICES = [
   { title: "בדיקות ואישורים לביטוח", desc: "בדיקת הארקה, לולאת תקלה, בדיקת התנגדות הבידוד", icon: <ShieldCheck className="w-6 h-6" /> },
   { title: "תאורה אדריכלית", desc: "עיצוב ותכנון פריסת גופי תאורה", icon: <Lightbulb className="w-6 h-6" /> },
   { title: "מסחרי/עסקי", desc: "תכנון והרכבה, תשתיות, לוחות, תעלות ותחזוקה", icon: <Building2 className="w-6 h-6" /> },
-  { title: "מערכות סולאריות", desc: "תכנון והתקנה לצרכן הביתי והעסקי – חיסכון בחחשמל", icon: <Sun className="w-6 h-6" /> },
+  { title: "מערכות סולאריות", desc: "תכנון והתקנה לצרכן הביתי והעסקי – חיסכון בחשמל", icon: <Sun className="w-6 h-6" /> },
 ];
 
 const TRUST_POINTS = [
@@ -88,47 +95,62 @@ const TOPIC_GALLERIES: { title: string; images: string[] }[] = [
   // },
 ];
 
-// Testimonials content
+/**
+ * Real customer testimonials only.
+ *
+ * Every entry below is a verbatim review from an identifiable customer, with their
+ * own photo, previously published on the solar side of the site (solar.html).
+ * Only whitespace and stray RTL punctuation artifacts were normalised — no wording changed.
+ *
+ * DO NOT add an entry here without a real, attributable source. Invented testimonials
+ * expose the business to consumer-protection liability and to a Google manual action.
+ */
 const TESTIMONIALS = [
   {
-    name: "הילה מ.",
-    city: "תל אביב",
-    work: "חידוש לוח חשמל ותאורה",
+    name: "ניר רווח",
+    city: "גני תקווה",
+    work: "התקנת מערכת סולארית",
     text:
-      "רוני עשה עבודה מדהימה, מסודרת ואסתטית. קיבלנו הסבר מלא על כל שלב ובטיחות מעל הכול.",
-    img: PUBLIC_URL + "/images/testimonials/1.svg",
+      "מבקש ושמח להמליץ בחום על רוני חג׳ג׳! חשמלאי מקצועי ואמין. התקין אצלנו מערכת סולארית. " +
+      "עבודה יסודית עם גימור מעולה!! יותר מכל רוצה לציין את השירות האדיב של רוני שלא עזב אותנו " +
+      "עד שהכל היה מושלם. תמיד עם חיוך וסבלנות. בטוח שיגיע רחוק ב״ה. בשורות טובות!",
+    img: SITE_ASSETS + "/ניר רווח, גני תקווה.jpg",
   },
   {
-    name: "דניאל ר.",
+    name: "נועה חממי",
+    city: "בת עין",
+    work: "חשמל סולארי למשאית",
+    text:
+      "הכרתי את רוני האלוף דרך פוסט שפרסמתי בבתים על גלגלים. הייתי צריכה בנאדם תותח שיעשה לי " +
+      "חשמל סולארי למשאית – והאמת הרבה המליצו עליו, אז יצרתי איתו קשר. הוא מקצועי, עושה את " +
+      "העבודה עד לפרטים הקטנים. כבר עברה יותר משנה ועד היום אני מרוצה מהעבודה שלו.",
+    img: SITE_ASSETS + "/נועה חממי, בת עין.jpg",
+  },
+  {
+    name: "בר טופז",
     city: "אשדוד",
-    work: "שדרוג לתלת פאזי",
+    work: "מערכת סולארית לבית פרטי",
     text:
-      "טיפול מלא מול חברת החשמל ותיאום באתר בזמן. העבודה נקייה ומקצועית, ממליץ בחום!",
-    img: PUBLIC_URL + "/images/testimonials/2.svg",
+      "אחרי תקופה שרציתי להתקין מערכת סולארית היה לי כל כך הרבה חששות למי לפנות, עד שמצאתי " +
+      "את רוני. הוא באמת מקצוען — הסביר לי את כל התהליך ומיקסם את מלוא הפוטנציאל של השטח הפנוי " +
+      "שהיה לי כדי להתקין את המערכת, ובעלות הכי שווה שמצאתי.",
+    img: SITE_ASSETS + "/בר טופז.jpg",
   },
   {
-    name: "גיל ל.",
-    city: "הרצליה",
-    work: "תאורה אדריכלית בסלון",
+    name: "רז אבישי",
+    city: "קיבוץ הרדוף",
+    work: "עבודות חשמל",
     text:
-      "הצעת פתרונות חכמים ששדרגו את העיצוב. התוצאה נראית יוקרתית ומאירה את החלל בצורה מושלמת.",
-    img: PUBLIC_URL + "/images/testimonials/3.svg",
+      "רוני מקצועי מאוד, והכי חשוב — בן אדם ישר ואכפתי ללקוחות. עשה אצלי עבודה מעולה, " +
+      "תמיד זמין לכל שאלה או עזרה.",
+    img: SITE_ASSETS + "/רז אבישי.jpg",
   },
   {
-    name: "אלמוג ק.",
-    city: "ראשון לציון",
-    work: "בדיקה ואישור לביטוח",
-    text:
-      "בדיקות תקן יסודיות וקיבלנו דו" + "\"" + "ח מסודר. השירות היה מהיר ומדויק.",
-    img: PUBLIC_URL + "/images/testimonials/4.svg",
-  },
-  {
-    name: "רותם ש.",
-    city: "אבן יהודה",
-    work: "תשתיות חשמל לעסק",
-    text:
-      "פרויקט מורכב שבוצע במקצועיות ובתיאום מלא עם הקבלנים. רוני זמין ושקוף לאורך כל הדרך.",
-    img: PUBLIC_URL + "/images/testimonials/5.svg",
+    name: "אלכס סוחוליטקו",
+    city: "אשדוד",
+    work: "עבודות חשמל",
+    text: "ממליץ בחום. בחור מקצועי מאוד בעבודות חשמל, מחירים טובים והשירות טוב.",
+    img: SITE_ASSETS + "/אלכס.jpg",
   },
 ];
 
@@ -291,7 +313,25 @@ export default function LandingPage() {
           name="description"
           content="חשמלאי מוסמך וראשי – הנדסאי חשמל. מומחה בלוחות חשמל, בדיקות ואישורים, תאורה אדריכלית, תלת פאזי, וחשמל תעשייתי. שירות מהיר, בטיחות ותקן ישראלי."
         />
-        <link rel="canonical" href={BRAND.siteUrl} />
+        {/*
+          Must point at THIS page, not the site root. Pointing it at BRAND.siteUrl told
+          Google that the entire electrician page was a duplicate of the root splash page,
+          which is an instruction to drop this page from the index.
+        */}
+        <link rel="canonical" href={PAGE_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={PAGE_URL} />
+        <meta property="og:site_name" content="RNRG — רוני חג׳ג׳ הנדסת חשמל" />
+        <meta
+          property="og:title"
+          content="רוני חג׳ג׳ – חשמלאי מוסמך וראשי | עבודות חשמל לבית, לעסק ולתעשייה"
+        />
+        <meta
+          property="og:description"
+          content="חשמלאי מוסמך וראשי – הנדסאי חשמל. לוחות חשמל, בדיקות ואישורים, תלת פאזי, תאורה אדריכלית וחשמל מסחרי."
+        />
+        <meta property="og:locale" content="he_IL" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
       {/* Header */}
@@ -301,7 +341,7 @@ export default function LandingPage() {
             <div className="shrink-0 h-24 sm:h-28 md:h-32 lg:h-36 xl:h-40 2xl:h-44 max-w-[80vw] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[640px] xl:max-w-[720px] 2xl:max-w-[820px] overflow-hidden">
               <a href="/energy" className="inline-block h-full">
                 <img
-                  src={PUBLIC_URL + "/images/gallery/logo.svg"}
+                  src={PUBLIC_URL + "/images/gallery/logo.png"}
                   className="block h-full w-auto object-contain"
                   alt="עבודת חשמל מקצועית – התקנות ובטיחות"
                 />
@@ -415,11 +455,18 @@ export default function LandingPage() {
               className="relative"
             >
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-teal-100">
+                {/*
+                  Was /images/hero.svg — an abstract gradient placeholder standing in for the
+                  single most important image on the page. Swapped for a real photograph of
+                  work actually done. eager + fetchPriority because this is the LCP element.
+                */}
                 <img
-                  src={PUBLIC_URL + "/images/hero.svg"}
-                  alt="עבודת חשמל מקצועית – התקנות ובטיחות"
+                  src={GALLERY[1].src}
+                  alt={GALLERY[1].alt}
                   className="w-full h-full object-cover"
-                  loading="lazy"
+                  loading="eager"
+                  // @ts-expect-error fetchpriority is valid HTML, not yet in this React version's types
+                  fetchpriority="high"
                   decoding="async"
                   referrerPolicy="no-referrer"
                   onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -484,7 +531,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between mb-6">
             <h2 className="text-2xl sm:text-3xl font-extrabold">לקוחות ממליצים</h2>
-            <div className="text-sm text-gray-600">עבודות נבחרות והמלצות מלקוחות ברחבי הארץ</div>
+            <div className="text-sm text-gray-600">המלצות מלקוחות אמיתיים, בשמם המלא</div>
           </div>
 
           <TestimonialsCarousel />
@@ -509,8 +556,14 @@ export default function LandingPage() {
           <div className="mt-10 rounded-3xl bg-gradient-to-r from-teal-600 to-rose-500 p-1">
             <div className="rounded-[20px] bg-white p-6 flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
-                <div className="font-bold text-lg">עבדנו עם מיטב הקבלנים והאדריכלים</div>
-                <div className="text-gray-600 text-sm">התאמה מלאה ללוחות זמנים באתר, תיאומים, בטיחות ותקשורת רציפה</div>
+                {/*
+                  Reworded from "עבדנו עם מיטב הקבלנים והאדריכלים" — a track-record claim with
+                  no supporting project, client or case study anywhere on the site. This states
+                  the capability instead, which is defensible. Restore a track-record claim only
+                  once a real contracting case study is published.
+                */}
+                <div className="font-bold text-lg">עובדים מול קבלנים, אדריכלים ומנהלי פרויקט</div>
+                <div className="text-gray-600 text-sm">התאמה ללוחות זמנים באתר, תיאום מול בעלי מקצוע, בטיחות ותקשורת רציפה</div>
               </div>
               <div className="flex gap-3">
                 <a
@@ -747,18 +800,28 @@ export default function LandingPage() {
         </button>
       )}
 
-      {/* JSON-LD (SEO) */}
+      {/*
+        JSON-LD (SEO)
+
+        Every field here must be verifiable against something a person can check.
+        Removed in this pass because none of it was backed by fact:
+          - aggregateRating 4.9 / 120 reviews — no review system exists anywhere on the site.
+            Publishing an invented rating risks a Google structured-data manual action.
+          - priceRange "₪₪" — arbitrary.
+          - openingHoursSpecification — never confirmed by the business, and not shown anywhere
+            on the page. Re-add once confirmed (see the intake questionnaire).
+        Re-add aggregateRating ONLY by mirroring the real Google Business Profile numbers.
+      */}
       <script
         type="application/ld+json"
-        // Note: Keep the JSON minimal, accurate, and consistent with visible content
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Electrician",
             name: BRAND.name,
             description:
-              "חשמלאי מוסמך וראשי – הנדסאי חשמל. מומחה בכל עבודות החשמל לבית, לעסק ולתעשייה. מעל 8 שנות ניסיון, אמינות ובטיחות.",
-            url: BRAND.siteUrl,
+              "חשמלאי מוסמך וראשי – הנדסאי חשמל. עבודות חשמל לבית, לעסק ולתעשייה: לוחות חשמל, שדרוג לתלת פאזי, בדיקות ואישורים, תאורה אדריכלית ומערכות סולאריות.",
+            url: PAGE_URL,
             areaServed: BRAND.areas,
             telephone: BRAND.phone,
             email: BRAND.email,
@@ -770,12 +833,11 @@ export default function LandingPage() {
               addressLocality: BRAND.address.locality,
             },
             sameAs: BRAND.sameAs,
-            priceRange: "₪₪",
-            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "120" },
-            openingHoursSpecification: [
-              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"], opens: "08:00", closes: "19:00" },
-              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Friday"], opens: "08:00", closes: "13:30" },
-            ],
+            hasCredential: {
+              "@type": "EducationalOccupationalCredential",
+              credentialCategory: "רישיון חשמלאי ראשי",
+              identifier: "991433",
+            },
           }),
         }}
       />
@@ -820,34 +882,47 @@ function TestimonialsCarousel() {
           </div>
         </div>
 
-        <div className="overflow-hidden">
-          <motion.div
-            className="flex"
-            animate={{ x: `-${index * 100}%` }}
-            transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-            style={{ width: `${TESTIMONIALS.length * 100}%` }}
-          >
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="w-full flex-shrink-0 px-1">
-                <div className="grid md:grid-cols-2 gap-6 items-center">
-                  <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                    <img
-                      src={t.img}
-                      alt={`עבודה שבוצעה – ${t.work}`}
-                      className="w-full h-64 md:h-72 object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm text-teal-700 font-semibold">{t.city} · {t.work}</div>
-                    <div className="mt-1 text-lg font-bold">{t.name}</div>
-                    <p className="mt-3 text-gray-700 leading-relaxed">{t.text}</p>
-                  </div>
-                </div>
+        {/*
+          Renders only the active testimonial and cross-fades between them.
+
+          The previous implementation animated a horizontal track using percentage
+          translateX against a 500%-wide flex container, whose children were also `w-full`
+          — so each slide resolved to five times the viewport width and only a fifth of it
+          was ever visible. The sign of the translate was also wrong under `dir="rtl"`.
+          A fade sidesteps both problems and reads better for short quotes.
+        */}
+        <div className="relative min-h-[16rem] sm:min-h-[13rem]">
+          {TESTIMONIALS.map((t, i) => (
+            <motion.figure
+              key={i}
+              className="absolute inset-0 m-0 flex flex-col sm:flex-row sm:items-start gap-5"
+              initial={false}
+              animate={{ opacity: i === index ? 1 : 0 }}
+              transition={{ duration: 0.45 }}
+              aria-hidden={i !== index}
+              style={{ pointerEvents: i === index ? "auto" : "none" }}
+            >
+              <img
+                src={t.img}
+                alt={`${t.name}, ${t.city}`}
+                className="w-20 h-20 rounded-full object-cover border border-teal-100 shadow-sm shrink-0"
+                loading="lazy"
+                decoding="async"
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  const el = e.currentTarget as HTMLImageElement;
+                  if (el.src !== FALLBACK_IMG) el.src = FALLBACK_IMG;
+                }}
+              />
+              <div>
+                <blockquote className="text-gray-700 leading-relaxed">{t.text}</blockquote>
+                <figcaption className="mt-3">
+                  <span className="font-bold">{t.name}</span>
+                  <span className="text-gray-500"> · {t.city}</span>
+                  <span className="block text-sm text-teal-700 font-semibold mt-0.5">{t.work}</span>
+                </figcaption>
               </div>
-            ))}
-          </motion.div>
+            </motion.figure>
+          ))}
         </div>
 
         <div className="mt-6 flex justify-center gap-2">

@@ -1,0 +1,121 @@
+---
+/**
+ * Mid-page and end-of-page conversion band.
+ *
+ * The wording and the primary action change by track, because the tracks convert on
+ * different things: a private customer acts on availability, a contractor acts on
+ * whether the business can carry their project.
+ */
+import { links, BUSINESS, TRACKS } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  track?: Track;
+  title?: string;
+  body?: string;
+  variant?: "brand" | "inverse";
+}
+
+const { track = "private", title, body, variant = "inverse" } = Astro.props;
+
+const COPY: Record<Track, { title: string; body: string; cta: string }> = {
+  private: {
+    title: "צריכים חשמלאי?",
+    body: "ספרו לנו מה צריך ונחזור אליכם עם הצעת מחיר ברורה. לתקלה דחופה — עדיף להתקשר.",
+    cta: "לבקשת הצעת מחיר",
+  },
+  contracting: {
+    title: "יש לכם פרויקט שדורש קבלן חשמל?",
+    body: "שלחו את פרטי הפרויקט — סוג, מיקום, שלב והיקף — ונחזור אליכם עם התייחסות מקצועית ובדיקת התאמה.",
+    cta: "הצעת מחיר לפרויקט",
+  },
+  solar: {
+    title: "רוצים לדעת אם הנכס שלכם מתאים?",
+    body: "בדיקת התאמה קצרה — סוג נכס, מיקום ושטח פנוי — ונחזור אליכם עם הערכה מבעל מקצוע.",
+    cta: "לבדיקת התאמה",
+  },
+};
+
+const copy = COPY[track];
+const heading = title ?? copy.title;
+const text = body ?? copy.body;
+---
+
+<section class:list={["cta-band", `cta-band--${variant}`]}>
+  <div class="container cta-band__inner">
+    <div class="cta-band__text">
+      <h2>{heading}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="btn-row">
+      <a
+        class="btn btn--accent btn--lg"
+        href={TRACKS[track].quoteHref}
+        data-cta="cta-band"
+        data-cta-location="cta-band"
+      >
+        {copy.cta}
+      </a>
+      <a class="btn btn--outline btn--lg" href={links.tel} data-cta-location="cta-band">
+        {BUSINESS.phonePretty}
+      </a>
+    </div>
+    <p class="cta-band__alt">
+      מעדיפים דרך אחרת? <a href="/contact/">כל דרכי יצירת הקשר</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    padding-block: var(--section-y);
+  }
+  .cta-band--inverse {
+    background: var(--bg-inverse);
+    color: var(--text-on-dark);
+  }
+  .cta-band--brand {
+    background: var(--bg-brand-soft);
+  }
+
+  .cta-band__inner {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .cta-band h2 {
+    font-size: var(--step-3);
+    margin-block-end: var(--space-3);
+  }
+  .cta-band--inverse h2 {
+    color: var(--text-on-dark);
+  }
+  .cta-band p {
+    max-width: 52ch;
+  }
+  .cta-band--inverse p {
+    color: var(--text-on-dark-muted);
+  }
+  .cta-band--brand p {
+    color: var(--text-muted);
+  }
+
+  .cta-band__alt {
+    margin-block-start: var(--space-4);
+    font-size: 0.9rem;
+  }
+  .cta-band--inverse .cta-band__alt {
+    color: var(--text-on-dark-muted);
+  }
+  .cta-band--inverse .cta-band__alt a {
+    color: var(--copper-400);
+  }
+
+  @media (min-width: 56rem) {
+    .cta-band__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-8);
+    }
+  }
+</style>

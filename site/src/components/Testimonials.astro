@@ -1,0 +1,179 @@
+---
+/**
+ * Customer reviews.
+ *
+ * When a track has no reviews yet — contracting currently has none — this renders an
+ * honest empty state rather than borrowing a private customer's review to fill the
+ * layout. That empty state is the Design System's "dignified empty" pattern: it looks
+ * deliberate, so the page can ship before the material arrives.
+ */
+import { testimonialsFor, TESTIMONIALS, type Testimonial } from "~/data/testimonials";
+import type { Track } from "~/data/business";
+import { links } from "~/data/business";
+
+export interface Props {
+  track?: Track;
+  title?: string;
+  limit?: number;
+  /** Suppresses the "all reviews" link on /reviews/ itself, where it would self-link. */
+  isReviewsPage?: boolean;
+  /** Lead paragraph under the heading. */
+  blurb?: string;
+}
+
+const {
+  track,
+  title = "לקוחות ממליצים",
+  limit,
+  isReviewsPage = false,
+  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.",
+} = Astro.props;
+
+let items: Testimonial[] = track ? testimonialsFor(track) : TESTIMONIALS;
+if (limit) items = items.slice(0, limit);
+
+const isEmpty = items.length === 0;
+---
+
+<section class="section testimonials">
+  <div class="container">
+    <div class="section-head section-head--row">
+      <div>
+        <h2>{title}</h2>
+        <p>{blurb}</p>
+      </div>
+      {!isReviewsPage && <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>}
+    </div>
+
+    {
+      isEmpty ? (
+        <div class="testimonials__empty">
+          <h3>עדיין לא פרסמנו כאן המלצות</h3>
+          <p>
+            בענף הקבלני אנחנו מעדיפים לא להציג המלצות של לקוחות פרטיים כאילו הן מפרויקט —
+            אז עד שתתקבל המלצה מקבלן או ממנהל פרויקט, המקום הזה נשאר ריק.
+          </p>
+          <p>
+            רוצים לדבר עם לקוח שעבדנו איתו לפני שאתם מחליטים? נשמח לחבר אתכם.
+          </p>
+          <a class="btn btn--outline" href={links.tel} data-cta-location="testimonials-empty">
+            בקשת ממליץ
+          </a>
+        </div>
+      ) : (
+        <ul class="testimonials__grid">
+          {items.map((t) => (
+            <li>
+              <figure class="testimonial">
+                <blockquote>{t.quote}</blockquote>
+                <figcaption>
+                  <img
+                    src={t.photo}
+                    alt={`${t.name}, ${t.city}`}
+                    width="64"
+                    height="64"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span>
+                    <strong>{t.name}</strong>
+                    <span class="testimonial__meta">
+                      {t.city} · {t.work}
+                    </span>
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>
+
+<style>
+
+  .testimonials__grid {
+    display: grid;
+    gap: var(--space-5);
+    /* 18rem so three testimonials still fit at a 1024px viewport (3x288+48=912
+       against 956.8px available); 20rem needed 1008px and left an orphan card. */
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .testimonial {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    height: 100%;
+    margin: 0;
+    padding: var(--space-5);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .testimonial blockquote {
+    margin: 0;
+    flex: 1 1 auto;
+    color: var(--text);
+    font-size: 0.98rem;
+    line-height: var(--leading-normal);
+  }
+  /* A quotation mark set as a graphic, not typed into the copy. */
+  .testimonial blockquote::before {
+    content: "";
+    display: block;
+    width: 1.75rem;
+    height: 2px;
+    background: var(--accent);
+    margin-block-end: var(--space-4);
+  }
+
+  .testimonial figcaption {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+  }
+  .testimonial figcaption img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+  .testimonial figcaption > span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.35;
+  }
+  .testimonial__meta {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+  }
+
+  .testimonials__empty {
+    max-width: var(--measure-narrow);
+    padding: var(--space-6);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .testimonials__empty h3 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-3);
+  }
+  .testimonials__empty p {
+    color: var(--text-muted);
+    margin-block-end: var(--space-3);
+    max-width: 56ch;
+  }
+  .testimonials__empty .btn {
+    margin-block-start: var(--space-2);
+  }
+</style>

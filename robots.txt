@@ -1,0 +1,15 @@
+# RNRG — rnrg.co.il
+# This file did not exist. Without it crawlers get no sitemap pointer and no guidance.
+
+User-agent: *
+Allow: /
+
+# Retired pages kept only as redirect stubs — they carry noindex tags too.
+Disallow: /m.html
+Disallow: /new.html
+Disallow: /solar-calculator.html
+
+# Confirmation page: no search value, and it should never be a landing page.
+Disallow: /success.html
+
+Sitemap: https://rnrg.co.il/sitemap.xml

@@ -1,0 +1,632 @@
+/* ============================================================================
+   RNRG Design System — shared components
+   Every interactive element defines hover, focus-visible, active and disabled.
+   ========================================================================= */
+
+/* ---- Buttons ------------------------------------------------------------ */
+.btn {
+  --btn-bg: var(--brand);
+  --btn-fg: var(--brand-contrast);
+  --btn-border: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.8rem 1.5rem;
+  min-height: 2.9rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.btn:hover {
+  color: var(--btn-fg);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn--primary {
+  --btn-bg: var(--brand);
+  --btn-fg: var(--brand-contrast);
+}
+.btn--primary:hover {
+  --btn-bg: var(--brand-hover);
+}
+
+/* --btn-fg was hard-coded #fff. In dark mode --accent is a light copper, making
+   white text 2.64:1 — below even the large-text threshold. The token flips. */
+.btn--accent {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--accent-contrast);
+}
+.btn--accent:hover {
+  --btn-bg: var(--accent-hover);
+}
+
+.btn--outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--brand);
+  --btn-border: var(--border-strong);
+}
+.btn--outline:hover {
+  --btn-bg: var(--bg-brand-soft);
+  --btn-border: var(--brand);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  --btn-border: transparent;
+}
+.btn--ghost:hover {
+  --btn-bg: var(--bg-sunken);
+  box-shadow: none;
+}
+
+/* On dark sections the outline variant needs the inverse ramp. */
+.section--inverse .btn--outline {
+  --btn-fg: var(--text-on-dark);
+  --btn-border: var(--border-inverse);
+}
+.section--inverse .btn--outline:hover {
+  --btn-bg: rgba(255, 255, 255, 0.07);
+  --btn-border: var(--brand);
+}
+
+.btn--sm {
+  padding: 0.5rem 0.95rem;
+  min-height: 2.35rem;
+  font-size: 0.9rem;
+}
+.btn--lg {
+  padding: 1rem 1.9rem;
+  min-height: 3.4rem;
+  font-size: 1.05rem;
+}
+.btn--block {
+  width: 100%;
+}
+
+/* Submit-in-flight. The old form gave no feedback at all between click and redirect. */
+.btn[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.75;
+}
+.btn[data-loading="true"]::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+}
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* ---- Cards -------------------------------------------------------------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.card h3 {
+  font-size: var(--step-1);
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  margin: 0;
+}
+
+/* A whole card that behaves as one link target, without nesting anchors. */
+.card--link {
+  position: relative;
+}
+.card--link:hover {
+  border-color: var(--brand);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.card--link:focus-within {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.card__link {
+  text-decoration: none;
+  color: inherit;
+}
+.card--link:focus-within .card__link:focus-visible {
+  outline: none;
+}
+
+.card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius);
+  background: var(--bg-brand-soft);
+  color: var(--brand);
+  flex: 0 0 auto;
+}
+.card__icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.card--accent .card__icon {
+  background: var(--bg-accent-soft);
+  color: var(--accent);
+}
+
+.card__meta {
+  margin-block-start: auto;
+  padding-block-start: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-subtle);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Stat block --------------------------------------------------------- */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.stat__value {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+.section--inverse .stat__value {
+  color: var(--copper-400);
+}
+.stat__label {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+.section--inverse .stat__label {
+  color: var(--text-on-dark-muted);
+}
+
+/* ---- Forms -------------------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+.field__label .req {
+  color: var(--danger);
+  margin-inline-start: 0.15em;
+}
+.field__hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  min-height: 2.9rem;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-size: 1rem; /* 16px minimum — anything smaller makes iOS zoom on focus */
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-subtle);
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: var(--ink-300);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--ring);
+}
+
+.textarea {
+  min-height: 7rem;
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+
+/*
+ * The arrow is drawn with background-position, which is purely physical: its
+ * percentages resolve from the left edge and are unaffected by `direction`. Under
+ * dir="rtl" the padding is reserved on the right while the arrow was painted on the
+ * left, so it overlapped the option text. Anchored to the right edge instead.
+ */
+.select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1.35rem) calc(50% + 2px), calc(100% - 1rem) calc(50% + 2px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  padding-inline-end: 2.4rem;
+}
+
+/* Invalid only after the user has left the field, never while typing. */
+.input[aria-invalid="true"],
+.select[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.input[aria-invalid="true"]:focus,
+.textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 30%, transparent);
+}
+
+.field__error {
+  font-size: 0.85rem;
+  color: var(--danger);
+  font-weight: 600;
+}
+.field__error:empty {
+  display: none;
+}
+
+.fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+.fieldset > legend {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--step-1);
+  padding: 0;
+  margin-block-end: var(--space-1);
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+.form-grid > .field--full {
+  grid-column: 1 / -1;
+}
+
+/* Honeypot — off-screen rather than display:none, which some bots detect. */
+.hp-field {
+  position: absolute;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---- Alerts (system state only) ----------------------------------------- */
+.alert {
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid;
+  font-size: 0.95rem;
+}
+.alert--error {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+.alert--success {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+}
+.alert--warning {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning);
+}
+.alert:empty {
+  display: none;
+}
+
+/* ---- Badges / pills ----------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-brand-soft);
+  color: var(--brand);
+  border: 1px solid color-mix(in srgb, var(--brand) 25%, transparent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge--accent {
+  background: var(--bg-accent-soft);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.badge--mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+
+/* ---- Breadcrumbs -------------------------------------------------------- */
+.breadcrumbs {
+  padding-block: var(--space-4) 0;
+  font-size: 0.87rem;
+}
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--text-subtle);
+}
+.breadcrumbs li:not(:last-child)::after {
+  content: "›";
+  margin-inline-start: 0.4rem;
+  color: var(--text-subtle);
+}
+.breadcrumbs a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.breadcrumbs a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+.breadcrumbs [aria-current="page"] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ---- FAQ ---------------------------------------------------------------- */
+.faq {
+  border-block-start: 1px solid var(--border);
+}
+.faq__item {
+  border-block-end: 1px solid var(--border);
+}
+.faq__item summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.03rem;
+  list-style: none;
+}
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+.faq__item summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--accent);
+  transition: transform var(--dur) var(--ease);
+}
+.faq__item[open] summary::after {
+  transform: rotate(45deg);
+}
+.faq__item summary:hover {
+  color: var(--brand);
+}
+.faq__answer {
+  padding-block-end: var(--space-5);
+  color: var(--text-muted);
+  max-width: var(--measure);
+}
+.faq__answer > * + * {
+  margin-block-start: var(--space-3);
+}
+
+/* ---- Pending marker ----------------------------------------------------- */
+/* Where a real fact or asset is missing. Visible and honest, never a fake number. */
+.pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.15em 0.55em;
+  border: 1px dashed var(--warning-border);
+  border-radius: var(--radius-sm);
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pending--block {
+  display: flex;
+  width: 100%;
+  padding: var(--space-4);
+  white-space: normal;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+/* ---- Data tables --------------------------------------------------------
+ * Was duplicated across three page files and had already drifted: one copy set
+ * vertical-align on cells and the others did not, so the same table rendered
+ * differently depending on which page it appeared on.
+ * Wide tables always scroll inside their own container so the page body never
+ * scrolls sideways.
+ */
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+.data-table thead th {
+  background: var(--bg-sunken);
+  text-align: start;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-block-end: 1px solid var(--border-strong);
+  white-space: nowrap;
+}
+.data-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-block-start: 1px solid var(--border);
+  vertical-align: top;
+}
+.data-table tbody tr:first-child td {
+  border-block-start: none;
+}
+.data-table tbody td:first-child {
+  font-weight: 600;
+}
+.data-table tr.is-ours {
+  background: var(--bg-accent-soft);
+}
+.data-table tr.is-ours td:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.table-source {
+  margin-block-start: var(--space-3);
+  font-size: 0.83rem;
+  color: var(--text-subtle);
+  max-width: var(--measure);
+}
+
+/* ---- Pending block ------------------------------------------------------
+ * A section whose content is genuinely missing. Looks deliberate rather than
+ * broken, so a page can ship before its material arrives.
+ * Was duplicated across four files; one copy had lost the flex layout on the
+ * meta row, so the markers stacked there and sat inline everywhere else.
+ */
+.pending-block {
+  max-width: var(--measure);
+  padding: var(--space-6);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+.pending-block h2 {
+  font-size: var(--step-2);
+  margin-block-end: var(--space-3);
+}
+.pending-block p {
+  color: var(--text-muted);
+  margin-block-end: var(--space-3);
+  max-width: 60ch;
+}
+.pending-block__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--border);
+  font-size: 0.87rem;
+}
+
+/* ---- Section heading with a trailing action ----------------------------- */
+.section-head--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: none;
+}

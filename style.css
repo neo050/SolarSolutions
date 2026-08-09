@@ -29,20 +29,25 @@
     /* שמות אזורים */
     grid-template-areas:
       "logo    logo    logo"
-      ".       .       ."
+      "title   title   title"
       "nav .     contact";
   
     /* רקע התמונה */
     background: url("assets/img/image-small.webp") center/cover no-repeat;
     min-height: 600px;
   }
+  /*
+    These two rules targeted .hero::before, which is never generated — no rule anywhere
+    gives that pseudo-element a `content` property. So the responsive hero art direction
+    silently never ran and every screen size loaded the 600px image. Retargeted to .hero.
+  */
   @media (min-width: 700px) {
-    .hero::before {
+    .hero {
       background-image: url("assets/img/image-medium.webp");
     }
   }
   @media (min-width: 1200px) {
-    .hero::before {
+    .hero {
       background-image: url("assets/img/image-large.webp");
     }
   }
@@ -59,6 +64,32 @@
     height: auto;
   }
   
+  /* 2b. כותרת ראשית — העמוד היה ללא H1 כלל, מה שמנע מגוגל לזהות במה הוא עוסק */
+  .hero-title {
+    grid-area: title;
+    align-self: center;
+    justify-self: center;
+    margin: 0;
+    padding: 0 1rem;
+    max-width: 22ch;
+    text-align: center;
+    color: #fff;
+    font-size: clamp(1.6rem, 1.1rem + 2.4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  .hero-title .hero-sub {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: clamp(0.9rem, 0.8rem + 0.6vw, 1.15rem);
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.5;
+  }
+
   /* 3. כפתור בדיקת התאמה בפינה תחתונה שמאלית */
   .contact-btn {
     grid-area: contact;
@@ -110,7 +141,7 @@
     gap: clamp(4px, 2vw, 12px);
     padding: 0;
   }
-  .icon-nav li button{
+  .icon-nav li .nav-btn{
     width: clamp(40px, 10vw, 80px);
     height: clamp(40px, 10vw, 80px);
     background-color: #fff;
@@ -123,7 +154,7 @@
     padding: 0;
     margin: 0;
   }
-  .icon-nav li button a {
+  .icon-nav li .nav-btn a {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -134,7 +165,7 @@
     padding: 0;
     margin: 0;
   }
-  .icon-nav li button a img {
+  .icon-nav li .nav-btn a img {
     max-height: 1.2rem;
     width: auto;
     margin-bottom: 5px;
@@ -143,10 +174,10 @@
     padding: 0;
     margin: 0;
   }
-  .icon-nav li button a:hover img {
+  .icon-nav li .nav-btn a:hover img {
     filter: grayscale(2%) brightness(1);
   }
-  .icon-nav li button a:hover {
+  .icon-nav li .nav-btn a:hover {
     transform: scale(1.1);
   }
   

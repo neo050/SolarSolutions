@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="צור קשר לקבלת הצעת מחיר ופרטים נוספים על מערכות סולאריות">
   <meta name="keywords" content="צור קשר, הצעת מחיר, מערכות סולאריות, התקנה">
-  <title>צור קשר</title>
+  <title>צור קשר | RNRG — רוני חג׳ג׳ הנדסת חשמל</title>
+  <link rel="canonical" href="https://rnrg.co.il/contact.html">
   <link rel="stylesheet" href="assets/css/style-modern.css">
 </head>
 <body>
@@ -40,7 +41,7 @@
         <input type="email" id="email" name="email" required>
 
         <label for="phone">פלאפון:</label>
-        <input type="number" id="phone" name="phone" required>
+        <input type="tel" id="phone" name="phone" inputmode="tel" autocomplete="tel" pattern="[0-9\-+ ]{9,15}" placeholder="050-1234567" required>
 
         <label for="message">הודעה:</label>
         <textarea id="message" name="message" required></textarea>
@@ -73,6 +74,7 @@
 </script>
 
   <!-- 3) סקריפט הראשי שלך -->
+  <script src="assets/js/analytics.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

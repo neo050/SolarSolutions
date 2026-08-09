@@ -1,0 +1,55 @@
+# Security and caching headers.
+#
+# Netlify / Cloudflare Pages format. On GitHub Pages this file is inert — headers cannot
+# be set at all there, which is one more reason the hosting decision matters.
+#
+# The old site declared a CSP on exactly one page out of thirteen, and that CSP still
+# allowed ws://127.0.0.1:3001 — a local dev-server origin shipped to production. This is
+# a site-wide policy instead.
+
+/*
+  # Clickjacking and MIME sniffing
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # No feature of this site needs any of these.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+
+  # HSTS. Two years, subdomains included. Add `preload` only once you are certain every
+  # subdomain is HTTPS-only — it is difficult to reverse.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+
+  # Content Security Policy.
+  #
+  # 'unsafe-inline' for script-src is required by Google Tag Manager and by Astro's
+  # inline hydration scripts. It is scoped as tightly as the rest allows. When GTM is
+  # replaced by a server-side container, drop it and move to nonces.
+  #
+  # frame-ancestors 'none' duplicates X-Frame-Options for browsers that honour only one.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+
+# Fingerprinted build output is immutable and safe to cache forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images are content-addressed by name rather than hash, so cache for a week and revalidate.
+/images/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+/og/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+# The lead endpoint must never be cached anywhere.
+/api/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex
+
+# Working documents: excluded from search at the header level as well as in the markup,
+# because a robots meta tag alone does not stop a page being served from a cache or CDN.
+/internal/*
+  X-Robots-Tag: noindex, nofollow
+
+/thank-you/*
+  X-Robots-Tag: noindex
+  Cache-Control: no-store

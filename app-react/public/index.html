@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electrician Landing Page</title>
+
+    <!--
+      This shell is what crawlers, link previews and the browser tab see before React
+      hydrates. It previously declared lang="en" and the title "Electrician Landing Page",
+      so every share of this URL rendered in English with no description.
+      react-helmet still overrides the title client-side; these are the pre-hydration values.
+    -->
+    <title>רוני חג׳ג׳ – חשמלאי מוסמך וראשי | עבודות חשמל לבית, לעסק ולתעשייה</title>
+    <meta name="description" content="חשמלאי מוסמך וראשי – הנדסאי חשמל. לוחות חשמל, שדרוג לתלת פאזי, בדיקות ואישורים לביטוח, תאורה אדריכלית וחשמל מסחרי. רישיון חשמלאי ראשי 991433.">
+    <link rel="canonical" href="https://rnrg.co.il/energy/">
+    <meta name="theme-color" content="#0d9488">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="he_IL">
+    <meta property="og:site_name" content="RNRG — רוני חג׳ג׳ הנדסת חשמל">
+    <meta property="og:url" content="https://rnrg.co.il/energy/">
+    <meta property="og:title" content="רוני חג׳ג׳ – חשמלאי מוסמך וראשי | עבודות חשמל לבית, לעסק ולתעשייה">
+    <meta property="og:description" content="חשמלאי מוסמך וראשי – הנדסאי חשמל. לוחות חשמל, תלת פאזי, בדיקות ואישורים, תאורה אדריכלית וחשמל מסחרי.">
+    <meta property="og:image" content="https://rnrg.co.il/energy/images/gallery/%D7%9C%D7%95%D7%97%20%D7%97%D7%A9%D7%9E%D7%9C%202.jpeg">
+
+    <link rel="icon" href="%PUBLIC_URL%/images/gallery/logo.png">
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/gallery/logo.png">
 </head>
 <body>
+    <noscript>
+      נדרש JavaScript כדי להציג את העמוד. ניתן ליצור קשר ישירות בטלפון
+      <a href="tel:+972546656076">054-665-6076</a>.
+    </noscript>
     <div id="root"></div>
 </body>
 </html>

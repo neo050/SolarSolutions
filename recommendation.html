@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>השאירו המלצה</title>
+  <title>השאירו המלצה | RNRG</title>
+  <link rel="canonical" href="https://rnrg.co.il/recommendation.html">
   <link rel="stylesheet" href="assets/css/recommendation.css">
 </head>
 <body>
@@ -37,15 +38,23 @@
       <h1 class="title">השאירו המלצה על השירות שלנו</h1>
       <p class="subtitle">תודה שבחרתם בנו! נשמח אם תשתפו חוויה והמלצה על התקנת מערכות סולאריות לביתכם.</p>
 
+      <!--
+        Destination was neoray.asking666@gmail.com (a developer address), while the near
+        identical form in m.html posted to roni.h1509@gmail.com — two inboxes for one form.
+        Both are now consolidated on the business owner's address.
+        _next pointed at neo050.github.io, the abandoned GitHub Pages domain, which threw
+        the visitor off rnrg.co.il after a successful submission.
+      -->
       <form id="testimonialForm"
-            action="https://formsubmit.co/neoray.asking666@gmail.com"
+            action="https://formsubmit.co/roni.h1509@gmail.com"
             method="POST"
             enctype="multipart/form-data">
 
-        <!-- EmailJS alternative: FormSubmit -->
         <input type="hidden" name="_subject" value="המלצה חדשה מהאתר">
-        <input type="hidden" name="_next" value="https://neo050.github.io/SolarSolutions/success.html">
+        <input type="hidden" name="_next" value="https://rnrg.co.il/success.html">
         <input type="hidden" name="_captcha" value="false">
+        <!-- Honeypot: bots fill hidden fields, humans never see this one. -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="form-group">
           <label for="name">שם מלא:</label>
@@ -92,6 +101,7 @@
   </footer>
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="assets/js/analytics.js"></script>
   <script src="assets/js/main.js"></script>
  
 </body>

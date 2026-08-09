@@ -1,0 +1,49 @@
+---
+/**
+ * Bare /thank-you/ — the fallback for anyone who reaches it without a track.
+ *
+ * Only bookmarks, shared links and the retired /success.html redirect land here. It is a
+ * complete page in its own right rather than a bounce, and it forwards to the private
+ * variant while preserving the lead reference in the query string.
+ */
+import Base from "~/layouts/Base.astro";
+import { BUSINESS, links } from "~/data/business";
+---
+
+<Base title="הפנייה התקבלה" description="הפנייה שלכם התקבלה. נחזור אליכם בהקדם." noindex={true}>
+  <section class="section thanks-fallback">
+    <div class="container container--narrow">
+      <h1>הפנייה התקבלה</h1>
+      <p class="lede">תודה. נחזור אליכם בהקדם.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={links.tel} data-cta-location="thank-you">
+          {BUSINESS.phonePretty}
+        </a>
+        <a class="btn btn--outline" href="/">לדף הבית</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks-fallback {
+    padding-block: var(--space-9);
+    text-align: center;
+  }
+  .thanks-fallback h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-4);
+  }
+  .thanks-fallback .lede {
+    margin-inline: auto;
+  }
+  .thanks-fallback .btn-row {
+    justify-content: center;
+    margin-block-start: var(--space-6);
+  }
+</style>
+
+<script>
+  // Forward to the private variant, carrying any lead reference across.
+  location.replace("/thank-you/private/" + location.search);
+</script>

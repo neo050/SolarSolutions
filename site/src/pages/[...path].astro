@@ -1,0 +1,372 @@
+---
+/**
+ * Service page template.
+ *
+ * One template renders all fifteen service pages from src/data/services. Routes are
+ * derived from the same slug the data declares, so a page cannot exist in the navigation
+ * without content, or carry content nothing links to.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import PageHero from "~/components/PageHero.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import FaqList from "~/components/FaqList.astro";
+import Testimonials from "~/components/Testimonials.astro";
+import Pending from "~/components/Pending.astro";
+import { servicePaths, type ServicePage } from "~/data/services";
+import { BUSINESS } from "~/data/business";
+import { getGap } from "~/data/gaps";
+import {
+  LICENCE_CLASSES,
+  LICENCE_NOTE,
+  INSPECTION_INTERVALS,
+  INSPECTION_SOURCE,
+} from "~/data/regulatory";
+
+export const getStaticPaths = servicePaths;
+
+interface Props {
+  page: ServicePage;
+}
+const { page } = Astro.props as Props;
+
+const trail = [
+  ...(page.parent ? [page.parent] : []),
+  { label: page.h1, href: page.slug },
+];
+
+// Service structured data. Describes what is offered, with no claim we cannot support.
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: page.h1,
+  description: page.description,
+  serviceType: page.h1,
+  areaServed: BUSINESS.areaServed,
+  provider: { "@id": `${BUSINESS.siteUrl}/#business` },
+  url: new URL(page.slug, BUSINESS.siteUrl).href,
+};
+---
+
+<Base
+  title={page.title}
+  description={page.description}
+  track={page.track}
+  breadcrumbs={trail}
+  schema={[serviceSchema]}
+>
+  <Breadcrumbs trail={trail} />
+
+  <PageHero
+    eyebrow={page.eyebrow}
+    title={page.h1}
+    lede={page.lede}
+    track={page.track}
+    image={page.heroImage}
+    points={page.heroPoints}
+  />
+
+  {
+    page.sections.map((section) => (
+      <section class="section" id={section.id}>
+        <div class="container">
+          {section.kind === "prose" && (
+            <div class="section-body">
+              <h2>{section.title}</h2>
+              <div class="prose">
+                {section.body.map((p) => (
+                  <p>{p}</p>
+                ))}
+                {section.note && <p class="muted">{section.note}</p>}
+              </div>
+            </div>
+          )}
+
+          {(section.kind === "bullets" || section.kind === "audience") && (
+            <>
+              <div class="section-head">
+                <h2>{section.title}</h2>
+                {section.intro && <p>{section.intro}</p>}
+              </div>
+              <ul class="feature-grid">
+                {section.items.map((item) => (
+                  <li class="feature">
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {section.kind === "steps" && (
+            <>
+              <div class="section-head">
+                <h2>{section.title}</h2>
+                {section.intro && <p>{section.intro}</p>}
+              </div>
+              {/* Numbered because these really are sequential — each step depends on the last. */}
+              <ol class="steps">
+                {section.items.map((item) => (
+                  <li>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
+
+          {section.kind === "gallery" && (
+            <>
+              <div class="section-head">
+                <h2>{section.title}</h2>
+                {section.intro && <p>{section.intro}</p>}
+              </div>
+              <ul class="gallery">
+                {section.images.map((img) => (
+                  <li>
+                    <img
+                      src={img.src}
+                      srcset={`${img.src.replace(/(\.[a-z]+)$/, "-800w$1")} 800w, ${img.src} 1600w`}
+                      sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 100vw"
+                      alt={img.alt}
+                      width="800"
+                      height="600"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {section.kind === "data-table" && (
+            <>
+              <div class="section-head">
+                <h2>{section.title}</h2>
+                {section.intro && <p>{section.intro}</p>}
+              </div>
+              <div class="table-scroll">
+                {section.variant === "licence" ? (
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>דרגת רישיון</th>
+                        <th>מותר לתכנן ולבצע</th>
+                        <th>עד גודל חיבור</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {LICENCE_CLASSES.map((row) => (
+                        <tr class:list={{ "is-ours": row.isOurs }}>
+                          <td>
+                            {row.grade}
+                            {row.isOurs && <span class="badge badge--accent">הרישיון שלנו</span>}
+                          </td>
+                          <td>{row.scope}</td>
+                          <td class="mono">{row.capacity}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>סוג מבנה או עסק</th>
+                        <th>תדירות בדיקת חשמלאי מוסמך</th>
+                        <th>בדיקת חשמלאי בודק</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {INSPECTION_INTERVALS.map((row) => (
+                        <tr>
+                          <td>{row.subject}</td>
+                          <td>{row.licensed}</td>
+                          <td>{row.inspector}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+              <p class="table-source">
+                {section.variant === "licence" ? LICENCE_NOTE : `מקור: ${INSPECTION_SOURCE}`}
+              </p>
+            </>
+          )}
+
+          {section.kind === "pending" && (
+            <div class="pending-block">
+              <h2>{section.title}</h2>
+              <p>{section.explain}</p>
+              <p class="pending-block__meta">
+                <Pending id={section.gapId} label={`ממתין למידע · ${getGap(section.gapId).priority}`} />
+                <span>נדרש: {getGap(section.gapId).closes}</span>
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  {page.track !== "contracting" && <Testimonials track={page.track} limit={3} />}
+
+  <FaqList items={page.faq} />
+
+  {
+    page.related.length > 0 && (
+      <section class="section section--sunken">
+        <div class="container">
+          <div class="section-head">
+            <h2>קשור לעמוד הזה</h2>
+          </div>
+          <ul class="related">
+            {page.related.map((r) => (
+              <li>
+                <a href={r.href}>
+                  <span>{r.label}</span>
+                  <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                    <path
+                      d="M12 5l-5 5 5 5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand track={page.track} />
+</Base>
+
+<style>
+  .section-body h2 {
+    margin-block-end: var(--space-5);
+  }
+
+  .feature-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .feature {
+    padding: var(--space-5);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .feature h3 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-2);
+  }
+  .feature p {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+  }
+
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    max-width: var(--measure);
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: var(--space-5) 0 var(--space-5) 0;
+    padding-inline-start: 3.5rem;
+    border-block-start: 1px solid var(--border);
+  }
+  .steps li:last-child {
+    border-block-end: 1px solid var(--border);
+  }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: var(--space-5);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .steps h3 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-2);
+  }
+  .steps p {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+  }
+
+  .gallery {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .gallery img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  /* A section whose content is genuinely missing. Looks deliberate, not broken. */
+
+  /* Wide tables scroll inside their own container so the page never scrolls sideways. */
+
+  .related {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .related a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .related a:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+  }
+  .related svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex: 0 0 auto;
+    color: var(--accent);
+  }
+</style>

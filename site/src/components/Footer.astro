@@ -1,0 +1,241 @@
+---
+/**
+ * Site footer.
+ *
+ * The previous footer was a single copyright line on every page. A footer is a navigation
+ * and internal-linking asset: it is the one place every page links to every branch, which
+ * is what lets authority flow between the three sections.
+ */
+import { FOOTER_GROUPS } from "~/data/nav";
+import { BUSINESS, links } from "~/data/business";
+import Pending from "~/components/Pending.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a class="brand" href="/">
+          <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+            <rect width="40" height="40" rx="8" fill="#0e2c33"></rect>
+            <path d="M22 7 12 23h6.5l-2 10 12-18H21l1-8z" fill="#b87333"></path>
+          </svg>
+          <span class="brand__text">
+            <strong>RNRG</strong>
+            <span>רוני חג׳ג׳ · הנדסת חשמל</span>
+          </span>
+        </a>
+
+        <p class="site-footer__blurb">
+          עבודות חשמל לבתים פרטיים, קבלנות ביצוע לפרויקטים ומערכות סולאריות.
+          {BUSINESS.ownerRole}.
+        </p>
+
+        <dl class="site-footer__facts">
+          <div>
+            <dt>טלפון</dt>
+            <dd><a href={links.tel} data-cta-location="footer">{BUSINESS.phonePretty}</a></dd>
+          </div>
+          <div>
+            <dt>אימייל</dt>
+            <dd><a href={links.mailto}>{BUSINESS.email}</a></dd>
+          </div>
+          <div>
+            <dt>אזור פעילות</dt>
+            <dd>{BUSINESS.areaServed}</dd>
+          </div>
+          <div>
+            <dt>רישיון</dt>
+            <dd class="mono">{BUSINESS.licenceNumber}</dd>
+          </div>
+          <div>
+            <dt>שעות פעילות</dt>
+            <dd><Pending id="fact.opening-hours" label="[ממתין לאישור]" /></dd>
+          </div>
+        </dl>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="ניווט תחתון">
+        {
+          FOOTER_GROUPS.map((group) => (
+            <section>
+              <h2>{group.title}</h2>
+              <ul>
+                {group.items.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="site-footer__cta">
+      <p>צריכים חשמלאי, קבלן ביצוע או מערכת סולארית?</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/quote/" data-cta="quote" data-cta-location="footer">
+          לבקשת הצעת מחיר
+        </a>
+        <a
+          class="btn btn--outline"
+          href={links.whatsapp()}
+          target="_blank"
+          rel="noopener"
+          data-cta-location="footer">הודעה בוואטסאפ</a
+        >
+      </div>
+    </div>
+
+    <div class="site-footer__legal">
+      <p>© {year} RNRG — רוני חג׳ג׳ הנדסת חשמל. כל הזכויות שמורות.</p>
+      <p><a href="/accessibility/">הצהרת נגישות</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-inverse);
+    color: var(--text-on-dark);
+    padding-block: var(--space-8) var(--space-5);
+    margin-block-start: var(--section-y);
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--text-on-dark);
+  }
+  .brand__mark {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius);
+  }
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .brand__text strong {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+  .brand__text span {
+    font-size: 0.72rem;
+    color: var(--text-on-dark-muted);
+  }
+
+  .site-footer__blurb {
+    margin-block-start: var(--space-4);
+    color: var(--text-on-dark-muted);
+    max-width: 40ch;
+    font-size: 0.94rem;
+  }
+
+  .site-footer__facts {
+    display: grid;
+    gap: var(--space-3);
+    margin-block-start: var(--space-5);
+  }
+  .site-footer__facts div {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    font-size: 0.9rem;
+  }
+  .site-footer__facts dt {
+    flex: 0 0 6.5rem;
+    color: var(--text-on-dark-muted);
+    font-size: 0.82rem;
+  }
+  .site-footer__facts dd {
+    margin: 0;
+  }
+  .site-footer__facts a {
+    color: var(--copper-400);
+    text-decoration: none;
+  }
+  .site-footer__facts a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__nav {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  }
+  .site-footer__nav h2 {
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--copper-400);
+    margin-block-end: var(--space-3);
+  }
+  .site-footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .site-footer__nav a {
+    color: var(--text-on-dark-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .site-footer__nav a:hover {
+    color: var(--text-on-dark);
+    text-decoration: underline;
+  }
+
+  .site-footer__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block-start: var(--space-7);
+    padding-block: var(--space-5);
+    border-block: 1px solid var(--border-inverse);
+  }
+  .site-footer__cta p {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--step-1);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-block-start: var(--space-5);
+    font-size: 0.82rem;
+    color: var(--text-on-dark-muted);
+  }
+  .site-footer__legal a {
+    color: var(--text-on-dark-muted);
+  }
+
+  @media (min-width: 60rem) {
+    .site-footer__top {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+      gap: var(--space-9);
+    }
+  }
+</style>

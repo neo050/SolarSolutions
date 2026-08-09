@@ -1,0 +1,56 @@
+---
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import { BUSINESS, links } from "~/data/business";
+
+const trail = [{ label: "הצהרת נגישות", href: "/accessibility/" }];
+---
+
+<Base
+  title="הצהרת נגישות"
+  description="הצהרת הנגישות של אתר RNRG — מה יושם, מה נבדק, ואיך לפנות אלינו בנושא."
+  breadcrumbs={trail}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section">
+    <div class="container container--narrow">
+      <h1>הצהרת נגישות</h1>
+      <div class="prose">
+        <p>
+          אנחנו רואים חשיבות בכך שהאתר יהיה שמיש עבור כמה שיותר אנשים, כולל משתמשים
+          בטכנולוגיות מסייעות.
+        </p>
+
+        <h2>מה יושם באתר</h2>
+        <ul>
+          <li>מבנה HTML סמנטי עם היררכיית כותרות תקינה בכל עמוד.</li>
+          <li>ניווט מלא באמצעות מקלדת, כולל מצב פוקוס נראה לעין בכל רכיב אינטראקטיבי.</li>
+          <li>קישור "דילוג לתוכן הראשי" כאלמנט הראשון בכל עמוד.</li>
+          <li>טקסט חלופי לכל תמונה שנושאת מידע.</li>
+          <li>תוויות מקושרות לכל שדה טופס, והודעות שגיאה המוכרזות לקוראי מסך.</li>
+          <li>יחסי ניגודיות בהתאם לרמה AA, בשני מצבי התצוגה — בהיר וכהה.</li>
+          <li>כיבוד העדפת המערכת להפחתת אנימציות.</li>
+          <li>גודל טקסט יחסי, שמאפשר הגדלה ללא שבירת הפריסה.</li>
+        </ul>
+
+        <h2>מגבלות ידועות</h2>
+        <p>
+          האתר בבנייה מחדש ובדיקת נגישות מלאה טרם הושלמה. אם נתקלתם בבעיה — נשמח שתעדכנו
+          אותנו, וזה יטופל.
+        </p>
+
+        <h2>פנייה בנושא נגישות</h2>
+        <p>
+          טלפון: <a href={links.tel}>{BUSINESS.phonePretty}</a><br />
+          אימייל: <a href={links.mailto}>{BUSINESS.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prose h2 { font-size: var(--step-2); margin-block-start: var(--space-6); }
+  h1 { font-size: var(--step-4); margin-block-end: var(--space-5); }
+</style>

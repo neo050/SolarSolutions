@@ -1,0 +1,141 @@
+---
+/**
+ * Mobile sticky action bar.
+ *
+ * The old site had one of these on the electrical page and nothing at all on the solar
+ * side, where the only way to make contact was to scroll to the bottom or open a menu.
+ *
+ * The actions differ by track, because the tracks convert differently: a private customer
+ * with a fault wants to call now; a contractor is not going to phone a stranger from a
+ * building site — they want to send a scoped brief.
+ */
+import { BUSINESS, links } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  track?: Track;
+}
+const { track = "private" } = Astro.props;
+
+const isContracting = track === "contracting";
+---
+
+<div class="sticky-cta" data-track={track} hidden>
+  {
+    isContracting ? (
+      <>
+        <a class="btn btn--primary btn--sm" href="/quote/?track=contracting" data-cta="quote" data-cta-location="sticky">
+          הצעת מחיר לפרויקט
+        </a>
+        <a class="btn btn--outline btn--sm" href={links.tel} data-cta-location="sticky">
+          שיחה מקצועית
+        </a>
+      </>
+    ) : (
+      <>
+        <a class="btn btn--primary btn--sm" href={links.tel} data-cta-location="sticky">
+          חייגו {BUSINESS.phonePretty}
+        </a>
+        <a
+          class="btn btn--outline btn--sm"
+          href={links.whatsapp()}
+          target="_blank"
+          rel="noopener"
+          data-cta-location="sticky"
+        >
+          וואטסאפ
+        </a>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset-inline: var(--space-3);
+    inset-block-end: var(--space-3);
+    z-index: var(--z-sticky-cta);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    background: color-mix(in srgb, var(--bg-raised) 96%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(calc(100% + var(--space-4)));
+    visibility: hidden;
+    transition: transform var(--dur-slow) var(--ease), visibility var(--dur-slow);
+  }
+
+  /*
+   * `hidden` is removed by script on load; visibility below is what actually hides the
+   * bar. Using visibility rather than transform alone matters: a transformed element is
+   * still focusable and still announced, so the off-screen bar used to sit in the tab
+   * order on every page.
+   */
+  .sticky-cta[hidden] {
+    display: grid;
+  }
+
+  .sticky-cta[data-visible="true"] {
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .sticky-cta .btn {
+    min-height: 2.9rem; /* comfortable thumb target */
+    /* At 320px each column leaves ~102px for the label, and both labels measure ~114px,
+       so they wrapped to two lines and pushed the bar over its reserved space. */
+    padding-inline: var(--space-2);
+    font-size: 0.86rem;
+  }
+
+  /*
+   * 64rem matches the header breakpoint, where its own phone and quote buttons appear.
+   * At 48rem this bar disappeared while those had not yet arrived, so every width from
+   * 768px to 1023px had no visible call to action anywhere on the page.
+   */
+  @media (min-width: 64rem) {
+    .sticky-cta {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Appears once the visitor has committed to the page, rather than covering the hero.
+  const bar = document.querySelector<HTMLElement>(".sticky-cta");
+  if (bar) {
+    bar.hidden = false;
+
+    let shown = false;
+    const onScroll = () => {
+      const past = window.scrollY > window.innerHeight * 0.6;
+      if (past !== shown) {
+        shown = past;
+        bar.dataset.visible = String(past);
+      }
+    };
+
+    /*
+     * Only listen where the bar can actually be seen. Above 64rem it is display:none, so
+     * the handler was firing on every scroll event to update a dataset attribute on an
+     * invisible element.
+     */
+    const mq = window.matchMedia("(max-width: 63.999rem)");
+    const sync = () => {
+      if (mq.matches) {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      } else {
+        window.removeEventListener("scroll", onScroll);
+        bar.dataset.visible = "false";
+      }
+    };
+    mq.addEventListener("change", sync);
+    sync();
+  }
+</script>

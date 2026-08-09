@@ -1,0 +1,80 @@
+/* ============================================================================
+   Fonts — Hebrew and Latin only, declared explicitly.
+   ============================================================================
+
+   Previously Base.astro imported the fontsource index stylesheets, which pull every
+   subset a family ships. That meant Rubik arrived with Arabic, Cyrillic and Cyrillic-Ext
+   faces, and Assistant with Latin-Ext — none of which any page on this site can render,
+   because the content is Hebrew with occasional Latin brand and unit strings.
+
+   Declaring the @font-face rules here instead of importing the packages means:
+     - only the two scripts actually used are declared,
+     - unicode-range lets the browser skip a file entirely when a page has no character
+       from it, which is the mechanism that actually saves the bytes,
+     - and the exact files can be preloaded, because their URLs are known here.
+
+   font-display: swap throughout. Hebrew text rendered in a fallback for 100ms is much
+   better than invisible text; the metrics are close enough that the reflow is small.
+   ========================================================================= */
+
+/* Rubik — display face, variable weight. Used for headings only. */
+@font-face {
+  font-family: "Rubik Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url("@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
+@font-face {
+  font-family: "Rubik Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url("@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* Assistant — body face. Two weights: 400 for running text, 600 for labels. */
+@font-face {
+  font-family: "Assistant";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/assistant/files/assistant-hebrew-400-normal.woff2") format("woff2");
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
+@font-face {
+  font-family: "Assistant";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/assistant/files/assistant-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Assistant";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("@fontsource/assistant/files/assistant-hebrew-600-normal.woff2") format("woff2");
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
+@font-face {
+  font-family: "Assistant";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("@fontsource/assistant/files/assistant-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}

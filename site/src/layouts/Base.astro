@@ -1,0 +1,160 @@
+---
+/**
+ * Base document layout.
+ *
+ * Every route renders complete HTML through this — title, description, canonical,
+ * Open Graph and structured data included. The old site's only content page was a
+ * client-rendered SPA whose shell carried none of that, which is why crawlers and
+ * link previews saw an empty English document.
+ */
+import "~/styles/global.css";
+
+/*
+ * Fonts are declared in src/styles/fonts.css rather than imported from the packages,
+ * which pulled Arabic, Cyrillic and Latin-Ext faces this site can never render.
+ *
+ * These two are preloaded because they are the ones the first paint needs: every page is
+ * Hebrew, and without a preload they are only discovered after the stylesheet has been
+ * downloaded and parsed — a third round trip before any text can render in the real face.
+ */
+import rubikHebrew from "@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2?url";
+import assistantHebrew from "@fontsource/assistant/files/assistant-hebrew-400-normal.woff2?url";
+
+import Header from "~/components/Header.astro";
+import Footer from "~/components/Footer.astro";
+import StickyCta from "~/components/StickyCta.astro";
+import Analytics from "~/components/Analytics.astro";
+import { BUSINESS } from "~/data/business";
+import type { Track } from "~/data/business";
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Which conversion track this page belongs to — drives the sticky mobile CTA. */
+  track?: Track;
+  /** Absolute or root-relative image for link previews. */
+  ogImage?: string;
+  /** Breadcrumb trail, innermost last. Rendered visually and as BreadcrumbList. */
+  breadcrumbs?: { label: string; href: string }[];
+  /** Extra JSON-LD objects to embed. */
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  track,
+  ogImage = "/og/default.png",
+  breadcrumbs = [],
+  schema = [],
+  noindex = false,
+  bodyClass = "",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? BUSINESS.siteUrl).href;
+const ogImageAbs = new URL(ogImage, Astro.site ?? BUSINESS.siteUrl).href;
+
+// Title pattern: page name, then business. Kept under ~60 characters at the call site.
+const fullTitle = title.includes(BUSINESS.shortName) ? title : `${title} | ${BUSINESS.shortName}`;
+
+/**
+ * Organisation-level structured data. Every field is verifiable.
+ * aggregateRating is deliberately absent — see src/data/business.ts.
+ */
+const organisationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Electrician",
+  "@id": `${BUSINESS.siteUrl}/#business`,
+  name: BUSINESS.displayName,
+  url: `${BUSINESS.siteUrl}/`,
+  // Google lists `image` among the expected properties for a LocalBusiness; without it
+  // the Rich Results Test warns on every page, since this node is emitted site-wide.
+  image: new URL("/og/default.png", BUSINESS.siteUrl).href,
+  telephone: BUSINESS.phone,
+  email: BUSINESS.email,
+  areaServed: BUSINESS.areaServed,
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: BUSINESS.country,
+    addressRegion: BUSINESS.region,
+    addressLocality: BUSINESS.locality,
+  },
+  founder: { "@type": "Person", name: BUSINESS.owner, jobTitle: BUSINESS.ownerRole },
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "רישיון חשמלאי ראשי",
+    identifier: BUSINESS.licenceNumber,
+  },
+};
+
+const breadcrumbSchema =
+  breadcrumbs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [{ label: "בית", href: "/" }, ...breadcrumbs].map((c, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: c.label,
+          item: new URL(c.href, Astro.site ?? BUSINESS.siteUrl).href,
+        })),
+      }
+    : null;
+
+const allSchema = [organisationSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...schema];
+---
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta name="theme-color" content="#0e2c33" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a1214" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="he_IL" />
+    <meta property="og:site_name" content={BUSINESS.displayName} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" as="font" type="font/woff2" href={rubikHebrew} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={assistantHebrew} crossorigin />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <Analytics />
+
+    {
+      allSchema.map((s) => (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />
+      ))
+    }
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">דילוג לתוכן הראשי</a>
+
+    <Header track={track} />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+    <StickyCta track={track} />
+  </body>
+</html>

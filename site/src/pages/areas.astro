@@ -1,0 +1,116 @@
+---
+/**
+ * Service areas.
+ *
+ * Deliberately ONE page, not a set of generated location pages. The keyword research
+ * confirms local intent is strong, but a location page with no real content for that
+ * location is thin content — and the town list needed to build them properly does not
+ * exist yet (`fact.areas.list`).
+ *
+ * What this page can do honestly today: state the declared area, show the towns where work
+ * has actually been done — which is evidence, not a claim — and be upfront that a longer
+ * project and a call-out are not the same thing distance-wise.
+ */
+import Base from "~/layouts/Base.astro";
+import Breadcrumbs from "~/components/Breadcrumbs.astro";
+import CtaBand from "~/components/CtaBand.astro";
+import Pending from "~/components/Pending.astro";
+import { BUSINESS } from "~/data/business";
+import { PROJECTS } from "~/data/projects";
+
+const trail = [{ label: "אזורי פעילות", href: "/areas/" }];
+const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) => a.localeCompare(b, "he"));
+---
+
+<Base
+  title="אזורי פעילות"
+  description={`RNRG פועלת ${BUSINESS.areaServed}. היישובים שבהם בוצעו עבודות בפועל, וההבדל בין קריאת שירות לפרויקט ארוך.`}
+  breadcrumbs={trail}
+>
+  <Breadcrumbs trail={trail} />
+
+  <section class="section areas-head">
+    <div class="container">
+      <p class="eyebrow">איפה אנחנו עובדים</p>
+      <h1>אזורי פעילות</h1>
+      <p class="lede">
+        אזור הפעילות המוצהר הוא {BUSINESS.areaServed}. הבסיס ב{BUSINESS.locality}.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>יישובים שבהם בוצעו עבודות</h2>
+        <p>
+          זו לא רשימת אזורים שאנחנו מצהירים שאנחנו מגיעים אליהם — אלה יישובים שבהם יש
+          פרויקט מתועד באתר.
+        </p>
+      </div>
+      <ul class="towns">
+        {worked.map((town) => <li>{town}</li>)}
+      </ul>
+      <p class="towns__note">
+        <a href="/projects/">לפרויקטים עצמם</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="prose">
+        <h2>קריאת שירות ופרויקט הם לא אותו מרחק</h2>
+        <p>
+          לתקלה נקודתית, מה שקובע הוא זמן הנסיעה — ולכן טווח ההגעה לעבודה קצרה מצומצם יותר
+          מטווח ההגעה לפרויקט.
+        </p>
+        <p>
+          בפרויקט קבלני התמונה שונה: כשהעבודה נמשכת שבועות והצוות נמצא באתר ממילא, המרחק
+          פחות משמעותי. לכן אם אתם קבלן או יזם מחוץ לאזור המיידי — עדיין שווה לשאול.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="pending-block">
+        <h2>למה אין כאן עמוד לכל עיר</h2>
+        <p>
+          עמוד נפרד לכל יישוב הוא מהלך SEO מקובל, אבל רק כשיש בו תוכן אמיתי לאותו יישוב —
+          פרויקטים, זמני הגעה, מאפיינים מקומיים. עמוד שנבנה מתבנית עם החלפת שם עיר הוא תוכן
+          דל, וגוגל מטפל בו בהתאם.
+        </p>
+        <p>
+          כשתתקבל רשימת היישובים שבהם העסק באמת עובד, ובאיזה סוג עבודה — נבנה עמודי אזור
+          למי שמצדיק אותם.
+        </p>
+        <p class="pending-block__meta">
+          <Pending id="fact.areas.list" label="P0 — רשימת יישובים" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand track="private" />
+</Base>
+
+<style>
+  .areas-head { padding-block: var(--space-7) var(--space-4); }
+  .areas-head h1 { font-size: var(--step-4); margin-block-end: var(--space-4); }
+
+  .towns {
+    display: flex; flex-wrap: wrap; gap: var(--space-2);
+    list-style: none; margin: 0; padding: 0;
+  }
+  .towns li {
+    padding: 0.5rem 1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.92rem; font-weight: 600;
+  }
+  .towns__note { margin-block-start: var(--space-5); font-size: 0.9rem; }
+
+</style>
