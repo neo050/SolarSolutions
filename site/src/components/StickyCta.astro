@@ -110,6 +110,7 @@ const isContracting = track === "contracting";
   const bar = document.querySelector<HTMLElement>(".sticky-cta");
   if (bar) {
     bar.hidden = false;
+
     let shown = false;
     const onScroll = () => {
       const past = window.scrollY > window.innerHeight * 0.6;
@@ -118,7 +119,23 @@ const isContracting = track === "contracting";
         bar.dataset.visible = String(past);
       }
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+
+    /*
+     * Only listen where the bar can actually be seen. Above 64rem it is display:none, so
+     * the handler was firing on every scroll event to update a dataset attribute on an
+     * invisible element.
+     */
+    const mq = window.matchMedia("(max-width: 63.999rem)");
+    const sync = () => {
+      if (mq.matches) {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      } else {
+        window.removeEventListener("scroll", onScroll);
+        bar.dataset.visible = "false";
+      }
+    };
+    mq.addEventListener("change", sync);
+    sync();
   }
 </script>

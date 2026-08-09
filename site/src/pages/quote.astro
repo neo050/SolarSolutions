@@ -16,11 +16,25 @@ const trail = [{ label: "בקשת הצעת מחיר", href: "/quote/" }];
 const tracks = ["private", "contracting", "solar"] as const;
 ---
 
+{/*
+  Resolves the track before the body paints. A deferred script would let the default
+  panel render first and then be swapped, which a visitor sees as the form changing shape
+  underneath them.
+*/}
 <Base
   title="בקשת הצעת מחיר"
   description="בקשת הצעת מחיר לעבודת חשמל, לפרויקט קבלני או לבדיקת התאמה למערכת סולארית. שלושה מסלולים, כל אחד עם הפרטים שבאמת נדרשים."
   breadcrumbs={trail}
 >
+  <script is:inline>
+    (function () {
+      var valid = ["private", "contracting", "solar"];
+      var t = new URLSearchParams(location.search).get("track");
+      document.documentElement.dataset.quoteTrack =
+        valid.indexOf(t) > -1 ? t : "private";
+    })();
+  </script>
+
   <Breadcrumbs trail={trail} />
 
   <section class="section quote-intro">
@@ -41,7 +55,7 @@ const tracks = ["private", "contracting", "solar"] as const;
             type="button"
             class="track-picker__btn"
             data-track-btn={t}
-            aria-pressed={t === "private" ? "true" : "false"}
+            aria-pressed="false"
           >
             {TRACKS[t].label}
           </button>
@@ -52,7 +66,7 @@ const tracks = ["private", "contracting", "solar"] as const;
     <div class="quote-forms">
       {
         tracks.map((t) => (
-          <div class="quote-panel" data-track-panel={t} hidden={t !== "private"}>
+          <div class="quote-panel" data-track-panel={t}>
             <LeadForm track={t} />
           </div>
         ))
@@ -141,8 +155,30 @@ const tracks = ["private", "contracting", "solar"] as const;
     box-shadow: var(--shadow-sm);
   }
 
-  .quote-panel[hidden] {
+  /*
+   * Visibility is driven by a root attribute set before the body parses, so the right
+   * panel is the one that paints — no swap, no reflow.
+   */
+  .quote-panel {
     display: none;
+  }
+  :root[data-quote-track="private"] .quote-panel[data-track-panel="private"],
+  :root[data-quote-track="contracting"] .quote-panel[data-track-panel="contracting"],
+  :root[data-quote-track="solar"] .quote-panel[data-track-panel="solar"] {
+    display: block;
+  }
+  /* Without JavaScript no attribute is set, so fall back to the shortest form. */
+  :root:not([data-quote-track]) .quote-panel[data-track-panel="private"] {
+    display: block;
+  }
+
+  :root[data-quote-track="private"] .track-picker__btn[data-track-btn="private"],
+  :root[data-quote-track="contracting"] .track-picker__btn[data-track-btn="contracting"],
+  :root[data-quote-track="solar"] .track-picker__btn[data-track-btn="solar"] {
+    background: var(--bg-raised);
+    border-color: var(--border);
+    color: var(--brand);
+    box-shadow: var(--shadow-sm);
   }
 
   @media (max-width: 26rem) {
@@ -206,15 +242,12 @@ const tracks = ["private", "contracting", "solar"] as const;
   type Track = (typeof VALID)[number];
 
   const buttons = document.querySelectorAll<HTMLButtonElement>("[data-track-btn]");
-  const panels = document.querySelectorAll<HTMLElement>("[data-track-panel]");
 
   function show(track: Track, pushState = true) {
+    document.documentElement.dataset.quoteTrack = track;
     buttons.forEach((b) =>
       b.setAttribute("aria-pressed", String(b.dataset.trackBtn === track))
     );
-    panels.forEach((p) => {
-      p.hidden = p.dataset.trackPanel !== track;
-    });
 
     if (pushState) {
       const url = new URL(location.href);
@@ -228,9 +261,11 @@ const tracks = ["private", "contracting", "solar"] as const;
     b.addEventListener("click", () => show(b.dataset.trackBtn as Track))
   );
 
-  // Honour ?track= so every CTA across the site lands on the right form.
-  const requested = new URLSearchParams(location.search).get("track");
-  if (requested && (VALID as readonly string[]).includes(requested)) {
-    show(requested as Track, false);
-  }
+  // The inline head script already chose the track; mirror it onto the buttons without
+  // re-writing the URL.
+  const chosen = (document.documentElement.dataset.quoteTrack ?? "private") as Track;
+  buttons.forEach((b) =>
+    b.setAttribute("aria-pressed", String(b.dataset.trackBtn === chosen))
+  );
+  (window as any).rnrgTrack?.("quote_start", { track: chosen });
 </script>

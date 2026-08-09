@@ -111,8 +111,10 @@ const { project, featured = false } = Astro.props;
     position: absolute;
     inset-block-start: var(--space-3);
     inset-inline-start: var(--space-3);
-    background: color-mix(in srgb, var(--bg-raised) 92%, transparent);
-    backdrop-filter: blur(6px);
+    /* Opaque. The previous 92%-opaque fill plus backdrop-filter produced a blur nobody
+       could see, while each badge created its own backdrop root and stacking context —
+       eleven of them at once on the projects index. */
+    background: var(--bg-raised);
   }
 
   .project-card__body {

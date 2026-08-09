@@ -51,13 +51,16 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 | Sticky mobile CTA, variant per track | **Done** | Appears after 60% viewport scroll |
 | Dignified empty states for missing assets | **Done** | `Pending.astro` + `.pending-block` |
 | Wireframes | **Superseded** | Built directly as working pages — reviewable in the browser, not as static mockups |
+| Responsive across 9 widths | **Done** | 320/360/414/768/1024/1280/1440/1920/2560 audited; the 1024px three-up break and the 768–1023px no-CTA gap fixed |
+| Contrast AA, both themes | **Done** | Border and subtle-text tokens solved numerically, not eyeballed |
+| RTL audit | **Done** | Select arrow was drawn opposite its own padding — background-position is physical |
 | AI-generated imagery | **Blocked** | Awaiting the client's source photographs; rules recorded in the gap report |
 
 ### Development
 
 | Task | Status | Acceptance |
 |---|---|---|
-| Astro static site, RTL, self-hosted fonts | **Done** | 39 pages, 2.2 KB JS total |
+| Astro static site, RTL, self-hosted fonts | **Done** | 42 pages, 12 KB JS across the whole site |
 | Three-track lead system with queue, retry and dedup | **Done** | Lead persisted to localStorage before send; retried on next load |
 | Lead endpoint | **Blocked** | Needs a hosting decision — see `docs/migration.md` |
 | Tracking layer, 10 events | **Done** (inert) | Fires into dataLayer; needs GTM id |
@@ -65,6 +68,11 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 | 404, accessibility statement, skip link | **Done** | |
 | QA suite gating the build | **Done** | `scripts/qa.mjs`, wired into CI |
 | CI workflow | **Done** | `.github/workflows/site-ci.yml` — build + check + QA |
+| Lead endpoint code + 13 tests | **Done** | Runs today; only deployment waits on hosting |
+| Security headers + CSP | **Done** | `public/_headers`, site-wide |
+| Fonts self-hosted, subset, preloaded | **Done** | 196KB → 96KB, Hebrew + Latin only |
+| Responsive images | **Done** | srcset everywhere it helps; `npm run images` keeps variants in step |
+| CSS deduplicated | **Done** | 37 duplicate rule blocks removed; they had already drifted |
 | Production cutover | **Pending** | Deliberately not done; see migration plan |
 
 ### Content
@@ -79,6 +87,8 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 | About, FAQ (20 Q), reviews, areas, contact, quote, thank-you | **Done** | |
 | Case study narratives | **Blocked** | Structure built; needs one conversation with the owner |
 | Owner questionnaire | **Done** | Generated at `/internal/gaps/` from the gap registry |
+| AI Asset Generation Pack | **Done** | `npm run pack` — manifest, prompts, style guide, master prompt, destinations |
+| Source asset inventory | **Done** | Every photo opened and catalogued; one quarantined, one cropped |
 
 ### SEO / Strategy
 
@@ -87,7 +97,8 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 | Competitor research — 29 sites, 4 segments | **Done** | `docs/research/market-research-2026-08.md` |
 | Keyword research + map for all 22 routes | **Done** | Titles and descriptions applied |
 | Cannibalisation rules | **Done** | "קבלן חשמל" exclusive to `/contracting/` etc. |
-| Schema: Electrician, Service, FAQPage, BreadcrumbList, Review, ItemList, Person | **Done** | Verified fields only |
+| Schema: Electrician, Service, FAQPage, BreadcrumbList, ItemList, Person, CreativeWork | **Done** | Verified fields only |
+| Review schema | **Deliberately absent** | Google requires `reviewRating`; no stars were ever collected, and inventing them is the fabrication this rebuild removed. Returns once the Business Profile is connected |
 | Internal linking between branches | **Done** | Related-pages block on every service page |
 | Redirect map, 13 URLs | **Done** | `site/public/_redirects` |
 | Location pages | **Deliberately not built** | Would be thin content until the town list arrives |
@@ -102,6 +113,17 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 3. **Google Business Profile URL** and its real review count.
 4. **Maps API key referrer restriction** — verify in Google Cloud.
 5. **Old GitHub domain** — is it still indexed?
+
+## Current build health
+
+```
+42 pages · astro check 0 errors · 3,353 internal links · QA green · 13/13 endpoint tests
+homepage first visit on mobile: 152KB  (48 html · 34 css · 13 font · 57 hero)
+JavaScript across the entire site: 12KB
+```
+
+`npm run verify` in `site/` runs the whole chain: typecheck, image variants, build, QA,
+endpoint tests.
 
 ## The one thing worth doing this week regardless
 

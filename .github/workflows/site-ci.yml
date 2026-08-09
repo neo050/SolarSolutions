@@ -42,14 +42,28 @@ jobs:
       - name: Typecheck (astro check)
         run: npx astro check
 
+      # Generates the narrow variants that srcset refers to. Running it in CI means a
+      # contributor who adds a photograph without running it locally still gets a green
+      # build rather than silently-404ing srcset candidates.
+      - name: Generate responsive image variants
+        run: npm run images
+
       - name: Build
         run: npx astro build
 
       # Fails the run on: broken internal links, a page without exactly one h1, a missing
       # canonical or description, an image without alt text, or any of the withdrawn
       # unverified claims reappearing in the output.
-      - name: QA — links, headings, metadata, content honesty
+      - name: QA — links, headings, metadata, images, schema, content honesty
         run: node scripts/qa.mjs
+
+      # The lead endpoint is pure enough to test without a Cloudflare runtime, so these
+      # run on every push — long before any hosting decision.
+      - name: Lead endpoint tests
+        run: npm test
+
+      - name: Regenerate the AI asset pack
+        run: npm run pack
 
       - name: Report build size
         run: |
@@ -59,6 +73,7 @@ jobs:
           echo "total: $(du -sh dist | cut -f1)" >> $GITHUB_STEP_SUMMARY
           echo "js:    $(find dist -name '*.js' -exec du -ch {} + | tail -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
           echo "css:   $(find dist -name '*.css' -exec du -ch {} + | tail -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "font:  $(find dist -name '*.woff2' -exec du -ch {} + | tail -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload preview build

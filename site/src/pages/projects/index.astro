@@ -159,7 +159,10 @@ const itemListSchema = {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-muted);
-    transition: all var(--dur-fast) var(--ease);
+    /* Named properties, not `all`: the latter animates layout-affecting properties
+       too, and this was the only `transition: all` left in the codebase. */
+    transition: background-color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
   }
   .filter:hover {
     border-color: var(--brand);
