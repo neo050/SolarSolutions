@@ -57,7 +57,13 @@ const BANNED_TEXT = [
   { pattern: /הילה מ\.|דניאל ר\.|גיל ל\.|אלמוג ק\.|רותם ש\./, why: "invented testimonial name" },
   { pattern: /חיסכון של 90%|90% חיסכון/, why: "the withdrawn flat savings promise" },
   { pattern: /ת"י 1424|ת״י 1424/, why: "standard the research could not verify" },
+  // Content completeness. Anything unfinished must be recorded in the gap report, not
+  // left sitting quietly in a page where nobody notices it until a visitor does.
   { pattern: /lorem ipsum|כותרת קלף|טקסט לדוגמה/i, why: "placeholder copy" },
+  { pattern: /\bTODO\b|\bTBD\b|\bFIXME\b/, why: "an unfinished marker" },
+  { pattern: /example text|sample text|dummy|בקרוב יתווסף|יתווסף בהמשך/i, why: "filler copy" },
+  { pattern: /ישראל ישראלי|יוסי כהן|John Doe/i, why: "a placeholder person" },
+  { pattern: /\b(999-?9999|050-?0000000)\b/, why: "placeholder contact details" },
 ];
 
 /**
@@ -104,6 +110,43 @@ for (const file of htmlFiles) {
     const visible = stripTags(html);
     for (const { pattern, why } of BANNED_TEXT) {
       if (pattern.test(visible)) failures.push(`${label} — visible copy contains ${why}`);
+    }
+  }
+
+  /* ---- structural completeness ----
+   *
+   * A control that goes nowhere, a heading with no words, or a section with no content
+   * all render without error and all read as broken. The build should refuse them.
+   */
+  if (!isInternal(label)) {
+    const deadLinks = [...html.matchAll(/<a[^>]*href="(#|javascript:void\(0\)|)"[^>]*>/g)];
+    if (deadLinks.length) {
+      failures.push(`${label} — ${deadLinks.length} link(s) with no destination (href="#" or empty)`);
+    }
+
+    // A button that is not a submit and carries no handler attribute goes nowhere.
+    for (const btn of html.match(/<button[^>]*>[\s\S]*?<\/button>/g) ?? []) {
+      const text = stripTags(btn).replace(/\s+/g, " ").trim();
+      if (!text) failures.push(`${label} — <button> with no accessible text`);
+    }
+
+    // Empty headings.
+    for (const m of html.matchAll(/<(h[1-6])[^>]*>([\s\S]*?)<\/\1>/g)) {
+      if (!stripTags(m[2]).replace(/\s+/g, "").length) {
+        failures.push(`${label} — empty <${m[1]}>`);
+      }
+    }
+
+    // A section that renders a heading and nothing else.
+    for (const m of html.matchAll(/<section[^>]*>([\s\S]*?)<\/section>/g)) {
+      const inner = m[1];
+      const words = stripTags(inner.replace(/<h[1-6][\s\S]*?<\/h[1-6]>/g, ""))
+        .replace(/\s+/g, " ")
+        .trim();
+      const hasMedia = /<(img|svg|video|iframe|form|table|input)/.test(inner);
+      if (/<h[1-6]/.test(inner) && words.length < 12 && !hasMedia) {
+        failures.push(`${label} — <section> with a heading and no content`);
+      }
     }
   }
 
@@ -170,6 +213,7 @@ const EXPECT_NO_INBOUND = new Set([
   "/404/", // emitted as dist/404.html; served by the host on any unmatched path
   "/accessibility/", // legal page: a footer link on every page is the correct treatment
   "/internal/gaps/", // working document, deliberately unlinked from the public site
+  "/internal/dashboard/",
   "/thank-you/", // reached only by redirect from the retired success page
   "/thank-you/private/",
   "/thank-you/contracting/",
@@ -230,6 +274,34 @@ for (const file of htmlFiles) {
   }
   // More than one FAQPage on a page is a structured-data violation Google flags.
   if (faqPages > 1) failures.push(`${label} — ${faqPages} FAQPage blocks (only one allowed)`);
+}
+
+/* ---- every route must be registered for review ----
+ *
+ * "The page exists and the build is green" is three of eight review dimensions. The
+ * registry in src/data/pages.ts holds the other five. Gating on it means a new page
+ * cannot quietly ship without anyone having judged its design, copy or conversion path.
+ */
+{
+  const registry = readFileSync("src/data/pages.ts", "utf8");
+  const registered = new Set(
+    [...registry.matchAll(/(?:route|pattern):\s*"([^"]+)"/g)].map((m) => m[1])
+  );
+
+  const familyOf = (r) =>
+    r.replace(/^\/projects\/[^/]+\/$/, "/projects/<slug>/")
+      .replace(/^\/thank-you\/(private|contracting|solar)\/$/, "/thank-you/<track>/");
+
+  for (const route of routes) {
+    if (route === "/thank-you/") continue; // redirect stub, covered by the family
+    const key = familyOf(route);
+    if (!registered.has(route) && !registered.has(key)) {
+      failures.push(
+        `${route} — not registered in src/data/pages.ts, so no design, content or ` +
+          `conversion review has been recorded for it`
+      );
+    }
+  }
 }
 
 /* ---- required artefacts ---- */
