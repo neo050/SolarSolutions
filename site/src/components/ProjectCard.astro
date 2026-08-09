@@ -13,6 +13,8 @@ const { project, featured = false } = Astro.props;
   <div class="project-card__media">
     <img
       src={project.image}
+      srcset={`${project.image.replace(/(\.[a-z]+)$/, "-800w$1")} 800w, ${project.image} 1800w`}
+      sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 100vw"
       alt={`${project.title}, ${project.location} — ${project.systemType}${project.sizeKw ? `, ${project.sizeKw} קילוואט` : ""}`}
       width="800"
       height="600"

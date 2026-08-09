@@ -70,6 +70,7 @@ const itemListSchema = {
 
   <section class="section">
     <div class="container">
+      <h2 class="visually-hidden">רשימת הפרויקטים</h2>
       <div class="filters" role="group" aria-label="סינון לפי סוג לקוח">
         <button type="button" class="filter" data-filter="all" aria-pressed="true">הכול</button>
         {
@@ -91,7 +92,8 @@ const itemListSchema = {
         }
       </ul>
 
-      <p class="projects-empty" hidden>אין פרויקטים בקטגוריה הזו.</p>
+      {/* role="status" so the result count is announced when filters change. */}
+      <p class="projects-empty" role="status" aria-live="polite"></p>
     </div>
   </section>
 
@@ -184,7 +186,7 @@ const itemListSchema = {
     margin-block-start: var(--space-6);
     color: var(--text-muted);
   }
-  .projects-empty[hidden] {
+  .projects-empty:empty {
     display: none;
   }
 
@@ -236,7 +238,14 @@ const itemListSchema = {
         if (show) visible++;
       });
 
-      if (empty) empty.hidden = visible > 0;
+      // Announce the outcome. Writing text rather than toggling `hidden` keeps the live
+      // region in the accessibility tree, which is what makes the announcement happen.
+      if (empty) {
+        empty.textContent =
+          visible === 0
+            ? "אין פרויקטים בקטגוריה הזו."
+            : `מוצגים ${visible} פרויקטים.`;
+      }
     })
   );
 </script>

@@ -91,9 +91,11 @@ const tracks = [
       <div class="home-hero__media">
         <img
           src="/images/gallery/panel-01-hero.jpeg"
+          srcset="/images/gallery/panel-01-hero-800w.jpeg 800w, /images/gallery/panel-01-hero.jpeg 1248w"
+          sizes="(min-width: 62rem) 42vw, 100vw"
           alt="לוח חשמל ביתי לאחר חידוש — הגנות מדורגות, חיווט מסודר ותיוג מלא של כל מעגל"
-          width="1200"
-          height="900"
+          width="1248"
+          height="936"
           fetchpriority="high"
           decoding="async"
         />
@@ -421,12 +423,4 @@ const tracks = [
   }
 
   /* ---- Section head with trailing action ---- */
-  .section-head--row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-4);
-    max-width: none;
-  }
 </style>

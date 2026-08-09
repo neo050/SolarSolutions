@@ -8,9 +8,17 @@
  * link previews saw an empty English document.
  */
 import "~/styles/global.css";
-import "@fontsource-variable/rubik";
-import "@fontsource/assistant/400.css";
-import "@fontsource/assistant/600.css";
+
+/*
+ * Fonts are declared in src/styles/fonts.css rather than imported from the packages,
+ * which pulled Arabic, Cyrillic and Latin-Ext faces this site can never render.
+ *
+ * These two are preloaded because they are the ones the first paint needs: every page is
+ * Hebrew, and without a preload they are only discovered after the stylesheet has been
+ * downloaded and parsed — a third round trip before any text can render in the real face.
+ */
+import rubikHebrew from "@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2?url";
+import assistantHebrew from "@fontsource/assistant/files/assistant-hebrew-400-normal.woff2?url";
 
 import Header from "~/components/Header.astro";
 import Footer from "~/components/Footer.astro";
@@ -120,6 +128,9 @@ const allSchema = [organisationSchema, ...(breadcrumbSchema ? [breadcrumbSchema]
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageAbs} />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" as="font" type="font/woff2" href={rubikHebrew} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={assistantHebrew} crossorigin />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

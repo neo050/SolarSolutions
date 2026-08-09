@@ -66,15 +66,23 @@ const isContracting = track === "contracting";
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     transform: translateY(calc(100% + var(--space-4)));
-    transition: transform var(--dur-slow) var(--ease);
+    visibility: hidden;
+    transition: transform var(--dur-slow) var(--ease), visibility var(--dur-slow);
   }
 
+  /*
+   * `hidden` is removed by script on load; visibility below is what actually hides the
+   * bar. Using visibility rather than transform alone matters: a transformed element is
+   * still focusable and still announced, so the off-screen bar used to sit in the tab
+   * order on every page.
+   */
   .sticky-cta[hidden] {
-    display: grid; /* keep it laid out; visibility is driven by the transform */
+    display: grid;
   }
 
   .sticky-cta[data-visible="true"] {
     transform: translateY(0);
+    visibility: visible;
   }
 
   .sticky-cta .btn {

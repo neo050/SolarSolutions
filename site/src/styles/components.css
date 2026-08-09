@@ -527,3 +527,106 @@
   font-family: var(--font-body);
   font-size: 0.9rem;
 }
+
+/* ---- Data tables --------------------------------------------------------
+ * Was duplicated across three page files and had already drifted: one copy set
+ * vertical-align on cells and the others did not, so the same table rendered
+ * differently depending on which page it appeared on.
+ * Wide tables always scroll inside their own container so the page body never
+ * scrolls sideways.
+ */
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+.data-table thead th {
+  background: var(--bg-sunken);
+  text-align: start;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-block-end: 1px solid var(--border-strong);
+  white-space: nowrap;
+}
+.data-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-block-start: 1px solid var(--border);
+  vertical-align: top;
+}
+.data-table tbody tr:first-child td {
+  border-block-start: none;
+}
+.data-table tbody td:first-child {
+  font-weight: 600;
+}
+.data-table tr.is-ours {
+  background: var(--bg-accent-soft);
+}
+.data-table tr.is-ours td:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.table-source {
+  margin-block-start: var(--space-3);
+  font-size: 0.83rem;
+  color: var(--text-subtle);
+  max-width: var(--measure);
+}
+
+/* ---- Pending block ------------------------------------------------------
+ * A section whose content is genuinely missing. Looks deliberate rather than
+ * broken, so a page can ship before its material arrives.
+ * Was duplicated across four files; one copy had lost the flex layout on the
+ * meta row, so the markers stacked there and sat inline everywhere else.
+ */
+.pending-block {
+  max-width: var(--measure);
+  padding: var(--space-6);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+.pending-block h2 {
+  font-size: var(--step-2);
+  margin-block-end: var(--space-3);
+}
+.pending-block p {
+  color: var(--text-muted);
+  margin-block-end: var(--space-3);
+  max-width: 60ch;
+}
+.pending-block__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--border);
+  font-size: 0.87rem;
+}
+
+/* ---- Section heading with a trailing action ----------------------------- */
+.section-head--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: none;
+}

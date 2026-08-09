@@ -15,9 +15,19 @@ export interface Props {
   track?: Track;
   title?: string;
   limit?: number;
+  /** Suppresses the "all reviews" link on /reviews/ itself, where it would self-link. */
+  isReviewsPage?: boolean;
+  /** Lead paragraph under the heading. */
+  blurb?: string;
 }
 
-const { track, title = "לקוחות ממליצים", limit } = Astro.props;
+const {
+  track,
+  title = "לקוחות ממליצים",
+  limit,
+  isReviewsPage = false,
+  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.",
+} = Astro.props;
 
 let items: Testimonial[] = track ? testimonialsFor(track) : TESTIMONIALS;
 if (limit) items = items.slice(0, limit);
@@ -30,9 +40,9 @@ const isEmpty = items.length === 0;
     <div class="section-head section-head--row">
       <div>
         <h2>{title}</h2>
-        <p>המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.</p>
+        <p>{blurb}</p>
       </div>
-      <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>
+      {!isReviewsPage && <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>}
     </div>
 
     {
@@ -82,14 +92,6 @@ const isEmpty = items.length === 0;
 </section>
 
 <style>
-  .section-head--row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-4);
-    max-width: none;
-  }
 
   .testimonials__grid {
     display: grid;

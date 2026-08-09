@@ -107,13 +107,38 @@ for (const file of htmlFiles) {
     }
   }
 
-  /* ---- images ---- */
+  /* ---- images ----
+   *
+   * srcset candidates are checked as well as src. A srcset built by string substitution
+   * silently points at files that may not exist, and the browser simply falls back —
+   * so the waste is invisible in the page and only shows up as a 404 in the log.
+   */
   const imgs = html.match(/<img[^>]*>/g) ?? [];
   for (const img of imgs) {
     if (!/\salt=/.test(img)) failures.push(`${label} — <img> without alt: ${img.slice(0, 90)}`);
+
     const src = img.match(/src="([^"]+)"/)?.[1];
     if (src && src.startsWith("/") && !assets.has(decodeURI(src))) {
       failures.push(`${label} — image not found: ${src}`);
+    }
+
+    const srcset = img.match(/srcset="([^"]+)"/)?.[1];
+    if (srcset) {
+      for (const candidate of srcset.split(",")) {
+        const url = candidate.trim().split(/\s+/)[0];
+        if (!url || !url.startsWith("/")) continue;
+        if (!assets.has(decodeURI(url))) {
+          failures.push(`${label} — srcset candidate not found: ${url}`);
+        }
+      }
+      if (!/\ssizes="/.test(img)) {
+        failures.push(`${label} — srcset without sizes: ${src ?? "(no src)"}`);
+      }
+    }
+
+    // Dimensions must be declared, or the layout shifts as each image arrives.
+    if (!/\swidth="/.test(img) || !/\sheight="/.test(img)) {
+      warnings.push(`${label} — <img> without width/height: ${(src ?? "").slice(0, 70)}`);
     }
   }
 
