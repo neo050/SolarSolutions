@@ -90,14 +90,31 @@
   box-shadow: none;
 }
 
-/* On dark sections the outline variant needs the inverse ramp. */
-.section--inverse .btn--outline {
+/*
+ * On any dark surface the outline variant needs the inverse ramp.
+ *
+ * This previously targeted `.section--inverse` alone, but three different classes render
+ * a dark ground — the inverse section, the CTA band and the footer — so outline buttons
+ * on the latter two kept the light-theme dark-teal foreground on a near-black background.
+ * A browser-rendered axe scan flagged it on 40 of 42 pages: every page carries both a CTA
+ * band and a footer.
+ *
+ * The list is defined once here and reused below, so adding a dark surface means adding
+ * it in one place rather than discovering the omission page by page.
+ */
+:is(.section--inverse, .cta-band--inverse, .site-footer) .btn--outline {
   --btn-fg: var(--text-on-dark);
   --btn-border: var(--border-inverse);
 }
-.section--inverse .btn--outline:hover {
-  --btn-bg: rgba(255, 255, 255, 0.07);
-  --btn-border: var(--brand);
+:is(.section--inverse, .cta-band--inverse, .site-footer) .btn--outline:hover {
+  --btn-bg: rgba(255, 255, 255, 0.09);
+  --btn-border: var(--panel-300);
+  --btn-fg: var(--text-on-dark);
+}
+
+/* Ghost and link-style buttons on dark grounds need the same treatment. */
+:is(.section--inverse, .cta-band--inverse, .site-footer) .btn--ghost {
+  --btn-fg: var(--text-on-dark);
 }
 
 .btn--sm {
@@ -233,6 +250,10 @@
   letter-spacing: -0.03em;
   color: var(--brand);
   font-variant-numeric: tabular-nums;
+  /* Values like "22 kWp" mix digits with a Latin unit. In an RTL line the bidi
+     algorithm reorders them so the unit lands left of the number, which reads wrong.
+     Isolation keeps the run intact. */
+  unicode-bidi: isolate;
 }
 .section--inverse .stat__value {
   color: var(--copper-400);
@@ -517,7 +538,12 @@
   font-family: var(--font-mono);
   font-size: 0.82em;
   font-weight: 600;
-  white-space: nowrap;
+  /* Was `white-space: nowrap`, which pushed a long Hebrew label 2px past a 320px
+     viewport and made the whole page scroll sideways. Wrapping is the right behaviour:
+     these labels are written for humans and some are a full phrase. */
+  max-width: 100%;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
 }
 .pending--block {
   display: flex;
@@ -540,6 +566,12 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--bg-raised);
+}
+/* The container is focusable so a keyboard user can scroll to the off-screen columns;
+   without a visible ring that affordance is invisible. */
+.table-scroll:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .data-table {

@@ -147,6 +147,9 @@ const current = Astro.url.pathname;
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    /* 44px is the minimum comfortable tap target; the mark plus two lines of text came
+       to 36. Padding rather than height so the layout is unchanged. */
+    min-height: 2.75rem;
     text-decoration: none;
     color: var(--text);
     flex: 0 0 auto;

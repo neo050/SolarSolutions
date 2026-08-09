@@ -7,7 +7,7 @@
 
 ## GEN-PERSON-PORTRAIT-001
 
-> **חסום על צילום אמיתי.** דיוקן של אדם אמיתי חייב להיות צילום. ניתן לשפר חיתוך, רקע וצבע — אך לא לייצר פנים.
+> **חסום על צילום אמיתי.** דורש 3–5 צילומים אמיתיים של רוני כ-Reference. ברגע שהם מגיעים אפשר לייצר מהם וריאציות, זוויות וסצנות — אבל לא לייצר פנים יש מאין.
 
 > לא נוצר עבורו Prompt.
 
@@ -31,13 +31,13 @@
 | Destination | `/public/images/person/roni-portrait.webp` |
 | Alt Text | רוני חג׳ג׳, בעל RNRG — הנדסאי חשמל וחשמלאי ראשי |
 | Priority | P0 |
-| Status | **BLOCKED ON REAL PHOTO** |
+| Status | **WAITING_FOR_SOURCE_REFERENCE** |
 
 ---
 
 ## GEN-TEAM-ONSITE-001
 
-> **חסום על צילום אמיתי.** תמונת צוות היא טענה עובדתית על גודל הצוות ועל יכולת הביצוע. זו בדיוק ההמצאה שהפרויקט הזה קיים כדי להסיר. חייבת צילום אמיתי.
+> **חסום על צילום אמיתי.** דורש צילומי Reference של אנשי הצוות. בנוסף — מספר האנשים בפריים חייב להתאים לגודל הצוות האמיתי (gap fact.team.size). תמונה שמראה חמישה כשיש שניים היא התחייבות שהעסק לא יוכל לעמוד בה מול קבלן ששואל כמה אנשים מגיעים לאתר.
 
 > לא נוצר עבורו Prompt.
 
@@ -61,7 +61,7 @@
 | Destination | `/public/images/contracting/contracting-team-onsite.webp` |
 | Alt Text | צוות RNRG בעבודת חשמל באתר |
 | Priority | P0 |
-| Status | **BLOCKED ON REAL PHOTO** |
+| Status | **WAITING_FOR_SOURCE_REFERENCE** |
 
 ---
 
@@ -93,7 +93,7 @@
 
 ## GEN-SOLAR-INSTALL-001
 
-> **חסום על צילום אמיתי.** מציג צוות בעבודה — טענה על כושר ביצוע. דורש צילום.
+> **חסום על צילום אמיתי.** דורש Reference של הצוות ושל התקנה בפועל. מספר האנשים חייב להתאים לצוות האמיתי.
 
 > לא נוצר עבורו Prompt.
 
@@ -117,7 +117,7 @@
 | Destination | `/public/images/solar/solar-contractors-install.webp` |
 | Alt Text | צוות מתקין מערכת סולארית על גג |
 | Priority | P1 |
-| Status | **BLOCKED ON REAL PHOTO** |
+| Status | **WAITING_FOR_SOURCE_REFERENCE** |
 
 ---
 

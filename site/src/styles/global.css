@@ -212,9 +212,14 @@ hr {
 }
 
 /* --accent is dark copper in light mode, giving only 3.03:1 on the near-black
-   inverse ground. Small bold text needs 4.5:1, so step to the light copper. */
-.section--inverse .eyebrow,
-.cta-band--inverse .eyebrow {
+   inverse ground. Small bold text needs 4.5:1, so step to the light copper.
+   Same surface list as the button overrides in components.css. */
+:is(.section--inverse, .cta-band--inverse, .site-footer) .eyebrow {
+  color: var(--copper-400);
+}
+
+/* Body links on a dark ground: --brand is the dark teal in light mode. */
+:is(.section--inverse, .cta-band--inverse) a:not(.btn) {
   color: var(--copper-400);
 }
 

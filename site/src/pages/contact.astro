@@ -116,6 +116,12 @@ const contactSchema = {
   }
   .method__value { font-size: 1.05rem; font-weight: 700; }
   .method__note { font-size: 0.84rem; color: var(--text-muted); }
+  /* The link inside this note was 18px tall, below the 24x24 minimum in WCAG 2.5.8.
+     Inline-block plus padding lifts the hit area without changing the layout. */
+  .method__note a {
+    display: inline-block;
+    padding-block: 0.25rem;
+  }
 
   .contact-form__alt {
     margin-block-start: var(--space-5);

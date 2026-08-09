@@ -60,7 +60,7 @@ write(
 | בבידוד | ${stats.quarantined} |
 | נכסים לייצור | ${stats.generateTotal} |
 | **ניתנים לייצור עכשיו** | **${stats.generatable}** |
-| חסומים על צילום אמיתי | ${stats.blockedOnPhoto} |
+| ממתינים לצילומי Reference | ${stats.waitingForReference} |
 
 ## התהליך, מקצה לקצה
 
@@ -83,8 +83,8 @@ write(
 מותר: מרקמים, רקעים, סצנות משלימות, קומפוזיציות, תמונות OG, עיבוד של חומר קיים.
 
 אסור: תמונה שמתפקדת כטענה עובדתית — צוות בגודל שלא אומת, פרויקט שלא בוצע, אתר שלא
-עבדנו בו, אדם אמיתי שאין לו צילום. ${stats.blockedOnPhoto} מהנכסים ברשימה מסומנים
-\`BLOCKED ON REAL PHOTO\` בדיוק מהסיבה הזו, ולא נוצר עבורם Prompt — הם ממתינים לצילום.
+עבדנו בו, אדם אמיתי שאין לו צילום. ${stats.waitingForReference} מהנכסים ברשימה מסומנים
+\`WAITING_FOR_SOURCE_REFERENCE\` — ה-Prompt שלהם מוכן, אבל הריצה מחכה לצילומים.
 
 הסיבה מעשית ולא רק עקרונית: תמונת צוות של חמישה אנשים שנוצרה ב-AI, מול קבלן ששואל
 "כמה אנשים אתם מביאים לאתר", היא התחייבות שהעסק לא בהכרח יכול לעמוד בה.
@@ -208,7 +208,7 @@ const miss = [
   "# Missing Visual Assets — מפרט מלא",
   "",
   `${stats.generateTotal} נכסים. ${stats.generatable} ניתנים לייצור עכשיו,`,
-  `${stats.blockedOnPhoto} חסומים על צילום אמיתי.`,
+  `${stats.waitingForReference} חסומים על צילום אמיתי.`,
   "",
 ];
 for (const a of GENERATED_ASSETS) {
@@ -288,11 +288,11 @@ const prompts = [
   "",
   "Prompt מוכן לכל נכס שמותר לייצר. העתק, צרף את תמונות ה-Reference, הרץ.",
   "",
-  `נכסים שמסומנים \`BLOCKED ON REAL PHOTO\` אינם מופיעים כאן בכוונה —`,
-  "הם דורשים צילום ולא ייצור.",
+  `נכסים בסטטוס \`WAITING_FOR_SOURCE_REFERENCE\` כן מופיעים כאן, עם Prompt מלא —`,
+  "אבל אי אפשר להריץ אותם עד שיתקבלו צילומי ה-Reference שהם מפנים אליהם.",
   "",
 ];
-for (const a of GENERATED_ASSETS.filter((x) => !x.assertsFact)) {
+for (const a of GENERATED_ASSETS.filter((x) => x.promptEn)) {
   prompts.push(buildPrompt(a));
 }
 write("PROMPTS/prompt-pack.md", prompts.join("\n"));
@@ -485,4 +485,4 @@ console.log(`  awaiting upload   : ${stats.awaitingUpload}`);
 console.log(`  quarantined       : ${stats.quarantined}`);
 console.log(`  to generate       : ${stats.generateTotal}`);
 console.log(`    generatable now : ${stats.generatable}`);
-console.log(`    needs a camera  : ${stats.blockedOnPhoto}`);
+console.log(`    needs a camera  : ${stats.waitingForReference}`);
