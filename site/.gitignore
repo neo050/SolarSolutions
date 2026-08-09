@@ -10,3 +10,14 @@ qa-screenshots/
 # ingested copies already live under public/.
 asset-inbox/*
 !asset-inbox/README.md
+
+# Photographs dropped in for mapping. The folder structure is tracked (it tells the owner
+# which category to use); the photographs themselves are not — mapping copies them into
+# public/ under ASCII names, and that copy is the one that belongs in the repo.
+source-inbox/**/*.jpg
+source-inbox/**/*.jpeg
+source-inbox/**/*.png
+source-inbox/**/*.webp
+source-inbox/**/*.heic
+source-inbox/**/*.tif
+source-inbox/**/*.tiff
