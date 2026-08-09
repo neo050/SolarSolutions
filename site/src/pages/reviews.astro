@@ -13,6 +13,7 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import Testimonials from "~/components/Testimonials.astro";
 import { TESTIMONIALS } from "~/data/testimonials";
 import { links } from "~/data/business";
@@ -71,10 +72,13 @@ const trail = [{ label: "המלצות", href: "/reviews/" }];
           כל חמש ההמלצות הן מלקוחות פרטיים, וארבע מהן בתחום הסולארי. אין כאן ולו קול אחד
           מקבלן, מיזם או ממנהל פרויקט — ולא נציג המלצה של לקוח פרטי כאילו היא מפרויקט.
         </p>
-        <p class="reviews-note__meta">
-          <Pending id="testimonial.contracting" label="P1 — המלצה מלקוח עסקי" />
-          <Pending id="integration.gbp" label="P0 — קישור ל-Google Business Profile" />
-        </p>
+        {/* Markers only — an empty <p> in production, so the whole element goes. */}
+        {SHOW_PENDING && (
+          <p class="reviews-note__meta">
+            <Pending id="testimonial.contracting" label="P1 — המלצה מלקוח עסקי" />
+            <Pending id="integration.gbp" label="P0 — קישור ל-Google Business Profile" />
+          </p>
+        )}
       </div>
     </div>
   </section>

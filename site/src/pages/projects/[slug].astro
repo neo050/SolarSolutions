@@ -11,6 +11,7 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import { PROJECTS, CUSTOMER_TYPE_LABEL, hasStory, type Project } from "~/data/projects";
 import { BUSINESS } from "~/data/business";
 
@@ -79,16 +80,28 @@ const schema = {
             <dt>סוג לקוח</dt>
             <dd>{CUSTOMER_TYPE_LABEL[project.customerType]}</dd>
           </div>
+          {/* The em dash is the production value. Keeping the row is right here — a
+              specification list that silently omits duration and crew size reads as though
+              those were never part of the spec, where a dash says plainly that the figure
+              is not recorded. In dev the marker names which gap it belongs to. */}
           <div>
             <dt>משך ביצוע</dt>
             <dd>
-              {project.durationDays ? `${project.durationDays} ימים` : <Pending id="case.details.solar" label="—" />}
+              {project.durationDays
+                ? `${project.durationDays} ימים`
+                : SHOW_PENDING
+                  ? <Pending id="case.details.solar" label="—" />
+                  : "—"}
             </dd>
           </div>
           <div>
             <dt>גודל צוות</dt>
             <dd>
-              {project.crewSize ? `${project.crewSize} אנשים` : <Pending id="case.details.solar" label="—" />}
+              {project.crewSize
+                ? `${project.crewSize} אנשים`
+                : SHOW_PENDING
+                  ? <Pending id="case.details.solar" label="—" />
+                  : "—"}
             </dd>
           </div>
         </dl>
@@ -159,10 +172,12 @@ const schema = {
               <p>
                 לא נכתוב את זה מדמיון. מבנה העמוד בנוי ומחכה — ברגע שהמידע יתקבל הוא ייכנס לכאן.
               </p>
-              <p class="pending-block__meta">
-                <Pending id="case.details.solar" label="ממתין למידע · P0" />
-                <span>נדרש: שיחה קצרה על הפרויקט עם בעל העסק</span>
-              </p>
+              {SHOW_PENDING && (
+                <p class="pending-block__meta">
+                  <Pending id="case.details.solar" label="ממתין למידע · P0" />
+                  <span>נדרש: שיחה קצרה על הפרויקט עם בעל העסק</span>
+                </p>
+              )}
             </div>
           </div>
         </section>

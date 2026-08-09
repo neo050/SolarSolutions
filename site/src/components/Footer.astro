@@ -9,6 +9,7 @@
 import { FOOTER_GROUPS } from "~/data/nav";
 import { BUSINESS, links } from "~/data/business";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 
 const year = new Date().getFullYear();
 ---
@@ -50,10 +51,18 @@ const year = new Date().getFullYear();
             <dt>רישיון</dt>
             <dd class="mono">{BUSINESS.licenceNumber}</dd>
           </div>
-          <div>
-            <dt>שעות פעילות</dt>
-            <dd><Pending id="fact.opening-hours" label="[ממתין לאישור]" /></dd>
-          </div>
+          {
+            /* The whole row goes, not just the marker: "שעות פעילות" over an empty value
+               reads as a broken footer on every page of the site. */
+            SHOW_PENDING && (
+              <div>
+                <dt>שעות פעילות</dt>
+                <dd>
+                  <Pending id="fact.opening-hours" label="[ממתין לאישור]" />
+                </dd>
+              </div>
+            )
+          }
         </dl>
       </div>
 

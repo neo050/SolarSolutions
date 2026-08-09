@@ -3,6 +3,7 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import LeadForm from "~/components/LeadForm.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import { BUSINESS, links } from "~/data/business";
 
 const trail = [{ label: "צור קשר", href: "/contact/" }];
@@ -60,15 +61,28 @@ const contactSchema = {
         </span>
       </div>
 
+      {
+        /*
+         * These two keep their note in production and lose only the marker. The notes
+         * already carry the message on their own — "leave a message and we will come back
+         * to you", "we will not commit to a response time before we can meet it" — and
+         * read as a stated policy rather than as an admission that nobody has filled the
+         * field in. The empty value span is dropped so the row does not sit on a blank line.
+         */
+      }
       <div class="method method--static">
         <span class="method__label">שעות פעילות</span>
-        <span class="method__value"><Pending id="fact.opening-hours" label="ממתין לאישור" /></span>
-        <span class="method__note">בינתיים — השאירו הודעה ונחזור אליכם</span>
+        {SHOW_PENDING && (
+          <span class="method__value"><Pending id="fact.opening-hours" label="ממתין לאישור" /></span>
+        )}
+        <span class="method__note">השאירו הודעה ונחזור אליכם</span>
       </div>
 
       <div class="method method--static">
         <span class="method__label">זמן תגובה</span>
-        <span class="method__value"><Pending id="fact.response-time" label="ממתין לנתון" /></span>
+        {SHOW_PENDING && (
+          <span class="method__value"><Pending id="fact.response-time" label="ממתין לנתון" /></span>
+        )}
         <span class="method__note">לא נתחייב לזמן לפני שנוכל לעמוד בו</span>
       </div>
     </div>

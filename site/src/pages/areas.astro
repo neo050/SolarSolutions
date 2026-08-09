@@ -15,6 +15,7 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import { BUSINESS } from "~/data/business";
 import { PROJECTS } from "~/data/projects";
 
@@ -86,9 +87,11 @@ const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) 
           כשתתקבל רשימת היישובים שבהם העסק באמת עובד, ובאיזה סוג עבודה — נבנה עמודי אזור
           למי שמצדיק אותם.
         </p>
-        <p class="pending-block__meta">
-          <Pending id="fact.areas.list" label="P0 — רשימת יישובים" />
-        </p>
+        {SHOW_PENDING && (
+          <p class="pending-block__meta">
+            <Pending id="fact.areas.list" label="P0 — רשימת יישובים" />
+          </p>
+        )}
       </div>
     </div>
   </section>
