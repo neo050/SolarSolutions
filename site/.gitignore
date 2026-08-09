@@ -4,3 +4,9 @@ dist/
 .env
 .env.production
 qa-screenshots/
+
+# Generated images awaiting ingest, and the originals ingest preserves. The inbox itself
+# is tracked (for its README); what lands in it is not — these are large binaries whose
+# ingested copies already live under public/.
+asset-inbox/*
+!asset-inbox/README.md

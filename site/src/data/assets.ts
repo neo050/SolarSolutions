@@ -153,7 +153,7 @@ export const SOURCE_ASSETS: SourceAsset[] = [
   {
     id: "SRC-PANEL-002",
     category: "ELECTRICAL",
-    path: "/images/_quarantine/panel-02.jpeg",
+    path: "/quarantine/panel-02.jpeg",
     originalName: "לוח חשמל 2.jpeg",
     people: "ללא אנשים",
     contains:

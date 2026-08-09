@@ -26,7 +26,7 @@
 
 | | |
 |---|---|
-| קובץ | `/images/_quarantine/panel-02.jpeg` |
+| קובץ | `/quarantine/panel-02.jpeg` |
 | שם מקורי | לוח חשמל 2.jpeg |
 | קטגוריה | ELECTRICAL |
 | מי מופיע | ללא אנשים |

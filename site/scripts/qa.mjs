@@ -304,6 +304,62 @@ for (const file of htmlFiles) {
   }
 }
 
+/* ---- asset integrity: the manifest and the build output must agree ---- */
+//
+// The quarantine rule is the reason this check exists. panel-02.jpeg carries another
+// electrician's licence sticker and phone number, and it used to live in
+// public/images/_quarantine/ — a directory whose name implied isolation while Astro
+// copied it into dist/ like any other public file. Unlinked is not unpublished: the
+// image was being deployed to a fetchable URL on this business's own domain. Holding a
+// file back is now a build-enforced property rather than a convention someone remembers.
+{
+  const { SOURCE_ASSETS, GENERATED_ASSETS } = await import("./_load-assets.mjs");
+  const all = [...SOURCE_ASSETS, ...GENERATED_ASSETS];
+
+  const publishedPath = (a) =>
+    // GENERATED_ASSETS record where the file is written (/public/...); SOURCE_ASSETS
+    // record where it is served from. Normalise to the served URL.
+    (a.path ?? a.destination ?? "").replace(/^\/public\//, "/");
+
+  for (const a of all.filter((x) => x.status === "QUARANTINED")) {
+    // Matched on filename, not on the path the manifest records. Someone re-adding the
+    // image is exactly the case this guards, and they would re-add it under a new path —
+    // checking the recorded path would then compare against a location the file no longer
+    // occupies and pass. The filename is what survives the move.
+    const name = publishedPath(a).split("/").pop();
+    for (const url of assets) {
+      if (url.split("/").pop() === name) {
+        failures.push(
+          `${a.id} is QUARANTINED but ${url} is in the build output — it would be ` +
+            `fetchable on the live domain. Quarantined files belong outside public/.`
+        );
+      }
+    }
+    for (const file of htmlFiles) {
+      if (readFileSync(file, "utf8").includes(name)) {
+        const where = "/" + relative(DIST, file).split("\\").join("/").replace(/index\.html$/, "");
+        failures.push(`${a.id} is QUARANTINED but ${where} references ${name}`);
+      }
+    }
+  }
+
+  // A manifest entry claiming IN USE whose file is absent is a broken image nobody sees
+  // until a visitor does. The reverse — a file present but the entry stale — is why the
+  // manifest is the source of truth rather than a description written after the fact.
+  for (const a of all.filter((x) => x.status === "IN USE")) {
+    const url = publishedPath(a);
+    if (url && !assets.has(url)) {
+      failures.push(`${a.id} is marked IN USE but ${url} is not in the build output`);
+    }
+  }
+
+  // Placed by `npm run assets:ingest`, not yet looked at by a human. Warned rather than
+  // failed: the file being on disk is what makes review possible.
+  for (const a of all.filter((x) => x.status === "NEEDS VISUAL REVIEW")) {
+    warnings.push(`${a.id} is in place but has had no visual review — ${publishedPath(a)}`);
+  }
+}
+
 /* ---- required artefacts ---- */
 for (const required of ["sitemap-index.xml", "404.html", "robots.txt", "_headers", "_redirects"]) {
   if (!existsSync(join(DIST, required))) failures.push(`missing build artefact: ${required}`);
