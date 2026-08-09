@@ -68,8 +68,10 @@ const MAX_BODY_BYTES = 32 * 1024;
 /** Per-IP submission cap. Generous for humans, restrictive for scripts. */
 const RATE_LIMIT = { max: 5, windowSeconds: 600 };
 
-/** How long a leadId is remembered for deduplication. */
-const DEDUP_TTL_SECONDS = 60 * 60 * 24 * 7;
+// Deduplication has no window and no key of its own: a leadId is a duplicate exactly when
+// its record is already in KV, and lead records are written without a TTL. A constant here
+// once claimed a 7-day window, which the code never implemented — the comment described an
+// earlier design, and a stale comment about retention is worse than none.
 
 /* ------------------------------------------------------------------ helpers */
 

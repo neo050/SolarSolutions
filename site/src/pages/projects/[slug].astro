@@ -28,7 +28,10 @@ const trail = [
   { label: `${project.title}, ${project.location}`, href: `/projects/${project.slug}/` },
 ];
 
-const gallery = project.gallery ?? [project.image];
+// Nine of the ten projects have no photograph, so this can legitimately be empty. Filtering
+// rather than defaulting matters: `[project.image]` on a project with no image produced a
+// one-element array of undefined, which rendered an <img> with no src.
+const gallery = (project.gallery ?? [project.image]).filter((src): src is string => Boolean(src));
 const complete = hasStory(project);
 
 const schema = {
@@ -94,6 +97,19 @@ const schema = {
 
     <section class="section">
       <div class="container">
+        {
+          /*
+           * No photographs: say so, once, in one line, and move on. The page still carries
+           * the customer, the location, the system type and the output — the facts that
+           * were always the substance here. An apology, a placeholder graphic or a
+           * "coming soon" panel would all take up more room than the absence deserves.
+           */
+          gallery.length === 0 && (
+            <p class="project-nophoto">
+              לפרויקט הזה אין תיעוד מצולם. הפרטים למטה מדויקים.
+            </p>
+          )
+        }
         <ul class="project-gallery">
           {
             gallery.map((src, i) => (
@@ -193,6 +209,11 @@ const schema = {
     font-weight: 600;
   }
 
+  .project-nophoto {
+    color: var(--text-subtle);
+    font-size: 0.94rem;
+    padding-block: var(--space-2);
+  }
   .project-gallery {
     display: grid;
     gap: var(--space-4);

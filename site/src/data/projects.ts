@@ -30,7 +30,20 @@ export interface Project {
   /** Rated output in kWp, where known. */
   sizeKw?: number;
   systemType: string;
-  image: string;
+  /**
+   * Optional, and absent for nine of the ten projects.
+   *
+   * Their photographs were stock images of South Asian rooftop installations — water
+   * tanks, exposed-rebar construction, a metro viaduct, a windmill — published as this
+   * business's own completed work for named Israeli customers. Held in
+   * quarantine/projects/ pending the owner's account of where they came from. See the
+   * `provenance.project-photos` gap.
+   *
+   * A project without a photograph renders an honest empty state. It does not borrow one
+   * from another project, and it does not get a generated stand-in: an image in this slot
+   * is a claim that the work in it is ours.
+   */
+  image?: string;
   gallery?: string[];
   /** One line describing what was installed — derived only from known facts. */
   summary: string;
@@ -70,7 +83,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 22,
     systemType: "מערכת מחוברת רשת",
-    image: "/images/projects/argaman-revivim.webp",
     summary: "המערכת הגדולה ביותר המתועדת באתר — 22 קילוואט על גג בית פרטי.",
     featured: true,
   },
@@ -82,7 +94,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 20,
     systemType: "מערכת על גג רפת",
-    image: "/images/projects/yaakobi-beit-ezra.webp",
     summary: "התקנה על גג מבנה חקלאי פעיל — 20 קילוואט.",
     featured: true,
   },
@@ -94,7 +105,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 12,
     systemType: "מערכת על גג האנגר תעשייתי",
-    image: "/images/projects/saban-shtulim.webp",
     summary: "12 קילוואט על גג האנגר — סביבה תעשייתית ולא ביתית.",
     featured: true,
   },
@@ -106,7 +116,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 8,
     systemType: "מערכת לבניין משותף",
-    image: "/images/projects/sigalon-yavne.webp",
     summary: "8 קילוואט בבניין משותף — התקנה הדורשת תיאום בין דיירים.",
     featured: true,
   },
@@ -118,7 +127,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 7,
     systemType: "מערכת מנותקת רשת",
-    image: "/images/projects/avishai-adi.webp",
     summary: "מערכת עצמאית מנותקת רשת על גג בית — 7 קילוואט.",
     featured: false,
   },
@@ -130,7 +138,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 6,
     systemType: "סככה סולארית",
-    image: "/images/projects/amar-kfar-yona.webp",
     summary: "סככה סולארית בהספק 6 קילוואט.",
     featured: false,
   },
@@ -142,7 +149,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 4,
     systemType: "פאנלים על סככה קיימת",
-    image: "/images/projects/sharabani-ben-zakai.webp",
     summary: "התקנה על סככה קיימת — 4 קילוואט, ללא בניית מבנה חדש.",
     featured: false,
   },
@@ -154,7 +160,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 3.5,
     systemType: "סככה סולארית",
-    image: "/images/projects/gemini-metzer.webp",
     summary: "סככה סולארית בהספק 3.5 קילוואט.",
     featured: false,
   },
@@ -166,7 +171,6 @@ export const PROJECTS: Project[] = [
     track: "solar",
     sizeKw: 3,
     systemType: "מערכת מנותקת רשת",
-    image: "/images/projects/lifshitz-klil.webp",
     summary: "מערכת מנותקת רשת בהספק 3 קילוואט.",
     featured: false,
   },

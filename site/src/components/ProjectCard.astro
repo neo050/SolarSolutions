@@ -11,16 +11,32 @@ const { project, featured = false } = Astro.props;
 
 <article class:list={["project-card", { "project-card--featured": featured }]}>
   <div class="project-card__media">
-    <img
-      src={project.image}
-      srcset={`${project.image.replace(/(\.[a-z]+)$/, "-800w$1")} 800w, ${project.image} 1800w`}
-      sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 100vw"
-      alt={`${project.title}, ${project.location} — ${project.systemType}${project.sizeKw ? `, ${project.sizeKw} קילוואט` : ""}`}
-      width="800"
-      height="600"
-      loading="lazy"
-      decoding="async"
-    />
+    {
+      /*
+       * Nine of the ten projects have no photograph — see the note on Project.image. The
+       * stand-in states the system type and output rather than showing a camera icon or a
+       * grey box: a card that says "22 kWp, grid-connected" is still useful, where a
+       * placeholder graphic only advertises that something is missing. It deliberately
+       * looks like a data panel and not like a failed image.
+       */
+      project.image ? (
+        <img
+          src={project.image}
+          srcset={`${project.image.replace(/(\.[a-z]+)$/, "-800w$1")} 800w, ${project.image} 1800w`}
+          sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 100vw"
+          alt={`${project.title}, ${project.location} — ${project.systemType}${project.sizeKw ? `, ${project.sizeKw} קילוואט` : ""}`}
+          width="800"
+          height="600"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div class="project-card__nophoto">
+          {project.sizeKw && <span class="project-card__kw mono">{project.sizeKw} kWp</span>}
+          <span class="project-card__systype">{project.systemType}</span>
+        </div>
+      )
+    }
     <span class="badge badge--accent project-card__type">
       {CUSTOMER_TYPE_LABEL[project.customerType]}
     </span>
@@ -104,8 +120,35 @@ const { project, featured = false } = Astro.props;
     aspect-ratio: 4 / 3;
     object-fit: cover;
   }
-  .project-card--featured .project-card__media img {
+  .project-card--featured .project-card__media img,
+  .project-card--featured .project-card__nophoto {
     aspect-ratio: 16 / 10;
+  }
+
+  .project-card__nophoto {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    text-align: center;
+    background: var(--bg-sunken);
+    /* A hairline inside the media box so the panel reads as a deliberate surface rather
+       than as the card's own background showing through where an image failed. */
+    border-block-end: 1px solid var(--border);
+  }
+  .project-card__kw {
+    font-size: var(--step-2);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .project-card__systype {
+    font-size: 0.86rem;
+    color: var(--text-subtle);
+    max-width: 22ch;
   }
   .project-card__type {
     position: absolute;
