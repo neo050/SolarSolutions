@@ -250,6 +250,10 @@
   letter-spacing: -0.03em;
   color: var(--brand);
   font-variant-numeric: tabular-nums;
+  /* Values like "22 kWp" mix digits with a Latin unit. In an RTL line the bidi
+     algorithm reorders them so the unit lands left of the number, which reads wrong.
+     Isolation keeps the run intact. */
+  unicode-bidi: isolate;
 }
 .section--inverse .stat__value {
   color: var(--copper-400);

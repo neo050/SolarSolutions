@@ -2,8 +2,65 @@
 
 Prompt מוכן לכל נכס שמותר לייצר. העתק, צרף את תמונות ה-Reference, הרץ.
 
-נכסים שמסומנים `BLOCKED ON REAL PHOTO` אינם מופיעים כאן בכוונה —
-הם דורשים צילום ולא ייצור.
+נכסים בסטטוס `WAITING_FOR_SOURCE_REFERENCE` כן מופיעים כאן, עם Prompt מלא —
+אבל אי אפשר להריץ אותם עד שיתקבלו צילומי ה-Reference שהם מפנים אליהם.
+
+### GEN-PERSON-PORTRAIT-001
+
+**Filename to return:** `roni-portrait.webp`
+**Aspect ratio:** 4:5 · **Resolution:** 1600×2000
+
+**Reference images to use (attached):**
+  - SRC-RONI-001 — דיוקן — פנים ברורות, ביגוד עבודה, סביבה אמיתית. נדרשות 3–5 תמונות מזוויות שונות כדי לשמר זהות עקבית בין כל התמ
+  - SRC-PANEL-001 — לוח חשמל ביתי פתוח, שורת מאמתים CHINT, ממסר פחת, ותוויות מודפסות בעברית לכל מעגל (מזגן, כירה, דוד, מטבח, ראשי)
+
+**המפרט (לקריאה שלך):** דיוקן מקצועי של בעל העסק בסביבת עבודה אמיתית · ליד לוח חשמל פתוח או ברכב העבודה · דמות בשליש הימני, מבט למצלמה, פלג גוף עליון
+
+**Prompt (paste this):**
+
+> Photorealistic documentary photograph for an Israeli electrical contracting company.
+>
+> Editorial portrait of a working electrician, built from the supplied reference photographs of the same man — preserve his face, build and hair exactly as they appear in the references. He stands beside an open distribution board in a real working environment, in worn work clothes, looking to camera with a calm, unforced expression. Positioned in the right third of the frame. 50-85mm lens at eye level, soft directional daylight from one side, no direct flash. Muted realistic colour. Documentary, not corporate stock.
+>
+> Style: honest working documentary, not a stock photo. Real materials, real wear on
+> surfaces, natural imperfection. Muted realistic colour, no orange-teal grade, no
+> lens flare, no artificial glow.
+> Match the reference images for equipment type, clothing and environment.
+> **Framing constraint (this is not optional — it fills a fixed slot in a built
+> layout): Keep the left 25% of the frame visually quiet — body copy is set there.**
+> Negative: no text, no logos, no brand names, no phone numbers, no readable signage,
+> no identifiable faces other than those in the references, no over-saturated colour,
+> no plastic skin, no impossible wiring, no unsafe practice, no missing PPE.
+
+
+### GEN-TEAM-ONSITE-001
+
+**Filename to return:** `contracting-team-onsite.webp`
+**Aspect ratio:** 16:9 · **Resolution:** 2400×1350
+
+**Reference images to use (attached):**
+  - SRC-TEAM-001 — צוות בעבודה — פנים, ביגוד, ציוד, סביבת עבודה.
+  - SRC-SITE-001 — אתר בנייה למגורים בשלב שלד — צנרת, שרוולים, קופסאות, הכנות לפני יציקה.
+  - SRC-COMMERCIAL-001 — פרויקט מסחרי בשלב בנייה: תקרת גבס פתוחה עם פתחים עגולים לגופי תאורה, צנרת שרשורית, מוליכים משוכים ומחכים, סולם
+
+**המפרט (לקריאה שלך):** צוות חשמלאים בעבודה באתר · אתר בנייה או מבנה מסחרי בשלב גמר · שני אנשים לפחות, פעולה אמיתית ולא פוזה
+
+**Prompt (paste this):**
+
+> Photorealistic documentary photograph for an Israeli electrical contracting company.
+>
+> Documentary photograph of an electrical crew at work on site, built from the supplied reference photographs of these specific people — preserve their faces and their work clothing. They are mid-task, not posed: one running conduit, another at an open board. Hard hats and eye protection worn correctly. Concrete and block-work environment with visible services overhead. 28-35mm lens, natural daylight through openings, moderate contrast. IMPORTANT: show exactly the number of people specified at generation time — no more.
+>
+> Style: honest working documentary, not a stock photo. Real materials, real wear on
+> surfaces, natural imperfection. Muted realistic colour, no orange-teal grade, no
+> lens flare, no artificial glow.
+> Match the reference images for equipment type, clothing and environment.
+> **Framing constraint (this is not optional — it fills a fixed slot in a built
+> layout): Keep the right 40% clear for a headline and buttons. Do not place faces dead centre: mobile crops the middle of this frame.**
+> Negative: no text, no logos, no brand names, no phone numbers, no readable signage,
+> no identifiable faces other than those in the references, no over-saturated colour,
+> no plastic skin, no impossible wiring, no unsafe practice, no missing PPE.
+
 
 ### GEN-CONTRACTING-SITE-001
 
@@ -29,6 +86,35 @@ Prompt מוכן לכל נכס שמותר לייצר. העתק, צרף את תמ�
 > Match the reference images for equipment type, clothing and environment.
 > **Framing constraint (this is not optional — it fills a fixed slot in a built
 > layout): Keep the right 40% clear for a headline and buttons. The bottom third may be cropped away on mobile, so nothing essential belongs there.**
+> Negative: no text, no logos, no brand names, no phone numbers, no readable signage,
+> no identifiable faces other than those in the references, no over-saturated colour,
+> no plastic skin, no impossible wiring, no unsafe practice, no missing PPE.
+
+
+### GEN-SOLAR-INSTALL-001
+
+**Filename to return:** `solar-contractors-install.webp`
+**Aspect ratio:** 16:9 · **Resolution:** 2400×1350
+
+**Reference images to use (attached):**
+  - SRC-SOLARWORK-001 — התקנה סולארית תוך כדי עבודה — צוות על גג, מבנה נשיאה, פאנלים באמצע הרכבה.
+  - SRC-SOLAR-001 — מערכת סולארית 22 קילוואט על גג בית פרטי, קיבוץ רביבים. המערכת הגדולה המתועדת.
+  - SRC-SOLAR-002 — מערכת 20 קילוואט על גג רפת, מושב בית עזרא.
+
+**המפרט (לקריאה שלך):** התקנת מערכת סולארית תוך כדי עבודה על גג · גג שטוח או רעפים, מבנה נשיאה מותקן חלקית, פאנלים באמצע הרכבה · שורות פאנלים באלכסון, שמיים בשליש העליון
+
+**Prompt (paste this):**
+
+> Photorealistic documentary photograph for an Israeli electrical contracting company.
+>
+> Documentary photograph of a solar installation crew mid-work on a roof, built from the supplied reference photographs of these specific people and of the business's own completed installations. Mounting rails are fixed and a partial run of dark blue panels is in place; one panel is being carried into position. Harnesses and hard hats worn. Rows of panels run diagonally, sky in the upper third. 24-35mm lens from a low position relative to the roof, low morning or late-afternoon sun. IMPORTANT: show exactly the number of people specified at generation time.
+>
+> Style: honest working documentary, not a stock photo. Real materials, real wear on
+> surfaces, natural imperfection. Muted realistic colour, no orange-teal grade, no
+> lens flare, no artificial glow.
+> Match the reference images for equipment type, clothing and environment.
+> **Framing constraint (this is not optional — it fills a fixed slot in a built
+> layout): Keep the left 40% clear for a headline. Do not place faces at the centre of the frame.**
 > Negative: no text, no logos, no brand names, no phone numbers, no readable signage,
 > no identifiable faces other than those in the references, no over-saturated colour,
 > no plastic skin, no impossible wiring, no unsafe practice, no missing PPE.

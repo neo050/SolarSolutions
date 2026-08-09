@@ -48,6 +48,7 @@ export type AssetStatus =
   | "AWAITING UPLOAD"
   | "NEEDS AI GENERATION"
   | "BLOCKED ON REAL PHOTO"
+  | "WAITING_FOR_SOURCE_REFERENCE"
   | "GENERATING"
   | "GENERATED"
   | "NEEDS VISUAL REVIEW"
@@ -514,11 +515,21 @@ export const GENERATED_ASSETS: GeneratedAsset[] = [
     destination: "/public/images/person/roni-portrait.webp",
     alt: "רוני חג׳ג׳, בעל RNRG — הנדסאי חשמל וחשמלאי ראשי",
     priority: "P0",
-    status: "BLOCKED ON REAL PHOTO",
+    status: "WAITING_FOR_SOURCE_REFERENCE",
     assertsFact: true,
     factNote:
-      "דיוקן של אדם אמיתי חייב להיות צילום. ניתן לשפר חיתוך, רקע וצבע — אך לא לייצר פנים.",
+      "דורש 3–5 צילומים אמיתיים של רוני כ-Reference. ברגע שהם מגיעים אפשר לייצר " +
+      "מהם וריאציות, זוויות וסצנות — אבל לא לייצר פנים יש מאין.",
     cropSafeAreaEn: "Keep the left 25% of the frame visually quiet — body copy is set there.",
+    promptEn:
+      "Editorial portrait of a working electrician, built from the supplied " +
+      "reference photographs of the same man — preserve his face, build and hair " +
+      "exactly as they appear in the references. He stands beside an open " +
+      "distribution board in a real working environment, in worn work clothes, " +
+      "looking to camera with a calm, unforced expression. Positioned in the right " +
+      "third of the frame. 50-85mm lens at eye level, soft directional daylight " +
+      "from one side, no direct flash. Muted realistic colour. Documentary, not " +
+      "corporate stock.",
   },
   {
     id: "GEN-TEAM-ONSITE-001",
@@ -541,12 +552,22 @@ export const GENERATED_ASSETS: GeneratedAsset[] = [
     destination: "/public/images/contracting/contracting-team-onsite.webp",
     alt: "צוות RNRG בעבודת חשמל באתר",
     priority: "P0",
-    status: "BLOCKED ON REAL PHOTO",
+    status: "WAITING_FOR_SOURCE_REFERENCE",
     assertsFact: true,
     factNote:
-      "תמונת צוות היא טענה עובדתית על גודל הצוות ועל יכולת הביצוע. זו בדיוק ההמצאה " +
-      "שהפרויקט הזה קיים כדי להסיר. חייבת צילום אמיתי.",
+      "דורש צילומי Reference של אנשי הצוות. בנוסף — מספר האנשים בפריים חייב להתאים " +
+      "לגודל הצוות האמיתי (gap fact.team.size). תמונה שמראה חמישה כשיש שניים היא " +
+      "התחייבות שהעסק לא יוכל לעמוד בה מול קבלן ששואל כמה אנשים מגיעים לאתר.",
     cropSafeAreaEn: "Keep the right 40% clear for a headline and buttons. Do not place faces dead centre: mobile crops the middle of this frame.",
+    promptEn:
+      "Documentary photograph of an electrical crew at work on site, built from the " +
+      "supplied reference photographs of these specific people — preserve their " +
+      "faces and their work clothing. They are mid-task, not posed: one running " +
+      "conduit, another at an open board. Hard hats and eye protection worn " +
+      "correctly. Concrete and block-work environment with visible services " +
+      "overhead. 28-35mm lens, natural daylight through openings, moderate " +
+      "contrast. IMPORTANT: show exactly the number of people specified at " +
+      "generation time — no more.",
   },
   {
     id: "GEN-CONTRACTING-SITE-001",
@@ -596,10 +617,20 @@ export const GENERATED_ASSETS: GeneratedAsset[] = [
     destination: "/public/images/solar/solar-contractors-install.webp",
     alt: "צוות מתקין מערכת סולארית על גג",
     priority: "P1",
-    status: "BLOCKED ON REAL PHOTO",
+    status: "WAITING_FOR_SOURCE_REFERENCE",
     assertsFact: true,
-    factNote: "מציג צוות בעבודה — טענה על כושר ביצוע. דורש צילום.",
+    factNote:
+      "דורש Reference של הצוות ושל התקנה בפועל. מספר האנשים חייב להתאים לצוות האמיתי.",
     cropSafeAreaEn: "Keep the left 40% clear for a headline. Do not place faces at the centre of the frame.",
+    promptEn:
+      "Documentary photograph of a solar installation crew mid-work on a roof, built " +
+      "from the supplied reference photographs of these specific people and of the " +
+      "business's own completed installations. Mounting rails are fixed and a " +
+      "partial run of dark blue panels is in place; one panel is being carried into " +
+      "position. Harnesses and hard hats worn. Rows of panels run diagonally, sky " +
+      "in the upper third. 24-35mm lens from a low position relative to the roof, " +
+      "low morning or late-afternoon sun. IMPORTANT: show exactly the number of " +
+      "people specified at generation time.",
   },
   {
     id: "GEN-ELECTRICAL-TEXTURE-001",
@@ -722,6 +753,6 @@ export const assetStats = () => {
     quarantined: SOURCE_ASSETS.filter((a) => a.status === "QUARANTINED").length,
     generateTotal: gen.length,
     generatable: gen.filter((a) => !a.assertsFact).length,
-    blockedOnPhoto: gen.filter((a) => a.assertsFact).length,
+    waitingForReference: gen.filter((a) => a.assertsFact).length,
   };
 };

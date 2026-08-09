@@ -90,12 +90,12 @@ const tracks = [
 
       <div class="home-hero__media">
         <img
-          src="/images/gallery/panel-01-hero.jpeg"
-          srcset="/images/gallery/panel-01-hero-800w.jpeg 800w, /images/gallery/panel-01-hero.jpeg 1248w"
-          sizes="(min-width: 62rem) 42vw, 100vw"
-          alt="לוח חשמל ביתי לאחר חידוש — הגנות מדורגות, חיווט מסודר ותיוג מלא של כל מעגל"
-          width="1248"
-          height="936"
+          src="/images/gallery/panel-05-wide.jpeg"
+          srcset="/images/gallery/panel-05-wide-800w.jpeg 800w, /images/gallery/panel-05-wide.jpeg 1500w"
+          sizes="(min-width: 62rem) 48vw, 100vw"
+          alt="לוח חשמל מסחרי בן 72 מודולים — הגנות מדורגות, מנתקים ובקרת בידוד"
+          width="1500"
+          height="1125"
           fetchpriority="high"
           decoding="async"
         />
@@ -115,7 +115,8 @@ const tracks = [
           <span class="stat__label">פרויקטים סולאריים מתועדים</span>
         </li>
         <li class="stat">
-          <span class="stat__value">{stats.largestKw} kWp</span>
+          {/* bdi so the unit stays to the right of the number in an RTL line. */}
+          <span class="stat__value"><bdi>{stats.largestKw} kWp</bdi></span>
           <span class="stat__label">המערכת הגדולה שהותקנה</span>
         </li>
         <li class="stat">
@@ -123,12 +124,19 @@ const tracks = [
           <span class="stat__label">יישובים שבהם בוצעו עבודות</span>
         </li>
         <li class="stat">
-          <span class="stat__value"><Pending id="fact.experience.years" label="—" /></span>
-          <span class="stat__label">שנות ניסיון בחשמל</span>
+          {/*
+            Not the licence number, which was here briefly: a licence has no magnitude,
+            so scanned alongside "10" and "22 kWp" it read as the quantity 991,433.
+            The licence belongs on the hero badge, where it already is. This is a real
+            counted total from the documented projects.
+          */}
+          <span class="stat__value"><bdi>{Math.round(stats.totalKw)} kWp</bdi></span>
+          <span class="stat__label">הספק מותקן מצטבר</span>
         </li>
       </ul>
       <p class="trust-strip__note">
         כל המספרים כאן נספרים מתוך עבודות שבוצעו בפועל ומתועדות באתר.
+        <Pending id="fact.experience.years" label="שנות ניסיון — ממתין לנתון" />
       </p>
     </div>
   </section>
@@ -266,6 +274,13 @@ const tracks = [
     border: 1px solid var(--border);
     box-shadow: var(--shadow-lg);
   }
+
+  @media (min-width: 62rem) {
+    .home-hero__media img {
+      /* Taller on desktop so the hero fills the fold rather than floating in it. */
+      aspect-ratio: 5 / 4;
+    }
+  }
   .home-hero__card {
     position: absolute;
     inset-block-end: var(--space-4);
@@ -279,8 +294,11 @@ const tracks = [
 
   @media (min-width: 62rem) {
     .home-hero__inner {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      /* Was 1.1fr / 0.9fr, which rendered the image at 482px in a 1440px viewport —
+         a thumbnail, not a hero. The image is the proof; give it the weight. */
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
       gap: var(--space-8);
+      align-items: center;
     }
   }
 
