@@ -335,11 +335,17 @@ const serviceSchema = {
     list-style: none;
     margin: 0;
     padding: 0;
+    /* Natural heights, so a portrait image is not stretched to match a landscape one. */
+    align-items: start;
   }
   .gallery img {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    /* No forced ratio.
+       These were `aspect-ratio: 4/3; object-fit: cover`, which cropped a distribution
+       board photographed in portrait down to a horizontal strip — discarding the circuit
+       labelling, which is the entire reason the photograph is evidence of anything. A
+       tidy grid that removes the subject is worse than a ragged one that keeps it. */
+    height: auto;
     border-radius: var(--radius);
     border: 1px solid var(--border);
   }

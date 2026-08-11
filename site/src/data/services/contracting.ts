@@ -80,6 +80,42 @@ export const CONTRACTING: ServicePage[] = [
           },
         ],
       },
+      /*
+       * Proof. The design review's most serious finding on this page was that it explains
+       * capability and demonstrates none: no photographs beyond the hero, no projects, no
+       * references, no numbers. The most sceptical audience on the site was getting the
+       * page with the most promises and the least evidence.
+       *
+       * These three photographs are the only ones in the library that document work which
+       * is demonstrably not a domestic call-out, and they were scattered across the
+       * electrical pages as decoration. They are captioned as what they are — evidence of
+       * a type of work — and deliberately not as named projects: no client agreed to be
+       * named, and inventing that framing is how the nine stock project photographs came
+       * to be presented as this business's portfolio in the first place.
+       */
+      {
+        kind: "gallery",
+        id: "evidence",
+        title: "עבודות שאינן קריאת שירות ביתית",
+        intro:
+          "שלושה תיעודים מתוך עבודות שבוצעו: לוח דירתי בבניין רב-דיירים, מונה ולוח בדירה " +
+          "נוספת באותו בניין, ותשתית תאורה בפרויקט מסחרי לפני סגירת תקרות. אלה לא " +
+          "Case Studies — שם הלקוח וסיפור הפרויקט טרם אושרו לפרסום, ולא נמציא אותם.",
+        images: [
+          {
+            src: "/images/gallery/panel-03.jpeg",
+            alt: "לוח חשמל דירתי מסומן 'דירה 17' בבניין משותף — מאמתים ABB, פחת ראשי ותיוג מלא",
+          },
+          {
+            src: "/images/gallery/panel-04.jpeg",
+            alt: "לוח ומונה המסומנים 'מונה דירה 2' — פיצול פאזות, פחת ראשי ותיוג מודפס לכל מעגל",
+          },
+          {
+            src: "/images/gallery/lighting-01-wide.jpeg",
+            alt: "תשתית תאורה בפרויקט מסחרי — תקרת גבס עם פתחים, מובילים וחיווט לפני גמר",
+          },
+        ],
+      },
       {
         kind: "audience",
         id: "who",
@@ -110,6 +146,24 @@ export const CONTRACTING: ServicePage[] = [
             text: "עבודות חשמל במבנים פעילים, כולל עבודה מחוץ לשעות הפעילות כשצריך.",
           },
         ],
+      },
+      /*
+       * The licence table was only on the electrical pages, which is the wrong place for
+       * it. A homeowner does not check licence class; a main contractor does, because the
+       * class caps the connection size his subcontractor may legally design and execute.
+       * Market research found seven of ten competitors claiming "ראשי" without publishing
+       * a number, so a table that states the class, what it permits, and the licence
+       * number alongside it is the single cheapest differentiator available here — and it
+       * needs no photograph, no client permission and no data the business does not have.
+       */
+      {
+        kind: "data-table",
+        id: "licence",
+        variant: "licence",
+        title: "דרגת הרישיון, ומה היא מתירה",
+        intro:
+          "לפני שמכניסים קבלן משנה לחשמל לפרויקט, הדרגה קובעת מה מותר לו לתכנן ולבצע ועד " +
+          "איזה גודל חיבור. הדרגה שלנו מסומנת בטבלה, ומספר הרישיון מופיע לצידה בכל עמוד.",
       },
       {
         kind: "steps",
