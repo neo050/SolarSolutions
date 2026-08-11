@@ -12,24 +12,37 @@
  * `label` overrides the display text; otherwise a short form of the gap is shown.
  */
 import { getGap } from "~/data/gaps";
+import { SHOW_PENDING } from "~/data/pending";
 
 export interface Props {
   id: string;
   label?: string;
   block?: boolean;
+  /**
+   * Show even in production. For /internal/ pages, whose entire purpose is to display
+   * what is missing — suppressing the markers there would empty the report.
+   */
+  always?: boolean;
 }
 
-const { id, label, block = false } = Astro.props;
-const gap = getGap(id); // throws on an unknown id — deliberate
+const { id, label, block = false, always = false } = Astro.props;
+// Still resolved in production, so an unknown id fails the build whether or not the
+// marker renders. The validation is the point; the badge is just how it looks in dev.
+const gap = getGap(id);
+const visible = SHOW_PENDING || always;
 ---
 
-<span
-  class:list={["pending", { "pending--block": block }]}
-  data-gap={id}
-  data-priority={gap.priority}
-  title={`חסר: ${gap.what}`}
->
-  <span aria-hidden="true">◆</span>
-  <span>{label ?? `[${gap.priority} — ממתין למידע]`}</span>
-  <span class="visually-hidden">פריט מידע שטרם התקבל: {gap.what}</span>
-</span>
+{
+  visible && (
+    <span
+      class:list={["pending", { "pending--block": block }]}
+      data-gap={id}
+      data-priority={gap.priority}
+      title={`חסר: ${gap.what}`}
+    >
+      <span aria-hidden="true">◆</span>
+      <span>{label ?? `[${gap.priority} — ממתין למידע]`}</span>
+      <span class="visually-hidden">פריט מידע שטרם התקבל: {gap.what}</span>
+    </span>
+  )
+}

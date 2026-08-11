@@ -67,14 +67,29 @@ const isEmpty = items.length === 0;
               <figure class="testimonial">
                 <blockquote>{t.quote}</blockquote>
                 <figcaption>
-                  <img
-                    src={t.photo}
-                    alt={`${t.name}, ${t.city}`}
-                    width="64"
-                    height="64"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {
+                    /*
+                     * A monogram stands in wherever no publishable portrait exists, which
+                     * is currently every review. It occupies the same 64px the photograph
+                     * did, so the card composition is unchanged, and it is decorative:
+                     * the name sits in text immediately beside it, so announcing the
+                     * initial as well would only repeat it.
+                     */
+                    t.photo ? (
+                      <img
+                        src={t.photo}
+                        alt={`${t.name}, ${t.city}`}
+                        width="64"
+                        height="64"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="testimonial__monogram" aria-hidden="true">
+                        {Array.from(t.name)[0]}
+                      </span>
+                    )
+                  }
                   <span>
                     <strong>{t.name}</strong>
                     <span class="testimonial__meta">
@@ -140,12 +155,28 @@ const isEmpty = items.length === 0;
     padding-block-start: var(--space-4);
     border-block-start: 1px solid var(--border);
   }
-  .testimonial figcaption img {
+  .testimonial figcaption img,
+  .testimonial__monogram {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
     object-fit: cover;
     flex: 0 0 auto;
+  }
+  .testimonial__monogram {
+    display: grid;
+    place-items: center;
+    /* Tinted rather than filled: the monogram is a placeholder for a face, and a solid
+       accent disc would pull more attention than the quote it sits under. */
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    color: var(--accent-contrast);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    font-family: var(--font-display, inherit);
+    font-size: 1.25rem;
+    font-weight: 600;
+    /* The initial is a Hebrew letter in an otherwise LTR-neutral circle; isolating it
+       keeps it centred rather than letting the surrounding direction shift it. */
+    unicode-bidi: isolate;
   }
   .testimonial figcaption > span {
     display: flex;

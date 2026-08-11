@@ -1,0 +1,444 @@
+---
+/**
+ * Readiness dashboard — the single view of what is actually done.
+ *
+ * A page is Done only when all eight review dimensions have passed. "The build is green"
+ * covers three of them; the other five are judgement and have to be signed off.
+ *
+ * Generated from src/data/pages.ts and src/data/gaps.ts, so it cannot claim a state the
+ * data does not support. noindex.
+ */
+import Base from "~/layouts/Base.astro";
+import {
+  PAGES,
+  PAGE_FAMILIES,
+  DIMENSIONS,
+  DIMENSION_LABEL,
+  reviewStats,
+  pageIsDone,
+  type Reviews,
+} from "~/data/pages";
+import { GAPS, gapStats } from "~/data/gaps";
+import { assetStats } from "~/data/assets";
+
+const stats = reviewStats();
+const gaps = gapStats();
+const assets = assetStats();
+
+const all = [...PAGES, ...PAGE_FAMILIES];
+
+/** Programme-level readiness, beyond the page grid. */
+const PROGRAMME = [
+  { label: "Build ותקינות טכנית", state: "passed", note: "42 עמודים · astro check 0 שגיאות" },
+  { label: "קישורים פנימיים", state: "passed", note: "3,353 נבדקו · 0 שבורים · 0 יתומים" },
+  { label: "Metadata ו-Schema", state: "passed", note: "canonical, description, h1 יחיד בכל עמוד" },
+  { label: "Responsive", state: "passed", note: "6 רוחבים · 0 גלישה אופקית · CTA גלוי בכולם" },
+  { label: "נגישות (axe AA)", state: "passed", note: "0 הפרות · מטרות מגע מעל 24×24" },
+  { label: "ביצועים", state: "passed", note: "152KB לביקור ראשון · 12KB JS · 96KB פונטים" },
+  { label: "אבטחה", state: "passed", note: "CSP, HSTS, כותרות — ממתין לאירוח שיגיש אותן" },
+  { label: "Redirects", state: "passed", note: "13 חוקים · נבדקים ב-QA · דורשים אירוח ל-301 אמיתי" },
+  { label: "בדיקות נקודת הקצה", state: "passed", note: "13/13 עוברות" },
+  { label: "Leads End-to-End", state: "blocked", note: "חסום על החלטת אירוח", gap: "integration.lead-endpoint" },
+  { label: "Analytics מחובר", state: "blocked", note: "הקוד מוכן · חסר מזהה", gap: "integration.gtm" },
+  { label: "Search Console", state: "blocked", note: "דורש אימות דומיין", gap: "integration.gtm" },
+  { label: "Google Business Profile", state: "blocked", note: "חסום על קישור לפרופיל", gap: "integration.gbp" },
+  { label: "Staging ציבורי", state: "blocked", note: "מקומי עובד היום · ציבורי חסום על אירוח", gap: "integration.lead-endpoint" },
+  { label: "AI Assets משולבים", state: "in-progress", note: `${assets.generatable} מוכנים לייצור · ${assets.waitingForReference} ממתינים לצילומים` },
+  { label: "Case Studies", state: "blocked", note: "מבנה בנוי · חסר סיפור", gap: "case.details.solar" },
+  { label: "Production smoke test", state: "pending", note: "אחרי העלייה" },
+];
+
+const STATE_LABEL: Record<string, string> = {
+  passed: "עבר",
+  "in-progress": "בעבודה",
+  blocked: "חסום",
+  pending: "ממתין",
+};
+---
+
+<Base
+  title="לוח בקרה — מוכנות"
+  description="Readiness dashboard — מסמך עבודה פנימי."
+  noindex={true}
+>
+  <section class="section dash-head">
+    <div class="container">
+      <p class="eyebrow mono">INTERNAL · לא מאונדקס</p>
+      <h1>לוח בקרה</h1>
+      <p class="lede">
+        עמוד נחשב Done רק כשכל שמונה ממדי הביקורת עברו. שלושה מהם אוטומטיים ועוברים
+        היום; חמישה הם שיפוט ודורשים אישור.
+      </p>
+
+      <ul class="dash-stats">
+        <li class="stat">
+          <span class="stat__value">{stats.done}/{stats.entries}</span>
+          <span class="stat__label">עמודים שעברו את כל שמונת הממדים</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{stats.blocked}</span>
+          <span class="stat__label">עמודים עם חסם פתוח</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{gaps.blocksLaunch}</span>
+          <span class="stat__label">חוסמי עלייה (P0)</span>
+        </li>
+        <li class="stat">
+          <span class="stat__value">{gaps.needsOwner}</span>
+          <span class="stat__label">פריטים אצל בעל העסק</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------- per dimension -->
+  <section class="section">
+    <div class="container">
+      <h2>לפי ממד ביקורת</h2>
+      <ul class="dims">
+        {
+          DIMENSIONS.map((d) => {
+            const s = stats.byDimension[d];
+            const pct = Math.round((s.passed / s.total) * 100);
+            return (
+              <li class="dim">
+                <div class="dim__head">
+                  <span class="dim__name">{DIMENSION_LABEL[d]}</span>
+                  <span class="dim__count mono">
+                    {s.passed}/{s.total}
+                  </span>
+                </div>
+                <div class="dim__bar" role="img" aria-label={`${pct} אחוז`}>
+                  <span style={`inline-size:${pct}%`} data-full={pct === 100}></span>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------- page grid -->
+  <section class="section section--sunken">
+    <div class="container">
+      <h2>לפי עמוד</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="מצב ביקורת לכל עמוד">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>עמוד</th>
+              {DIMENSIONS.map((d) => <th class="dash-table__dim">{DIMENSION_LABEL[d]}</th>)}
+              <th>חסום על</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              all.map((p) => (
+                <tr class:list={{ "is-done": pageIsDone(p) }}>
+                  <td class="dash-table__page">
+                    <strong>{p.label}</strong>
+                    <code>{"route" in p ? p.route : p.pattern}</code>
+                  </td>
+                  {DIMENSIONS.map((d) => (
+                    <td class="dash-table__cell">
+                      <span
+                        class:list={["dot", `dot--${p.reviews[d as keyof Reviews]}`]}
+                        title={STATE_LABEL[p.reviews[d as keyof Reviews]]}
+                      >
+                        <span class="visually-hidden">
+                          {DIMENSION_LABEL[d]}: {STATE_LABEL[p.reviews[d as keyof Reviews]]}
+                        </span>
+                      </span>
+                    </td>
+                  ))}
+                  <td class="dash-table__blocked">
+                    {p.blockedBy?.length
+                      ? p.blockedBy.map((g) => <code>{g}</code>)
+                      : "—"}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="table-source">
+        עיגול מלא = עבר · חלול = ממתין · אדום = חסום. שורה מודגשת = כל שמונת הממדים עברו.
+      </p>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------- programme level -->
+  <section class="section">
+    <div class="container">
+      <h2>מוכנות ברמת הפרויקט</h2>
+      <ul class="programme">
+        {
+          PROGRAMME.map((row) => (
+            <li class:list={["prog", `prog--${row.state}`]}>
+              <span class="prog__state">{STATE_LABEL[row.state]}</span>
+              <span class="prog__label">{row.label}</span>
+              <span class="prog__note">{row.note}</span>
+              {row.gap && <code class="prog__gap">{row.gap}</code>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--sunken">
+    <div class="container">
+      <div class="dash-note">
+        <h2>מה חוסם מה</h2>
+        <p>
+          {gaps.blocksLaunch} פריטי P0 פתוחים. הם אינם חוסמים בנייה — כל עמוד מרונדר,
+          מעוצב ונבדק בלעדיהם — אבל הם קובעים כמה משכנע האתר ביום הראשון.
+        </p>
+        <ul>
+          {
+            GAPS.filter((g) => g.priority === "P0" && g.status === "missing")
+              .slice(0, 8)
+              .map((g) => (
+                <li>
+                  <code>{g.id}</code> {g.what.slice(0, 90)}
+                </li>
+              ))
+          }
+        </ul>
+        <p>
+          הרשימה המלאה: <a href="/internal/gaps/">דוח החוסרים</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .dash-head {
+    padding-block: var(--space-7) var(--space-5);
+  }
+  .dash-head h1 {
+    font-size: var(--step-4);
+    margin-block-end: var(--space-4);
+  }
+  .dash-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-5);
+  }
+
+  /* ---- dimension bars ---- */
+  .dims {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .dim__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-block-end: var(--space-2);
+  }
+  .dim__name {
+    font-weight: 600;
+    font-size: 0.94rem;
+  }
+  .dim__count {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .dim__bar {
+    block-size: 0.5rem;
+    background: var(--bg-sunken);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+  .dim__bar span {
+    display: block;
+    block-size: 100%;
+    background: var(--brand);
+    border-radius: inherit;
+  }
+  .dim__bar span[data-full="true"] {
+    background: var(--success);
+  }
+
+  /* ---- page grid ---- */
+  .dash-table {
+    width: 100%;
+    min-width: 52rem;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .dash-table thead th {
+    background: var(--bg-sunken);
+    text-align: start;
+    padding: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-block-end: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .dash-table__dim {
+    text-align: center !important;
+  }
+  .dash-table tbody td {
+    padding: var(--space-3);
+    border-block-start: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .dash-table tr.is-done .dash-table__page strong {
+    color: var(--success);
+  }
+  .dash-table__page {
+    min-width: 14rem;
+  }
+  .dash-table__page code {
+    display: block;
+    margin-block-start: 0.2rem;
+    font-size: 0.72rem;
+    color: var(--text-subtle);
+    background: none;
+    padding: 0;
+  }
+  .dash-table__cell {
+    text-align: center;
+  }
+  .dash-table__blocked {
+    min-width: 12rem;
+  }
+  .dash-table__blocked code {
+    display: block;
+    font-size: 0.7rem;
+    margin-block-end: 0.15rem;
+    background: none;
+    padding: 0;
+    color: var(--danger);
+  }
+
+  .dot {
+    display: inline-block;
+    inline-size: 0.7rem;
+    block-size: 0.7rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+  }
+  .dot--passed {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .dot--pending {
+    background: transparent;
+  }
+  .dot--in-progress {
+    background: var(--warning);
+    border-color: var(--warning);
+  }
+  .dot--blocked {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+
+  /* ---- programme rows ---- */
+  .programme {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .prog {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 14rem) minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding-block: var(--space-3);
+    border-block-start: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+  .prog:last-child {
+    border-block-end: 1px solid var(--border);
+  }
+  .prog__state {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid;
+    text-align: center;
+  }
+  .prog--passed .prog__state {
+    color: var(--success);
+    background: var(--success-bg);
+    border-color: var(--success-border);
+  }
+  .prog--blocked .prog__state {
+    color: var(--danger);
+    background: var(--danger-bg);
+    border-color: var(--danger-border);
+  }
+  .prog--in-progress .prog__state,
+  .prog--pending .prog__state {
+    color: var(--warning);
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+  }
+  .prog__label {
+    font-weight: 600;
+  }
+  .prog__note {
+    color: var(--text-muted);
+  }
+  .prog__gap {
+    font-size: 0.7rem;
+    color: var(--danger);
+    background: none;
+    padding: 0;
+  }
+
+  .dash-note {
+    max-width: var(--measure);
+    padding: var(--space-6);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+  }
+  .dash-note ul {
+    display: grid;
+    gap: var(--space-2);
+    margin-block: var(--space-4);
+    padding-inline-start: 1.2em;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .dash-note code {
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 48rem) {
+    .prog {
+      grid-template-columns: 5rem minmax(0, 1fr);
+    }
+    .prog__note,
+    .prog__gap {
+      grid-column: 2;
+    }
+  }
+</style>

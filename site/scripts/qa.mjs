@@ -57,7 +57,13 @@ const BANNED_TEXT = [
   { pattern: /הילה מ\.|דניאל ר\.|גיל ל\.|אלמוג ק\.|רותם ש\./, why: "invented testimonial name" },
   { pattern: /חיסכון של 90%|90% חיסכון/, why: "the withdrawn flat savings promise" },
   { pattern: /ת"י 1424|ת״י 1424/, why: "standard the research could not verify" },
+  // Content completeness. Anything unfinished must be recorded in the gap report, not
+  // left sitting quietly in a page where nobody notices it until a visitor does.
   { pattern: /lorem ipsum|כותרת קלף|טקסט לדוגמה/i, why: "placeholder copy" },
+  { pattern: /\bTODO\b|\bTBD\b|\bFIXME\b/, why: "an unfinished marker" },
+  { pattern: /example text|sample text|dummy|בקרוב יתווסף|יתווסף בהמשך/i, why: "filler copy" },
+  { pattern: /ישראל ישראלי|יוסי כהן|John Doe/i, why: "a placeholder person" },
+  { pattern: /\b(999-?9999|050-?0000000)\b/, why: "placeholder contact details" },
 ];
 
 /**
@@ -104,6 +110,43 @@ for (const file of htmlFiles) {
     const visible = stripTags(html);
     for (const { pattern, why } of BANNED_TEXT) {
       if (pattern.test(visible)) failures.push(`${label} — visible copy contains ${why}`);
+    }
+  }
+
+  /* ---- structural completeness ----
+   *
+   * A control that goes nowhere, a heading with no words, or a section with no content
+   * all render without error and all read as broken. The build should refuse them.
+   */
+  if (!isInternal(label)) {
+    const deadLinks = [...html.matchAll(/<a[^>]*href="(#|javascript:void\(0\)|)"[^>]*>/g)];
+    if (deadLinks.length) {
+      failures.push(`${label} — ${deadLinks.length} link(s) with no destination (href="#" or empty)`);
+    }
+
+    // A button that is not a submit and carries no handler attribute goes nowhere.
+    for (const btn of html.match(/<button[^>]*>[\s\S]*?<\/button>/g) ?? []) {
+      const text = stripTags(btn).replace(/\s+/g, " ").trim();
+      if (!text) failures.push(`${label} — <button> with no accessible text`);
+    }
+
+    // Empty headings.
+    for (const m of html.matchAll(/<(h[1-6])[^>]*>([\s\S]*?)<\/\1>/g)) {
+      if (!stripTags(m[2]).replace(/\s+/g, "").length) {
+        failures.push(`${label} — empty <${m[1]}>`);
+      }
+    }
+
+    // A section that renders a heading and nothing else.
+    for (const m of html.matchAll(/<section[^>]*>([\s\S]*?)<\/section>/g)) {
+      const inner = m[1];
+      const words = stripTags(inner.replace(/<h[1-6][\s\S]*?<\/h[1-6]>/g, ""))
+        .replace(/\s+/g, " ")
+        .trim();
+      const hasMedia = /<(img|svg|video|iframe|form|table|input)/.test(inner);
+      if (/<h[1-6]/.test(inner) && words.length < 12 && !hasMedia) {
+        failures.push(`${label} — <section> with a heading and no content`);
+      }
     }
   }
 
@@ -170,6 +213,7 @@ const EXPECT_NO_INBOUND = new Set([
   "/404/", // emitted as dist/404.html; served by the host on any unmatched path
   "/accessibility/", // legal page: a footer link on every page is the correct treatment
   "/internal/gaps/", // working document, deliberately unlinked from the public site
+  "/internal/dashboard/",
   "/thank-you/", // reached only by redirect from the retired success page
   "/thank-you/private/",
   "/thank-you/contracting/",
@@ -230,6 +274,116 @@ for (const file of htmlFiles) {
   }
   // More than one FAQPage on a page is a structured-data violation Google flags.
   if (faqPages > 1) failures.push(`${label} — ${faqPages} FAQPage blocks (only one allowed)`);
+}
+
+/* ---- every route must be registered for review ----
+ *
+ * "The page exists and the build is green" is three of eight review dimensions. The
+ * registry in src/data/pages.ts holds the other five. Gating on it means a new page
+ * cannot quietly ship without anyone having judged its design, copy or conversion path.
+ */
+{
+  const registry = readFileSync("src/data/pages.ts", "utf8");
+  const registered = new Set(
+    [...registry.matchAll(/(?:route|pattern):\s*"([^"]+)"/g)].map((m) => m[1])
+  );
+
+  const familyOf = (r) =>
+    r.replace(/^\/projects\/[^/]+\/$/, "/projects/<slug>/")
+      .replace(/^\/thank-you\/(private|contracting|solar)\/$/, "/thank-you/<track>/");
+
+  for (const route of routes) {
+    if (route === "/thank-you/") continue; // redirect stub, covered by the family
+    const key = familyOf(route);
+    if (!registered.has(route) && !registered.has(key)) {
+      failures.push(
+        `${route} — not registered in src/data/pages.ts, so no design, content or ` +
+          `conversion review has been recorded for it`
+      );
+    }
+  }
+}
+
+/* ---- asset integrity: the manifest and the build output must agree ---- */
+//
+// The quarantine rule is the reason this check exists. panel-02.jpeg carries another
+// electrician's licence sticker and phone number, and it used to live in
+// public/images/_quarantine/ — a directory whose name implied isolation while Astro
+// copied it into dist/ like any other public file. Unlinked is not unpublished: the
+// image was being deployed to a fetchable URL on this business's own domain. Holding a
+// file back is now a build-enforced property rather than a convention someone remembers.
+{
+  const { SOURCE_ASSETS, GENERATED_ASSETS } = await import("./_load-assets.mjs");
+  const all = [...SOURCE_ASSETS, ...GENERATED_ASSETS];
+
+  const publishedPath = (a) =>
+    // GENERATED_ASSETS record where the file is written (/public/...); SOURCE_ASSETS
+    // record where it is served from. Normalise to the served URL.
+    (a.path ?? a.destination ?? "").replace(/^\/public\//, "/");
+
+  for (const a of all.filter((x) => x.status === "QUARANTINED")) {
+    // Matched on filename, not on the path the manifest records. Someone re-adding the
+    // image is exactly the case this guards, and they would re-add it under a new path —
+    // checking the recorded path would then compare against a location the file no longer
+    // occupies and pass. The filename is what survives the move.
+    const name = publishedPath(a).split("/").pop();
+    for (const url of assets) {
+      if (url.split("/").pop() === name) {
+        failures.push(
+          `${a.id} is QUARANTINED but ${url} is in the build output — it would be ` +
+            `fetchable on the live domain. Quarantined files belong outside public/.`
+        );
+      }
+    }
+    for (const file of htmlFiles) {
+      if (readFileSync(file, "utf8").includes(name)) {
+        const where = "/" + relative(DIST, file).split("\\").join("/").replace(/index\.html$/, "");
+        failures.push(`${a.id} is QUARANTINED but ${where} references ${name}`);
+      }
+    }
+  }
+
+  // A manifest entry claiming IN USE whose file is absent is a broken image nobody sees
+  // until a visitor does. The reverse — a file present but the entry stale — is why the
+  // manifest is the source of truth rather than a description written after the fact.
+  for (const a of all.filter((x) => x.status === "IN USE")) {
+    const url = publishedPath(a);
+    if (url && !assets.has(url)) {
+      failures.push(`${a.id} is marked IN USE but ${url} is not in the build output`);
+    }
+  }
+
+  // Placed by `npm run assets:ingest`, not yet looked at by a human. Warned rather than
+  // failed: the file being on disk is what makes review possible.
+  for (const a of all.filter((x) => x.status === "NEEDS VISUAL REVIEW")) {
+    warnings.push(`${a.id} is in place but has had no visual review — ${publishedPath(a)}`);
+  }
+
+  // Every published image must have a manifest row.
+  //
+  // This is the gate the quarantine check could not be. panel-01.jpeg — the uncropped
+  // original of the homepage hero, with a third-party phone number readable on a toolbox
+  // at the left edge — was published for exactly as long as it was, because the cropped
+  // version got a manifest row and the original never got one. A check that reads the
+  // manifest cannot see a file the manifest has never heard of. This reads the build
+  // output instead and asks the manifest about each file, which is the direction that
+  // catches an image nobody catalogued.
+  const catalogued = new Set(all.map((a) => publishedPath(a)));
+  const DERIVED = /-800w\.|-wide(-800w)?\./; // generated by scripts/optimise-images.mjs
+  // Brand chrome, not photography. These are drawn from the design tokens rather than
+  // captured, so there is no scene to describe, no person in frame and no permission to
+  // establish — the questions the manifest exists to answer do not apply to them.
+  const CHROME = new Set(["/apple-touch-icon.png", "/favicon.png", "/og/default.png"]);
+  for (const url of assets) {
+    if (!/\.(jpe?g|png|webp|avif|gif)$/i.test(url)) continue;
+    if (DERIVED.test(url)) continue;
+    if (CHROME.has(url)) continue;
+    if (catalogued.has(url)) continue;
+    failures.push(
+      `${url} is published but has no row in src/data/assets.ts — nobody has recorded ` +
+        `what is in it or whether it may be used. Run: npm run assets:map`
+    );
+  }
 }
 
 /* ---- required artefacts ---- */

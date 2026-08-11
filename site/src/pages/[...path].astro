@@ -16,6 +16,7 @@ import Pending from "~/components/Pending.astro";
 import { servicePaths, type ServicePage } from "~/data/services";
 import { BUSINESS } from "~/data/business";
 import { getGap } from "~/data/gaps";
+import { SHOW_PENDING } from "~/data/pending";
 import {
   LICENCE_CLASSES,
   LICENCE_NOTE,
@@ -67,7 +68,17 @@ const serviceSchema = {
   />
 
   {
-    page.sections.map((section) => (
+    page.sections
+      /*
+       * A "pending" section is a panel explaining which fact is still missing. On the
+       * contracting page that panel occupied the slot for scope and capacity — the one
+       * thing a main contractor opens the page to find out — and answered it with a
+       * notice that nobody had supplied the number yet. Rendering the section shell with
+       * the block hidden would leave an empty band, so the whole section is filtered out
+       * before the loop. It is still fully visible in dev and at /internal/gaps/.
+       */
+      .filter((section) => SHOW_PENDING || section.kind !== "pending")
+      .map((section) => (
       <section class="section" id={section.id}>
         <div class="container">
           {section.kind === "prose" && (

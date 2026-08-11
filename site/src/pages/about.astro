@@ -12,6 +12,7 @@ import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
 import Testimonials from "~/components/Testimonials.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import { BUSINESS } from "~/data/business";
 import { LICENCE_CLASSES, LICENCE_NOTE } from "~/data/regulatory";
 import { projectStats } from "~/data/projects";
@@ -80,10 +81,14 @@ const personSchema = {
       <aside class="about-facts">
         <h2>עובדות</h2>
         <dl>
-          <div>
-            <dt>עוסק בחשמל מאז</dt>
-            <dd><Pending id="fact.experience.years" label="ממתין לנתון" /></dd>
-          </div>
+          {/* Row removed in production: a definition list term with no definition is
+              worse than a shorter list. The gap stays tracked at /internal/gaps/. */}
+          {SHOW_PENDING && (
+            <div>
+              <dt>עוסק בחשמל מאז</dt>
+              <dd><Pending id="fact.experience.years" label="ממתין לנתון" /></dd>
+            </div>
+          )}
           <div>
             <dt>העסק פועל מאז</dt>
             <dd class="mono">{BUSINESS.solarSince}</dd>
@@ -100,10 +105,12 @@ const personSchema = {
             <dt>הספק מותקן מצטבר</dt>
             <dd class="mono">{Math.round(stats.totalKw)} kWp</dd>
           </div>
-          <div>
-            <dt>גודל צוות</dt>
-            <dd><Pending id="fact.team.size" label="ממתין לנתון" /></dd>
-          </div>
+          {SHOW_PENDING && (
+            <div>
+              <dt>גודל צוות</dt>
+              <dd><Pending id="fact.team.size" label="ממתין לנתון" /></dd>
+            </div>
+          )}
           <div>
             <dt>אזור פעילות</dt>
             <dd>{BUSINESS.areaServed}</dd>
@@ -154,6 +161,16 @@ const personSchema = {
     </div>
   </section>
 
+  {
+    /*
+     * A working note, not page copy. It tells the visitor that the business cannot show
+     * them a team and cites the asset count on the previous site — an internal fact that
+     * only undermines the page it sits on. The About page's job is to establish that
+     * there is a real, licensed person behind the work; a panel explaining what is
+     * missing does the opposite. Visible in dev and at /internal/gaps/, where the three
+     * gaps it names are already tracked.
+     */
+    SHOW_PENDING && (
   <section class="section">
     <div class="container">
       <div class="pending-block">
@@ -175,6 +192,8 @@ const personSchema = {
       </div>
     </div>
   </section>
+    )
+  }
 
   <Testimonials limit={3} />
   <CtaBand track="private" />

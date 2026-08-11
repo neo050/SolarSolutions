@@ -11,6 +11,7 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
 import Pending from "~/components/Pending.astro";
+import { SHOW_PENDING } from "~/data/pending";
 import { PROJECTS, CUSTOMER_TYPE_LABEL, hasStory, type Project } from "~/data/projects";
 import { BUSINESS } from "~/data/business";
 
@@ -28,7 +29,10 @@ const trail = [
   { label: `${project.title}, ${project.location}`, href: `/projects/${project.slug}/` },
 ];
 
-const gallery = project.gallery ?? [project.image];
+// Nine of the ten projects have no photograph, so this can legitimately be empty. Filtering
+// rather than defaulting matters: `[project.image]` on a project with no image produced a
+// one-element array of undefined, which rendered an <img> with no src.
+const gallery = (project.gallery ?? [project.image]).filter((src): src is string => Boolean(src));
 const complete = hasStory(project);
 
 const schema = {
@@ -76,16 +80,28 @@ const schema = {
             <dt>סוג לקוח</dt>
             <dd>{CUSTOMER_TYPE_LABEL[project.customerType]}</dd>
           </div>
+          {/* The em dash is the production value. Keeping the row is right here — a
+              specification list that silently omits duration and crew size reads as though
+              those were never part of the spec, where a dash says plainly that the figure
+              is not recorded. In dev the marker names which gap it belongs to. */}
           <div>
             <dt>משך ביצוע</dt>
             <dd>
-              {project.durationDays ? `${project.durationDays} ימים` : <Pending id="case.details.solar" label="—" />}
+              {project.durationDays
+                ? `${project.durationDays} ימים`
+                : SHOW_PENDING
+                  ? <Pending id="case.details.solar" label="—" />
+                  : "—"}
             </dd>
           </div>
           <div>
             <dt>גודל צוות</dt>
             <dd>
-              {project.crewSize ? `${project.crewSize} אנשים` : <Pending id="case.details.solar" label="—" />}
+              {project.crewSize
+                ? `${project.crewSize} אנשים`
+                : SHOW_PENDING
+                  ? <Pending id="case.details.solar" label="—" />
+                  : "—"}
             </dd>
           </div>
         </dl>
@@ -94,6 +110,19 @@ const schema = {
 
     <section class="section">
       <div class="container">
+        {
+          /*
+           * No photographs: say so, once, in one line, and move on. The page still carries
+           * the customer, the location, the system type and the output — the facts that
+           * were always the substance here. An apology, a placeholder graphic or a
+           * "coming soon" panel would all take up more room than the absence deserves.
+           */
+          gallery.length === 0 && (
+            <p class="project-nophoto">
+              לפרויקט הזה אין תיעוד מצולם. הפרטים למטה מדויקים.
+            </p>
+          )
+        }
         <ul class="project-gallery">
           {
             gallery.map((src, i) => (
@@ -143,10 +172,12 @@ const schema = {
               <p>
                 לא נכתוב את זה מדמיון. מבנה העמוד בנוי ומחכה — ברגע שהמידע יתקבל הוא ייכנס לכאן.
               </p>
-              <p class="pending-block__meta">
-                <Pending id="case.details.solar" label="ממתין למידע · P0" />
-                <span>נדרש: שיחה קצרה על הפרויקט עם בעל העסק</span>
-              </p>
+              {SHOW_PENDING && (
+                <p class="pending-block__meta">
+                  <Pending id="case.details.solar" label="ממתין למידע · P0" />
+                  <span>נדרש: שיחה קצרה על הפרויקט עם בעל העסק</span>
+                </p>
+              )}
             </div>
           </div>
         </section>
@@ -193,6 +224,11 @@ const schema = {
     font-weight: 600;
   }
 
+  .project-nophoto {
+    color: var(--text-subtle);
+    font-size: 0.94rem;
+    padding-block: var(--space-2);
+  }
   .project-gallery {
     display: grid;
     gap: var(--space-4);

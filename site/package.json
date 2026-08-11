@@ -16,6 +16,8 @@
     "qa": "node scripts/qa.mjs",
     "verify": "astro check && node scripts/optimise-images.mjs && astro build && node scripts/qa.mjs && node --test functions/api/*.test.mjs",
     "pack": "node scripts/build-asset-pack.mjs",
+    "assets:ingest": "node scripts/ingest-assets.mjs",
+    "assets:map": "node scripts/map-sources.mjs",
     "images": "node scripts/optimise-images.mjs",
     "qa:visual": "node scripts/visual-qa.mjs"
   },

@@ -32,9 +32,11 @@ export const SOLAR: ServicePage[] = [
       "התקנה על גג, על סככה קיימת או על סככה חדשה",
       "ביצוע על ידי בעל רישיון חשמלאי ראשי",
     ],
+    // Was argaman-revivim.webp, now quarantined — see the provenance.project-photos gap.
+    // The replacement is one of the three photographs that are demonstrably ours.
     heroImage: {
-      src: "/images/projects/argaman-revivim.webp",
-      alt: "מערכת סולארית 22 קילוואט על גג בית פרטי בקיבוץ רביבים",
+      src: "/images/projects/beit-knesset-yona-02.webp",
+      alt: "מערך פאנלים סולאריים על מסגרות הטיה, על גג בית כנסת יונה בגני תקווה",
     },
     sections: [
       {
@@ -235,9 +237,12 @@ export const SOLAR: ServicePage[] = [
       "מאפשרת חיבור למתח גבוה",
       "התקנה גם על מבנים חקלאיים",
     ],
+    // Was yaakobi-beit-ezra.webp, now quarantined. The installation-in-progress frame
+    // suits a B2B page better than a finished array anyway: it shows the work, and it is
+    // the only photograph in the library with a person in it.
     heroImage: {
-      src: "/images/projects/yaakobi-beit-ezra.webp",
-      alt: "מערכת סולארית 20 קילוואט על גג רפת במושב בית עזרא",
+      src: "/images/projects/beit-knesset-yona-03.webp",
+      alt: "מתקין מרכיב מסגרות אלומיניום על גג לפני הנחת פאנלים, בית כנסת יונה בגני תקווה",
     },
     sections: [
       {
