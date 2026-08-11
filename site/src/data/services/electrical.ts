@@ -397,7 +397,14 @@ export const ELECTRICAL: ServicePage[] = [
       "תאורה שקועה, מוסתרת ותאורת חוץ",
       "הכנה לעמעום ולבקרה",
     ],
-    heroImage: { src: "/images/gallery/lighting-04-wide.jpeg", alt: "תאורה אדריכלית בחלל מסחרי גמור — תאורה שקועה, פסי תאורה ותאורת הדגשה" },
+    // Was lighting-04-wide.jpeg. Three of the four lighting photographs are of one
+    // client's shop and carry its brand name, logo and price list — held until permission
+    // is on record (consent.commercial-client-brand). lighting-01-wide is the same fit-out
+    // at ceiling stage, with nothing in frame that identifies anyone.
+    heroImage: {
+      src: "/images/gallery/lighting-01-wide.jpeg",
+      alt: "תקרת גבס מסחרית בשלב הכנה — פתחי גופי תאורה, מובילים וחיווט לפני גמר",
+    },
     sections: [
       {
         kind: "steps",
@@ -415,11 +422,16 @@ export const ELECTRICAL: ServicePage[] = [
         kind: "gallery",
         id: "gallery",
         title: "עבודות תאורה",
+        // The "after" frames of this fit-out are the ones that show the client's brand,
+        // so what is left is the preparation stage. That is a real loss — the before/after
+        // pair was the strongest thing on this page — and it comes back the moment the
+        // client confirms. Three near-identical crops would be padding; one is honest.
         images: [
-          { src: "/images/gallery/lighting-01.jpeg", alt: "שלב הכנה — תקרת גבס עם פתחי גופי תאורה, מובילים וחיווט לפני גמר" },
-          { src: "/images/gallery/lighting-02.jpeg", alt: "אותו חלל מסחרי לאחר גמר — תאורה שקועה ופסי תאורה" },
-          { src: "/images/gallery/lighting-03.jpeg", alt: "פריסת גופי תאורה בתקרה מסחרית" },
-          { src: "/images/gallery/lighting-04.jpeg", alt: "בית עסק לאחר השלמת התאורה — תאורה שקועה, פסי תאורה ותאורת הדגשה" },
+          // The wide crop, not the portrait original: the original's lower frame contains
+          // the client's logo, its shop name and architectural drawings taped to the wall.
+          // The crop that already existed for responsive layout happens to remove all of
+          // it, which is the only reason anything from this fit-out can still be shown.
+          { src: "/images/gallery/lighting-01-wide.jpeg", alt: "שלב הכנה — תקרת גבס עם פתחי גופי תאורה, מובילים וחיווט לפני גמר" },
         ],
       },
     ],

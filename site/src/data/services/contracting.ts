@@ -406,10 +406,17 @@ export const CONTRACTING: ServicePage[] = [
     lede:
       "במבנה מסחרי, השבתה עולה כסף. לכן מה שקובע הוא לא רק הביצוע אלא גם התכנון של מתי " +
       "עובדים, על מה מפסיקים מתח ולכמה זמן.",
-    heroImage: {
-      src: "/images/gallery/lighting-04-wide.jpeg",
-      alt: "חלל מסחרי לאחר השלמת עבודות החשמל והתאורה",
-    },
+    // No hero image, deliberately.
+    //
+    // This page used lighting-04-wide.jpeg — the finished shop interior — which carries
+    // the client's brand name, logo, full price list and a neighbouring tenant's signage.
+    // Held until permission to publish is on record (consent.commercial-client-brand).
+    //
+    // The obvious substitute, panel-05-wide.jpeg, already leads both the homepage and the
+    // contracting gateway. Putting it here too would make one photograph the face of three
+    // pages, which reads as a business with one photograph rather than as a considered
+    // choice. Eight usable photographs exist for forty-three routes; a text hero is the
+    // honest answer until there are more. PageHero renders without an image by design.
     heroPoints: [
       "עבודה במבנה פעיל, כולל מחוץ לשעות הפעילות",
       "לוחות מסחריים ותשתיות בהיקף",

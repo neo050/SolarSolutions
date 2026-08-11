@@ -236,29 +236,31 @@ export const SOURCE_ASSETS: SourceAsset[] = [
   {
     id: "SRC-COMMERCIAL-001",
     category: "CONTRACTING",
-    path: "/images/gallery/lighting-01.jpeg",
+    path: "/quarantine/commercial/lighting-01.jpeg",
     originalName: "תאורה 1.jpeg",
     people: "ללא אנשים",
     contains:
       "פרויקט מסחרי בשלב בנייה: תקרת גבס פתוחה עם פתחים עגולים לגופי תאורה, צנרת שרשורית, " +
-      "מוליכים משוכים ומחכים, סולם, ותוכניות מודבקות על הקיר. במסגרת התחתונה נראה שילוט " +
-      "'Luna Park of flavors'.",
+      "מוליכים משוכים ומחכים, סולם, ותוכניות מודבקות על הקיר. בפינה השמאלית התחתונה מופיע " +
+      "הלוגו של 'קצפת' והשילוט 'Luna Park Of Flavors', וכן תוכניות אדריכליות מודבקות על הקיר.",
     workType: ["contracting", "commercial", "electrical"],
     quality: "high",
     dimensions: "1080×1353 (לאורך) · גזירה לרוחב 1080×810",
-    potentialUse: ["Hero", "Contracting", "Service", "Reference"],
-    aiReference: true,
-    treatment: ["Crop לרוחב — בוצע"],
+    potentialUse: ["Reference Only"],
+    aiReference: false,
+    treatment: ["Crop לרוחב — בוצע, והוא מסיר את כל הסימנים המזהים"],
     notes:
-      "מתעד שלב תשתית בפרויקט אמיתי. סותר את ההנחה הקודמת שאין באתר ולו תמונה אחת משלב " +
-      "בנייה. הפכה לתמונה הראשית של עמוד התשתיות.",
-    status: "IN USE",
-    usedOn: ["/contracting/infrastructure/", "/electrical/lighting/"],
+      "מתעד שלב תשתית בפרויקט אמיתי, וסותר את ההנחה הקודמת שאין באתר ולו תמונה אחת משלב " +
+      "בנייה. המקור לאורך מוחזק — בפינה השמאלית התחתונה מופיעים הלוגו ושם העסק של הלקוח. " +
+      "הגזירה לרוחב (lighting-01-wide) מסירה אותם לחלוטין, ולכן היא היחידה מהסדרה שמותר " +
+      "לפרסם. ראה gap consent.commercial-client-brand.",
+    status: "QUARANTINED",
+    usedOn: [],
   },
   {
     id: "SRC-COMMERCIAL-002",
     category: "CONTRACTING",
-    path: "/images/gallery/lighting-02.jpeg",
+    path: "/quarantine/commercial/lighting-02.jpeg",
     originalName: "תאורה 2.jpeg",
     people: "ללא אנשים",
     contains:
@@ -267,34 +269,40 @@ export const SOURCE_ASSETS: SourceAsset[] = [
     workType: ["contracting", "commercial", "electrical"],
     quality: "high",
     dimensions: "2048×945 (פנורמי)",
-    potentialUse: ["Service", "Marketing", "Reference"],
-    aiReference: true,
+    potentialUse: ["Reference Only"],
+    aiReference: false,
     treatment: [],
-    notes: "יחס רחב מאוד — מתאים לבאנר או לרצועת רוחב מלא, פחות לכרטיס.",
-    status: "IN USE",
-    usedOn: ["/electrical/lighting/"],
+    notes:
+      "מוחזק עד לאישור שימוש מהלקוח. בפריים מופיעים שם העסק והלוגו של 'קצפת', " +
+      "תפריט מחירים מלא, ושילוט של עסקים שכנים. ראה gap consent.commercial-client-brand.",
+    status: "QUARANTINED",
+    usedOn: [],
   },
   {
     id: "SRC-COMMERCIAL-003",
     category: "CONTRACTING",
-    path: "/images/gallery/lighting-03.jpeg",
+    path: "/quarantine/commercial/lighting-03.jpeg",
     originalName: "תאורה 3.jpeg",
     people: "ללא אנשים",
-    contains: "פריסת גופי תאורה בתקרה מסחרית, זווית קרובה יותר.",
+    contains:
+      "פריסת גופי תאורה בתקרה מסחרית, זווית קרובה יותר. בפריים נראים שילוט העסק " +
+      "'Luna Park of Flavors', לוגו 'קצפת', תפריט מחירים מלא, סולם וארגזי ציוד.",
     workType: ["commercial", "electrical"],
     quality: "medium",
     dimensions: "1200×1600 (לאורך)",
-    potentialUse: ["Service", "Reference"],
-    aiReference: true,
+    potentialUse: ["Reference Only"],
+    aiReference: false,
     treatment: [],
-    notes: "משלימה את הסדרה. פחות חזקה מ-001 ומ-004.",
-    status: "IN USE",
-    usedOn: ["/electrical/lighting/"],
+    notes:
+      "מוחזק עד לאישור שימוש מהלקוח. בפריים מופיעים שם העסק והלוגו של 'קצפת', " +
+      "תפריט מחירים מלא, ושילוט של עסקים שכנים. ראה gap consent.commercial-client-brand.",
+    status: "QUARANTINED",
+    usedOn: [],
   },
   {
     id: "SRC-COMMERCIAL-004",
     category: "CONTRACTING",
-    path: "/images/gallery/lighting-04.jpeg",
+    path: "/quarantine/commercial/lighting-04.jpeg",
     originalName: "תאורה 4.jpeg",
     people: "ללא אנשים",
     contains:
@@ -303,14 +311,16 @@ export const SOURCE_ASSETS: SourceAsset[] = [
     workType: ["commercial", "electrical"],
     quality: "high",
     dimensions: "1500×2000 (לאורך) · גזירה לרוחב 1500×1125",
-    potentialUse: ["Hero", "Service", "Marketing", "Reference"],
-    aiReference: true,
-    treatment: ["Crop לרוחב — בוצע"],
+    potentialUse: ["Reference Only"],
+    aiReference: false,
+    treatment: ["Crop לרוחב — בוצע, אך הוא לא מסיר את השילוט"],
     notes:
-      "התמונה המסחרית המרשימה ביותר. מותג הלקוח גלוי — טעון אישור פרסום " +
-      "(gap consent.commercial-client-brand).",
-    status: "IN USE",
-    usedOn: ["/electrical/lighting/", "/contracting/commercial/"],
+      "התמונה המסחרית המרשימה ביותר, ולכן גם ההפסד הגדול ביותר. הרשומה כאן כבר קבעה " +
+      "'מותג הלקוח גלוי — טעון אישור פרסום', ובכל זאת הסטטוס נשאר IN USE והתמונה " +
+      "פורסמה בשני עמודים. הערה שמסמנת סיכון בלי לשנות סטטוס לא עוצרת כלום. " +
+      "מוחזק עד לאישור — ראה gap consent.commercial-client-brand.",
+    status: "QUARANTINED",
+    usedOn: [],
   },
 
   /* ------------------------------------------------------------- solar */
@@ -402,7 +412,7 @@ export const SOURCE_ASSETS: SourceAsset[] = [
       "אותנטי, ואיכותי מספיק לשמש כתמונה ראשית. לא היה קטלוג לתמונה הזו — היא הייתה " +
       "בתיקייה המפורסמת בלי רשומה.",
     status: "IN USE",
-    usedOn: ["/projects/beit-knesset-yona-ganei-tikva/"],
+    usedOn: ["/solar/", "/projects/beit-knesset-yona-ganei-tikva/"],
   },
   {
     id: "SRC-SOLAR-003C",
@@ -424,7 +434,7 @@ export const SOURCE_ASSETS: SourceAsset[] = [
       "הזו הייתה שגויה, והתמונה הייתה כל הזמן בתיקייה בלי רשומה. משחרר חלקית את " +
       "GEN-SOLAR-INSTALL-001.",
     status: "IN USE",
-    usedOn: ["/projects/beit-knesset-yona-ganei-tikva/"],
+    usedOn: ["/solar/commercial/", "/projects/beit-knesset-yona-ganei-tikva/"],
   },
   {
     id: "SRC-SOLAR-004",
