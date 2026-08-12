@@ -18,6 +18,18 @@ import { BUSINESS, links } from "~/data/business";
 import { featuredProjects, projectStats } from "~/data/projects";
 import { PRIMARY_NAV } from "~/data/nav";
 
+/*
+ * Page title.
+ *
+ * Was "חשמלאי ראשי, קבלנות ביצוע ומערכות סולאריות" — no locality, and it opened on a
+ * licence grade, which is a credential rather than anything a person types into a search
+ * box. "מאשדוד" states the base without narrowing the service area, which genuinely runs
+ * from מצפה רמון to עמק חפר; "אשדוד והדרום" would have been a smaller and less
+ * accurate claim than the truth. Contracting leads, as it does in the H1.
+ *
+ * The SEO map also claimed the locality appears nowhere in indexable copy. That is wrong:
+ * אשדוד is in the footer address on all 43 pages. Only the title lacked it.
+ */
 const stats = projectStats();
 const featured = featuredProjects().slice(0, 3);
 
@@ -78,7 +90,7 @@ const tracks = [
 ---
 
 <Base
-  title="חשמלאי ראשי, קבלנות ביצוע ומערכות סולאריות"
+  title="קבלן חשמל לפרויקטים וחשמלאי ראשי מאשדוד"
   description="RNRG — רוני חג׳ג׳, הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים, קבלנות ביצוע לקבלנים וליזמים, ומערכות סולאריות. שירות ממצפה רמון ועד עמק חפר."
 >
   <!-- ============================ Hero ============================ -->
@@ -156,8 +168,14 @@ const tracks = [
             The licence belongs on the hero badge, where it already is. This is a real
             counted total from the documented projects.
           */}
-          <span class="stat__value"><bdi>{Math.round(stats.totalKw)} kWp</bdi></span>
-          <span class="stat__label">הספק מותקן מצטבר</span>
+          {/*
+            85.5, not Math.round(85.5) = 86. The rounding turned a counted figure into one
+            that reads as exact and is not. It also sums nine projects, because the tenth
+            has no recorded output — sitting beside "10 projects" that invited the reading
+            that all ten are covered. The label now says which nine.
+          */}
+          <span class="stat__value"><bdi>{stats.totalKw} kWp</bdi></span>
+          <span class="stat__label">הספק מצטבר בתשעה פרויקטים</span>
         </li>
       </ul>
       <p class="trust-strip__note">

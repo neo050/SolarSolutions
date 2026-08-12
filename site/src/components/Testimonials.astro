@@ -26,7 +26,11 @@ const {
   title = "לקוחות ממליצים",
   limit,
   isReviewsPage = false,
-  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.",
+  // "ובתמונתם" removed. It promised photographs on every page rendering this
+  // component with the default blurb, and there are none: all five portraits were the
+  // reviewers' own profile pictures and are held pending consent. A default that
+  // describes what the component used to show is a claim the page no longer keeps.
+  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובישובם.",
 } = Astro.props;
 
 let items: Testimonial[] = track ? testimonialsFor(track) : TESTIMONIALS;

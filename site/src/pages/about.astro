@@ -103,7 +103,9 @@ const personSchema = {
           </div>
           <div>
             <dt>הספק מותקן מצטבר</dt>
-            <dd class="mono">{Math.round(stats.totalKw)} kWp</dd>
+            {/* Unrounded: 85.5 is the counted total across the nine projects that
+                record an output. Rounding it to 86 presented an approximation as exact. */}
+            <dd class="mono"><bdi>{stats.totalKw} kWp</bdi></dd>
           </div>
           {SHOW_PENDING && (
             <div>
