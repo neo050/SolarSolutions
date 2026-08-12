@@ -172,12 +172,12 @@ const serviceSchema = {
                     <tbody>
                       {LICENCE_CLASSES.map((row) => (
                         <tr class:list={{ "is-ours": row.isOurs }}>
-                          <td>
+                          <td data-label="דרגת רישיון">
                             {row.grade}
                             {row.isOurs && <span class="badge badge--accent">הרישיון שלנו</span>}
                           </td>
-                          <td>{row.scope}</td>
-                          <td class="mono">{row.capacity}</td>
+                          <td data-label="מותר לתכנן ולבצע">{row.scope}</td>
+                          <td class="mono" data-label="עד גודל חיבור">{row.capacity}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -194,9 +194,9 @@ const serviceSchema = {
                     <tbody>
                       {INSPECTION_INTERVALS.map((row) => (
                         <tr>
-                          <td>{row.subject}</td>
-                          <td>{row.licensed}</td>
-                          <td>{row.inspector}</td>
+                          <td data-label="סוג מבנה או עסק">{row.subject}</td>
+                          <td data-label="תדירות בדיקת חשמלאי מוסמך">{row.licensed}</td>
+                          <td data-label="בדיקת חשמלאי בודק">{row.inspector}</td>
                         </tr>
                       ))}
                     </tbody>

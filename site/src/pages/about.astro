@@ -147,12 +147,12 @@ const personSchema = {
             {
               LICENCE_CLASSES.map((row) => (
                 <tr class:list={{ "is-ours": row.isOurs }}>
-                  <td>
+                  <td data-label="דרגת רישיון">
                     {row.grade}
                     {row.isOurs && <span class="badge badge--accent">הרישיון שלנו</span>}
                   </td>
-                  <td>{row.scope}</td>
-                  <td class="mono">{row.capacity}</td>
+                  <td data-label="מותר לתכנן ולבצע">{row.scope}</td>
+                  <td class="mono" data-label="עד גודל חיבור">{row.capacity}</td>
                 </tr>
               ))
             }
