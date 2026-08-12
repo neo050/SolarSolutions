@@ -70,6 +70,14 @@
   --text-on-dark-muted: #a6bcc2;
   --text-on-brand: var(--white);
 
+  /* The accent as it must be used on an inverse surface, in either theme.
+     --accent is copper-600 in light theme, which measures 3.09:1 on --bg-inverse: enough
+     for a large heading, not for the small uppercase eyebrow the homepage lead card puts
+     there, where 4.5:1 applies. copper-400 measures 6.94:1 on the same surface and is
+     already what the contracting band reaches for by hand. This makes it a token so the
+     next dark section does not have to rediscover it. */
+  --accent-on-dark: var(--copper-400);
+
   --border: var(--ink-100);
   /* Solved, not guessed. --ink-200 (#c3cdd1) gave form controls a 1.62:1 border and
      --ink-300 only reached 2.53:1; both fail the 3:1 minimum for non-text UI

@@ -35,8 +35,8 @@ const personSchema = {
 ---
 
 <Base
-  title="רוני חג׳ג׳ — הנדסאי חשמל וחשמלאי ראשי 991433"
-  description="מי עומד מאחורי RNRG: הנדסאי חשמל ובעל רישיון חשמלאי ראשי מס׳ 991433. מה מותר לכל דרגת רישיון, ואיך אפשר לאמת אותה."
+  title="רוני חג׳ג׳ — חשמלאי ראשי ודרגות רישיון החשמל"
+  description="מי עומד מאחורי RNRG: רוני חג׳ג׳, הנדסאי חשמל ובעל רישיון חשמלאי ראשי 991433. מה כל דרגת רישיון מתירה לתכנן ולבצע, ואיך לאמת רישיון של כל בעל מקצוע."
   breadcrumbs={trail}
   schema={[personSchema]}
 >
@@ -103,7 +103,9 @@ const personSchema = {
           </div>
           <div>
             <dt>הספק מותקן מצטבר</dt>
-            <dd class="mono">{Math.round(stats.totalKw)} kWp</dd>
+            {/* Unrounded: 85.5 is the counted total across the nine projects that
+                record an output. Rounding it to 86 presented an approximation as exact. */}
+            <dd class="mono"><bdi>{stats.totalKw} kWp</bdi></dd>
           </div>
           {SHOW_PENDING && (
             <div>
@@ -145,12 +147,12 @@ const personSchema = {
             {
               LICENCE_CLASSES.map((row) => (
                 <tr class:list={{ "is-ours": row.isOurs }}>
-                  <td>
+                  <td data-label="דרגת רישיון">
                     {row.grade}
                     {row.isOurs && <span class="badge badge--accent">הרישיון שלנו</span>}
                   </td>
-                  <td>{row.scope}</td>
-                  <td class="mono">{row.capacity}</td>
+                  <td data-label="מותר לתכנן ולבצע">{row.scope}</td>
+                  <td class="mono" data-label="עד גודל חיבור">{row.capacity}</td>
                 </tr>
               ))
             }
@@ -196,7 +198,7 @@ const personSchema = {
   }
 
   <Testimonials limit={3} />
-  <CtaBand track="private" />
+  <CtaBand track="all" />
 </Base>
 
 <style>

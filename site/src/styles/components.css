@@ -613,6 +613,70 @@
   gap: var(--space-2);
 }
 
+/* ---- narrow screens: rows become cards ----
+ *
+ * The table is 34rem wide inside a 353px scroller at 390px, so on a phone the third
+ * column was entirely off-screen and the second was clipped mid-word. On the licence
+ * table that third column is "עד גודל חיבור" — the one figure a main contractor opens
+ * the page to check, and the whole reason the table was promoted to the contracting
+ * page. A horizontal scroller is a fine fallback for a wide data grid; it is the wrong
+ * answer for a three-column table whose last column carries the point.
+ *
+ * Each row becomes a block, and each cell carries its column name from the data-label
+ * attribute. The header row is hidden visually but stays in the DOM, so the table is
+ * still a table to assistive technology and the reading order is unchanged.
+ */
+@media (max-width: 40rem) {
+  .data-table {
+    min-width: 0;
+    display: block;
+  }
+  .data-table thead {
+    /* Not display:none — that would remove the headers from the accessibility tree. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .data-table tbody,
+  .data-table tbody tr,
+  .data-table tbody td {
+    display: block;
+    width: 100%;
+  }
+  .data-table tbody tr {
+    padding: var(--space-4);
+    border-block-start: 1px solid var(--border);
+  }
+  .data-table tbody tr:first-child {
+    border-block-start: none;
+  }
+  .data-table tbody td {
+    padding: 0;
+    border: none;
+  }
+  .data-table tbody td + td {
+    margin-block-start: var(--space-3);
+  }
+  .data-table tbody td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--text-subtle);
+    margin-block-end: 0.15rem;
+  }
+  /* Deliberately no rule on .table-scroll here.
+     Setting overflow-x: visible on it removed the scroll container from the two internal
+     report tables, which are .dash-table and .report-table and so never get the card
+     layout above — they went from scrolling correctly to overflowing the page at 857px
+     and 1488px. The card layout already narrows .data-table to the container width, so
+     the scroller simply has nothing to scroll and needs no help. */
+}
+
 .table-source {
   margin-block-start: var(--space-3);
   font-size: 0.83rem;

@@ -18,12 +18,53 @@ import { BUSINESS, links } from "~/data/business";
 import { featuredProjects, projectStats } from "~/data/projects";
 import { PRIMARY_NAV } from "~/data/nav";
 
+/*
+ * Page title.
+ *
+ * Was "חשמלאי ראשי, קבלנות ביצוע ומערכות סולאריות" — no locality, and it opened on a
+ * licence grade, which is a credential rather than anything a person types into a search
+ * box. "מאשדוד" states the base without narrowing the service area, which genuinely runs
+ * from מצפה רמון to עמק חפר; "אשדוד והדרום" would have been a smaller and less
+ * accurate claim than the truth. Contracting leads, as it does in the H1.
+ *
+ * The SEO map also claimed the locality appears nowhere in indexable copy. That is wrong:
+ * אשדוד is in the footer address on all 43 pages. Only the title lacked it.
+ */
 const stats = projectStats();
 const featured = featuredProjects().slice(0, 3);
 
+/*
+ * Contracting first, and rendered differently from the other two.
+ *
+ * The design review found that three identical cards gave the commercially central line
+ * exactly one third of the attention, sitting in the middle where it reads as the middle
+ * option. A project manager landing here saw a service menu and classified the business
+ * as a domestic electrician.
+ *
+ * `lead` drives both order and treatment: the contracting card spans the full row, keeps
+ * its sub-links, and carries the real conversion CTA. The other two sit beneath it as a
+ * pair, shorter, without inner link lists. Nothing is hidden — the private and solar
+ * routes are one click away and still in the main navigation — but the page now states a
+ * priority instead of presenting a menu.
+ */
 const tracks = [
   {
+    id: "contracting",
+    lead: true,
+    eyebrow: "לקבלנים, ליזמים ולמנהלי פרויקט",
+    title: "קבלנות ביצוע ופרויקטים",
+    body:
+      "ביצוע חשמל בפרויקט — משלב השלד ועד המסירה. תשתיות, לוחות, תיאום מול בעלי מקצוע " +
+      "ועמידה בלוחות הזמנים של האתר.",
+    href: "/contracting/",
+    cta: "הצעת מחיר לפרויקט",
+    ctaHref: "/quote/?track=contracting",
+    secondary: "מה אנחנו לוקחים על עצמנו",
+    items: PRIMARY_NAV[1].children ?? [],
+  },
+  {
     id: "private",
+    lead: false,
     eyebrow: "לבית ולדירה",
     title: "עבודות חשמל פרטיות",
     body:
@@ -34,18 +75,8 @@ const tracks = [
     items: PRIMARY_NAV[0].children ?? [],
   },
   {
-    id: "contracting",
-    eyebrow: "לקבלנים, ליזמים ולמנהלי פרויקט",
-    title: "קבלנות ביצוע ופרויקטים",
-    body:
-      "ביצוע חשמל בפרויקט — משלב השלד ועד המסירה. תשתיות, לוחות, תיאום מול בעלי מקצוע " +
-      "ועמידה בלוחות הזמנים של האתר.",
-    href: "/contracting/",
-    cta: "לעבודות קבלניות",
-    items: PRIMARY_NAV[1].children ?? [],
-  },
-  {
     id: "solar",
+    lead: false,
     eyebrow: "ביתי, מסחרי וקבלני",
     title: "מערכות סולאריות",
     body:
@@ -59,7 +90,7 @@ const tracks = [
 ---
 
 <Base
-  title="חשמלאי ראשי, קבלנות ביצוע ומערכות סולאריות"
+  title="קבלן חשמל לפרויקטים וחשמלאי ראשי מאשדוד"
   description="RNRG — רוני חג׳ג׳, הנדסאי חשמל ובעל רישיון חשמלאי ראשי. עבודות חשמל לבתים, קבלנות ביצוע לקבלנים וליזמים, ומערכות סולאריות. שירות ממצפה רמון ועד עמק חפר."
 >
   <!-- ============================ Hero ============================ -->
@@ -67,7 +98,14 @@ const tracks = [
     <div class="container home-hero__inner">
       <div class="home-hero__body">
         <p class="eyebrow">{BUSINESS.ownerRole}</p>
-        <h1>עבודות חשמל, קבלנות ביצוע ומערכות סולאריות</h1>
+        {/*
+          Was "עבודות חשמל, קבלנות ביצוע ומערכות סולאריות" — a list of three services whose
+          first item, and in RTL the first thing the eye meets, was "עבודות חשמל". Readers
+          classified the business as a domestic electrician from the first two words. The
+          positioning claim leads now, and the other two lines follow it in the lede rather
+          than competing with it in the heading.
+        */}
+        <h1>קבלנות ביצוע חשמל לפרויקטים — ועבודות חשמל ומערכות סולאריות</h1>
         <p class="lede">
           RNRG מבצעת עבודות חשמל לבתים פרטיים, קבלנות ביצוע לפרויקטים מול קבלנים ויזמים,
           והתקנת מערכות סולאריות — הכול תחת רישיון חשמלאי ראשי ובאחריות מלאה.
@@ -130,8 +168,14 @@ const tracks = [
             The licence belongs on the hero badge, where it already is. This is a real
             counted total from the documented projects.
           */}
-          <span class="stat__value"><bdi>{Math.round(stats.totalKw)} kWp</bdi></span>
-          <span class="stat__label">הספק מותקן מצטבר</span>
+          {/*
+            85.5, not Math.round(85.5) = 86. The rounding turned a counted figure into one
+            that reads as exact and is not. It also sums nine projects, because the tenth
+            has no recorded output — sitting beside "10 projects" that invited the reading
+            that all ten are covered. The label now says which nine.
+          */}
+          <span class="stat__value"><bdi>{stats.totalKw} kWp</bdi></span>
+          <span class="stat__label">הספק מצטבר בתשעה פרויקטים</span>
         </li>
       </ul>
       <p class="trust-strip__note">
@@ -147,28 +191,64 @@ const tracks = [
       <div class="section-head">
         <h2>שלושה תחומי פעילות, עסק אחד</h2>
         <p>
-          בחרו את התחום הרלוונטי לכם — כל מסלול מוביל למידע, לעבודות שבוצעו ולדרך פנייה
-          שמתאימה לסוג העבודה.
+          עיקר העבודה הוא ביצוע חשמל בפרויקטים מול קבלנים ויזמים. לצידו אנחנו עושים גם
+          עבודות חשמל פרטיות ומערכות סולאריות — כל מסלול מוביל למידע ולדרך פנייה שמתאימה
+          לסוג העבודה.
         </p>
       </div>
 
       <div class="tracks">
         {
           tracks.map((track) => (
-            <article class="track" data-track={track.id}>
-              <p class="eyebrow">{track.eyebrow}</p>
-              <h3>{track.title}</h3>
-              <p class="track__body">{track.body}</p>
-              <ul class="track__list">
-                {track.items.slice(0, 5).map((item) => (
-                  <li>
-                    <a href={item.href}>{item.label}</a>
-                  </li>
-                ))}
-              </ul>
-              <a class="btn btn--outline btn--block track__cta" href={track.href} data-cta={`track-${track.id}`}>
-                {track.cta}
-              </a>
+            <article class:list={["track", { "track--lead": track.lead }]} data-track={track.id}>
+              {/*
+                Two wrappers so the lead card can become two columns on a wide screen
+                without the others changing at all. A full-bleed dark card with copy capped
+                at 46ch left half its width empty; the links and the call to action now
+                occupy that half instead.
+              */}
+              <div class="track__copy">
+                <p class="eyebrow">{track.eyebrow}</p>
+                <h3>{track.title}</h3>
+                <p class="track__body">{track.body}</p>
+              </div>
+
+              <div class="track__aside">
+                {
+                  /* Sub-links only on the lead card. On the two smaller cards they added a
+                     third of the height for links that already sit in the main navigation,
+                     and made all three cards read as equals. */
+                  track.lead && (
+                    <ul class="track__list">
+                      {track.items.slice(0, 5).map((item) => (
+                        <li>
+                          <a href={item.href}>{item.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                }
+                <div class="track__actions">
+                  <a
+                    class:list={["btn", track.lead ? "btn--primary" : "btn--outline", "track__cta"]}
+                    href={track.ctaHref ?? track.href}
+                    data-cta={`track-${track.id}`}
+                    data-cta-location="tracks"
+                  >
+                    {track.cta}
+                  </a>
+                  {
+                    /* The lead card asks for the job; the link to read more sits beside it
+                       as a link, not as a second button. The review found this inverted —
+                       the heaviest control on the page pointed at another article. */
+                    track.lead && track.secondary && (
+                      <a class="track__secondary" href={track.href}>
+                        {track.secondary}
+                      </a>
+                    )
+                  }
+                </div>
+              </div>
             </article>
           ))
         }
@@ -223,8 +303,18 @@ const tracks = [
     <div class="container">
       <div class="section-head section-head--row">
         <div>
-          <h2>עבודות שבוצעו</h2>
-          <p>פרויקטים אמיתיים, עם מיקום, סוג מערכת והספק.</p>
+          {/*
+            Was "עבודות שבוצעו" — "work we have done" — over three solar installations,
+            which presented the solar portfolio as the whole track record. Every documented
+            project on this site is solar, so the heading now says so. Naming the limit is
+            also the honest way to introduce the contracting gap rather than papering over
+            it, and it stops a contractor concluding that solar is all the business does.
+          */}
+          <h2>פרויקטים סולאריים מתועדים</h2>
+          <p>
+            כל הפרויקטים שתועדו בזמן אמת הם סולאריים. עבודות החשמל והפרויקטים הקבלניים
+            שבוצעו לא צולמו — ולא נמציא אותם.
+          </p>
         </div>
         <a class="btn btn--outline" href="/projects/">לכל הפרויקטים</a>
       </div>
@@ -237,7 +327,7 @@ const tracks = [
 
   <Testimonials limit={3} />
 
-  <CtaBand track="private" />
+  <CtaBand track="all" />
 </Base>
 
 <style>
@@ -331,7 +421,15 @@ const tracks = [
   .tracks {
     display: grid;
     gap: var(--space-5);
-    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    /* Two columns, not auto-fit: the lead card spans both and the remaining pair sits
+       beneath it. auto-fit would happily make three equal columns again the moment the
+       viewport allowed it, which is the layout this replaces. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 47.9375rem) {
+    .tracks {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
   .track {
     display: flex;
@@ -347,6 +445,96 @@ const tracks = [
   .track:hover {
     box-shadow: var(--shadow);
     transform: translateY(-2px);
+  }
+
+  /* ---- the lead card ---- */
+  .track--lead {
+    grid-column: 1 / -1;
+    background: var(--bg-inverse);
+    color: var(--text-on-dark);
+    border-color: transparent;
+    /* The copper rail is the accent on the light cards. On the dark one it would compete
+       with the primary button, so the surface itself carries the emphasis instead. */
+    border-block-start-width: 1px;
+  }
+  .track--lead h3 {
+    font-size: var(--step-3);
+  }
+  .track--lead .eyebrow {
+    color: var(--accent-on-dark);
+  }
+  .track--lead .track__body {
+    color: var(--text-on-dark-muted, var(--text-on-dark));
+    max-width: 46ch;
+  }
+  .track--lead .track__list {
+    border-block-start-color: var(--border-inverse);
+    /* Five links in a single column left a tall thin card; two columns keep the lead card
+       close to the height of the pair beneath it. */
+    grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+  }
+  .track--lead .track__list a {
+    color: var(--text-on-dark-muted, var(--text-on-dark));
+  }
+  .track--lead .track__list a:hover {
+    color: var(--text-on-dark);
+  }
+
+  .track__copy {
+    display: flex;
+    flex-direction: column;
+  }
+  .track__aside {
+    display: flex;
+    flex-direction: column;
+    /* Pushes the actions to the foot of the card so the two smaller cards line their
+       buttons up with each other regardless of body length. */
+    margin-block-start: auto;
+  }
+  .track__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: auto;
+    padding-block-start: var(--space-5);
+  }
+
+  /* Two columns on a wide screen: copy on the reading side, links and the call to action
+     on the other. Below this width everything stacks, which is what the smaller cards do
+     at every width. */
+  @media (min-width: 62rem) {
+    .track--lead {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: var(--space-7);
+      align-items: center;
+    }
+    .track--lead .track__copy,
+    .track--lead .track__aside {
+      margin-block-start: 0;
+    }
+    .track--lead .track__list {
+      margin-block-start: 0;
+      padding-block-start: 0;
+      border-block-start: 0;
+      /* One column of five short links reads as a menu and fits the half-width column
+         without the 4+1 orphan that a multi-column grid produced here. */
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .track--lead .track__actions {
+      margin-block-start: 0;
+    }
+  }
+  .track__secondary {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-on-dark);
+  }
+  .track__secondary::after {
+    /* Leftwards, because the text runs that way. Written as a CSS escape rather than a
+       literal arrow so nothing between here and the browser gets to reorder it. */
+    content: " \2190";
   }
   .track h3 {
     font-size: var(--step-2);
@@ -377,7 +565,13 @@ const tracks = [
     text-decoration: underline;
   }
   .track__cta {
-    margin-block-start: auto;
+    /* .track__actions owns the push-to-bottom now. On the two smaller cards the button
+       still spans the card, which keeps their footprint identical to each other. */
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .track--lead .track__cta {
+    flex: 0 0 auto;
   }
 
   /* ---- Contracting band ---- */

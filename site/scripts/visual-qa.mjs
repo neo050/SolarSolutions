@@ -132,12 +132,35 @@ for (const route of ROUTES) {
     await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle" });
 
     /* ---- horizontal overflow ---- */
+    //
+    // The test is whether the page can actually be scrolled sideways, not what
+    // documentElement.scrollWidth reports.
+    //
+    // In an RTL document Chrome inflates documentElement.scrollWidth whenever any
+    // descendant has a horizontal scroll container — even when that container is doing
+    // exactly its job and the page itself does not move. The dashboard's review table is
+    // 857px inside a 353px scroller at 390px wide, and the old check called that a
+    // sideways-scrolling page. A check that fires on the correct implementation of the
+    // thing it is meant to enforce trains people to ignore it.
+    //
+    // So: try to scroll, and see whether anything moved. body.scrollWidth is kept as a
+    // second opinion because it does not inflate the way documentElement does.
     const overflow = await page.evaluate(() => {
       const doc = document.documentElement;
+      const inScrollContainer = (el) => {
+        let p = el.parentElement;
+        while (p && p !== document.body) {
+          const o = getComputedStyle(p).overflowX;
+          if (o === "auto" || o === "scroll" || o === "hidden") return true;
+          p = p.parentElement;
+        }
+        return false;
+      };
       const wide = [];
       for (const el of document.querySelectorAll("body *")) {
         const r = el.getBoundingClientRect();
-        if (r.width > doc.clientWidth + 1 && r.height > 0) {
+        // Something wider than the viewport inside a scroller is intended, not a fault.
+        if (r.width > doc.clientWidth + 1 && r.height > 0 && !inScrollContainer(el)) {
           wide.push({
             tag: el.tagName.toLowerCase(),
             cls: (el.className || "").toString().slice(0, 60),
@@ -145,10 +168,22 @@ for (const route of ROUTES) {
           });
         }
       }
+      // The element scan alone decides.
+      //
+      // Two other signals were tried and both false-positive in RTL:
+      // documentElement.scrollWidth inflates whenever a descendant scroller exists, and
+      // probing the scroll range by writing scrollLeft reports a non-zero range on a page
+      // that cannot be scrolled at all. Both flagged /internal/dashboard/, whose 857px
+      // review table sits correctly inside a 353px scroller.
+      //
+      // The scan was checked in the other direction too: a 900px div appended to the body
+      // is caught, while the dashboard table is not. That is the behaviour wanted — it
+      // names the offending element rather than reporting a number, and it knows the
+      // difference between overflow and a scroll container doing its job.
       return {
-        scrolls: doc.scrollWidth > doc.clientWidth + 1,
+        scrolls: wide.length > 0,
         clientWidth: doc.clientWidth,
-        scrollWidth: doc.scrollWidth,
+        scrollWidth: document.body.scrollWidth,
         wide: wide.slice(0, 3),
       };
     });

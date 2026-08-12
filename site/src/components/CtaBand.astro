@@ -10,13 +10,26 @@ import { links, BUSINESS, TRACKS } from "~/data/business";
 import type { Track } from "~/data/business";
 
 export interface Props {
-  track?: Track;
+  /**
+   * "all" for pages that serve every audience at once.
+   *
+   * /about/, /areas/, /faq/, /reviews/, /projects/ and the homepage each closed with a
+   * band aimed at exactly one track — five of them private, two solar. So a main
+   * contractor who read the About page to decide whether this business is real was then
+   * asked whether he needs an electrician for his house, and the homepage, whose whole
+   * hierarchy now leads with contracting, ended on a private-customer button.
+   *
+   * A page that does not know who is reading should not guess. It offers the three
+   * routes and lets the reader pick the one that is theirs.
+   */
+  track?: Track | "all";
   title?: string;
   body?: string;
   variant?: "brand" | "inverse";
 }
 
 const { track = "private", title, body, variant = "inverse" } = Astro.props;
+const isAll = track === "all";
 
 const COPY: Record<Track, { title: string; body: string; cta: string }> = {
   private: {
@@ -36,9 +49,27 @@ const COPY: Record<Track, { title: string; body: string; cta: string }> = {
   },
 };
 
-const copy = COPY[track];
-const heading = title ?? copy.title;
-const text = body ?? copy.body;
+const copy = isAll ? null : COPY[track as Track];
+const heading =
+  title ?? copy?.title ?? "מה אתם צריכים?";
+const text =
+  body ??
+  copy?.body ??
+  "שלושה סוגי עבודה, שלושה טפסים נפרדים — כדי שלא נשאל אתכם שאלות שלא רלוונטיות לעבודה שלכם. " +
+  "לתקלה דחופה — עדיף להתקשר.";
+
+// Contracting first: it is the commercial priority, and on an all-audiences band the
+// order is the only signal of that left.
+//
+// The labels name the audience rather than the action. Single-track bands can say
+// "לבקשת הצעת מחיר" because the page has already established who is being asked; three of
+// those side by side — "הצעת מחיר לפרויקט", "לבקשת הצעת מחיר", "לבדיקת התאמה" — make the
+// reader work out which one is theirs from the verb.
+const ALL_ORDER: { track: Track; label: string }[] = [
+  { track: "contracting", label: "לפרויקט קבלני" },
+  { track: "private", label: "לעבודת חשמל בבית" },
+  { track: "solar", label: "למערכת סולארית" },
+];
 ---
 
 <section class:list={["cta-band", `cta-band--${variant}`]}>
@@ -48,14 +79,29 @@ const text = body ?? copy.body;
       <p>{text}</p>
     </div>
     <div class="btn-row">
-      <a
-        class="btn btn--accent btn--lg"
-        href={TRACKS[track].quoteHref}
-        data-cta="cta-band"
-        data-cta-location="cta-band"
-      >
-        {copy.cta}
-      </a>
+      {
+        isAll ? (
+          ALL_ORDER.map((entry, i) => (
+            <a
+              class:list={["btn", "btn--lg", i === 0 ? "btn--accent" : "btn--outline"]}
+              href={TRACKS[entry.track].quoteHref}
+              data-cta="cta-band"
+              data-cta-location="cta-band"
+            >
+              {entry.label}
+            </a>
+          ))
+        ) : (
+          <a
+            class="btn btn--accent btn--lg"
+            href={TRACKS[track as Track].quoteHref}
+            data-cta="cta-band"
+            data-cta-location="cta-band"
+          >
+            {copy!.cta}
+          </a>
+        )
+      }
       <a class="btn btn--outline btn--lg" href={links.tel} data-cta-location="cta-band">
         {BUSINESS.phonePretty}
       </a>

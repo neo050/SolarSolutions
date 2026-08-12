@@ -114,16 +114,45 @@ Shipped on branch `p0-critical-fixes`. These were active risk and did not wait f
 4. **Maps API key referrer restriction** — verify in Google Cloud.
 5. **Old GitHub domain** — is it still indexed?
 
+## Readiness, per page and per dimension
+
+The number that matters is not "the build is green". `/internal/dashboard/` scores all 31
+registered entries against eight dimensions, and reads:
+
+```
+technical      31/31      responsive     31/31      accessibility  31/31
+ux             20/31      conversion     22/31      seo            22/31
+content        12/31      ui              7/31
+done on all eight:  3 of 31
+```
+
+The automated columns are full because they are automated. The judged ones are not, and
+that gap is the honest state of the project. It comes from a design review of 31 routes
+that produced 105 findings, written up in [`review-2026-08.md`](review-2026-08.md) and
+recorded route by route in `src/data/pages.ts`, so a page cannot be called ready because
+it compiles.
+
+Fixed findings are recorded per area rather than deleted, so the dashboard keeps showing
+what was raised. A page with some areas closed is not the same as one nobody looked at,
+and not the same as one that passed.
+
 ## Current build health
 
 ```
-42 pages · astro check 0 errors · 3,353 internal links · QA green · 13/13 endpoint tests
-homepage first visit on mobile: 152KB  (48 html · 34 css · 13 font · 57 hero)
+43 pages · astro check 0 errors · 3,435 internal links · QA green · 13/13 endpoint tests
+visual QA green: 43 routes × 6 breakpoints, axe WCAG 2.0/2.1 A+AA, real Chrome
 JavaScript across the entire site: 12KB
 ```
 
-`npm run verify` in `site/` runs the whole chain: typecheck, image variants, build, QA,
-endpoint tests.
+`npm run verify` runs typecheck, image variants, build, QA and endpoint tests.
+`npm run qa:visual` renders every page at six widths and runs axe on each.
+
+Nine QA gates now fail the build, not just report:
+broken links · orphaned routes · missing or duplicated h1 · missing canonical or
+description · missing alt text · srcset candidates that would 404 · withdrawn claims
+reappearing in copy · unfinished markers and empty headings · routes missing from the page
+registry · a quarantined image reaching the build output · an image marked in use whose
+file is gone · a published image with no manifest row.
 
 ## The one thing worth doing this week regardless
 

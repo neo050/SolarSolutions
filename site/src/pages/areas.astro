@@ -24,8 +24,8 @@ const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) 
 ---
 
 <Base
-  title="אזורי פעילות"
-  description={`RNRG פועלת ${BUSINESS.areaServed}. היישובים שבהם בוצעו עבודות בפועל, וההבדל בין קריאת שירות לפרויקט ארוך.`}
+  title="אזורי שירות — חשמלאי מאשדוד, ממצפה רמון לעמק חפר"
+  description="RNRG פועלת מבסיס באשדוד, ממצפה רמון ועד עמק חפר. היישובים שבהם כבר בוצעו פרויקטים מתועדים, ולמה טווח ההגעה לקריאת שירות שונה מזה של פרויקט קבלני."
   breadcrumbs={trail}
 >
   <Breadcrumbs trail={trail} />
@@ -96,7 +96,7 @@ const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) 
     </div>
   </section>
 
-  <CtaBand track="private" />
+  <CtaBand track="all" />
 </Base>
 
 <style>

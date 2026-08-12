@@ -26,7 +26,11 @@ const {
   title = "לקוחות ממליצים",
   limit,
   isReviewsPage = false,
-  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובתמונתם.",
+  // "ובתמונתם" removed. It promised photographs on every page rendering this
+  // component with the default blurb, and there are none: all five portraits were the
+  // reviewers' own profile pictures and are held pending consent. A default that
+  // describes what the component used to show is a claim the page no longer keeps.
+  blurb = "המלצות מלקוחות אמיתיים, בשמם המלא ובישובם.",
 } = Astro.props;
 
 let items: Testimonial[] = track ? testimonialsFor(track) : TESTIMONIALS;
@@ -40,9 +44,27 @@ const isEmpty = items.length === 0;
     <div class="section-head section-head--row">
       <div>
         <h2>{title}</h2>
-        <p>{blurb}</p>
+        {
+          /*
+           * The blurb describes the reviews below it, so it is wrong when there are none.
+           * On the contracting pages it read "המלצות מלקוחות אמיתיים, בשמם המלא ובישובם"
+           * directly above a panel explaining that no review exists yet, which contradicts
+           * itself in the space of two lines. The empty state carries its own explanation
+           * and needs no introduction.
+           */
+          !isEmpty && <p>{blurb}</p>
+        }
       </div>
-      {!isReviewsPage && <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>}
+      {
+        /*
+         * The link is also wrong when empty: every published review is from a private or
+         * solar customer, so sending a contractor to /reviews/ from a panel that just told
+         * him we will not pass those off as project references undoes the point.
+         */
+        !isReviewsPage && !isEmpty && (
+          <a class="btn btn--outline" href="/reviews/">לכל ההמלצות</a>
+        )
+      }
     </div>
 
     {

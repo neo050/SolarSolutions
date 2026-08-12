@@ -32,7 +32,12 @@ const { project, featured = false } = Astro.props;
         />
       ) : (
         <div class="project-card__nophoto">
-          {project.sizeKw && <span class="project-card__kw mono">{project.sizeKw} kWp</span>}
+          {/* bdi: without it the RTL line reorders "20 kWp" to read "kWp 20". */}
+          {project.sizeKw && (
+            <span class="project-card__kw mono">
+              <bdi>{project.sizeKw} kWp</bdi>
+            </span>
+          )}
           <span class="project-card__systype">{project.systemType}</span>
         </div>
       )
@@ -64,7 +69,7 @@ const { project, featured = false } = Astro.props;
         project.sizeKw && (
           <div>
             <dt>הספק</dt>
-            <dd class="mono">{project.sizeKw} kWp</dd>
+            <dd class="mono"><bdi>{project.sizeKw} kWp</bdi></dd>
           </div>
         )
       }

@@ -37,8 +37,8 @@ const trail = [{ label: "המלצות", href: "/reviews/" }];
 ---
 
 <Base
-  title="המלצות מלקוחות"
-  description="המלצות מלקוחות אמיתיים של RNRG — בשם מלא, יישוב ותמונה. ללא דירוגים מומצאים."
+  title="המלצות על רוני חג׳ג׳ — 5 ביקורות בשם מלא"
+  description="חמש המלצות מלקוחות מזוהים בשם מלא וביישוב, על מערכות סולאריות ועל עבודות חשמל. בלי כוכבים, בלי ממוצע מומצא ובלי דירוג — זה הטקסט שהלקוחות עצמם כתבו."
   breadcrumbs={trail}
 >
   <Breadcrumbs trail={trail} />
@@ -48,7 +48,7 @@ const trail = [{ label: "המלצות", href: "/reviews/" }];
       <p class="eyebrow">המלצות</p>
       <h1>מה לקוחות אומרים</h1>
       <p class="lede">
-        {TESTIMONIALS.length} המלצות, כולן מלקוחות מזוהים בשמם המלא ועם תמונתם. אין כאן
+        {TESTIMONIALS.length} המלצות, כולן מלקוחות מזוהים בשמם המלא ובישובם. אין כאן
         דירוג כוכבים ואין ממוצע — הצגת ממוצע דורשת מערכת ביקורות אמיתית.
       </p>
     </div>
@@ -58,8 +58,14 @@ const trail = [{ label: "המלצות", href: "/reviews/" }];
     Was a verbatim copy of Testimonials.astro — same markup, same CSS with the class
     names changed. Two copies of one component drift, and this pair already had.
   */}
+  {/*
+    The heading here was "מה לקוחות אומרים" — identical to the H1 a few lines above it,
+    so the page announced itself twice and the H2 carried no information. It now names
+    what the section actually contains, which is also what distinguishes these reviews
+    from the ones a visitor has read elsewhere: every one is attributable.
+  */}
   <Testimonials
-    title="מה לקוחות אומרים"
+    title="חמש ההמלצות, במלואן"
     blurb="כל ההמלצות שפורסמו, מלקוחות מזוהים בשמם המלא."
     isReviewsPage={true}
   />
@@ -101,7 +107,7 @@ const trail = [{ label: "המלצות", href: "/reviews/" }];
     </div>
   </section>
 
-  <CtaBand track="private" />
+  <CtaBand track="all" />
 </Base>
 
 <style>
