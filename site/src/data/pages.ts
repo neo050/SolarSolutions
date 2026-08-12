@@ -523,20 +523,70 @@ interface ReviewOutcome {
   count: number;
   /** The finding areas raised, which decide which dimensions are affected. */
   areas: string[];
+  /**
+   * Areas whose findings have since been addressed and verified in a browser.
+   *
+   * Recorded per area rather than by clearing the entry, so the dashboard keeps showing
+   * that a page was reviewed and what was raised. A page with some areas fixed is not the
+   * same as a page nobody looked at, and it is not the same as a page that passed either.
+   *
+   * Fixed areas drop out of the affected set below, so a route only leaves "blocked" when
+   * every high-severity area on it has actually been dealt with.
+   */
+  fixed?: string[];
 }
 
 const REVIEWED: Record<string, ReviewOutcome> = {
-  "/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "spacing", "typography"] },
-  "/about/": { worst: "high", count: 7, areas: ["cta", "imagery", "other", "section-order", "typography"] },
-  "/areas/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "section-order"] },
+  // hierarchy: contracting card leads the grid. cta: primary now the quote request.
+  // typography: H1 and <title> rewritten. other: pending badge gone, projects heading
+  // no longer claims the solar set is the whole portfolio, cumulative figure unrounded.
+  // imagery: the finding was wrong — the hero is a 72-way commercial board, not a
+  // domestic consumer unit. Verified by opening it. spacing: stat strip breaks 2×2 at
+  // tablet, not 3+1, confirmed in Chrome at 820.
+  "/": {
+    worst: "high",
+    count: 7,
+    areas: ["cta", "hierarchy", "imagery", "other", "spacing", "typography"],
+    fixed: ["cta", "hierarchy", "imagery", "other", "spacing", "typography"],
+  },
+  // cta: all-audiences band. other: the "we cannot show you a team" panel no longer
+  // renders in production, and the cumulative figure is unrounded.
+  "/about/": {
+    worst: "high",
+    count: 7,
+    areas: ["cta", "imagery", "other", "section-order", "typography"],
+    fixed: ["cta", "other"],
+  },
+  // cta: all-audiences band. other: internal priority badges gone from production.
+  "/areas/": {
+    worst: "high",
+    count: 7,
+    areas: ["cta", "hierarchy", "imagery", "other", "section-order"],
+    fixed: ["cta", "other"],
+  },
   "/contact/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
-  "/contracting/": { worst: "high", count: 8, areas: ["cta", "imagery", "other", "section-order", "spacing"] },
+  // section-order: evidence gallery and licence table added, so the page now proves
+  // rather than only asserts. other: the visible "capacity unknown" panel is gone from
+  // production. cta/imagery/spacing not yet re-reviewed against their findings.
+  "/contracting/": {
+    worst: "high",
+    count: 8,
+    areas: ["cta", "imagery", "other", "section-order", "spacing"],
+    fixed: ["other", "section-order"],
+  },
   "/contracting/builders/": { worst: "high", count: 8, areas: ["cta", "hero", "hierarchy", "imagery", "other", "section-order"] },
   "/contracting/commercial/": { worst: "high", count: 4, areas: ["hierarchy", "imagery", "other", "spacing"] },
   "/contracting/infrastructure/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
   "/contracting/process/": { worst: "high", count: 5, areas: ["hierarchy", "other", "typography"] },
   "/contracting/renovation/": { worst: "medium", count: 4, areas: ["mobile", "section-order", "spacing", "typography"] },
-  "/electrical/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "section-order"] },
+  // mobile: the licence table is a card list below 40rem, so the capacity column is
+  // no longer off-screen on a phone.
+  "/electrical/": {
+    worst: "high",
+    count: 5,
+    areas: ["cta", "imagery", "mobile", "other", "section-order"],
+    fixed: ["mobile"],
+  },
   "/electrical/homes/": { worst: "high", count: 6, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
   "/electrical/inspection/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
   "/electrical/lighting/": { worst: "medium", count: 4, areas: ["cta", "imagery", "other", "spacing"] },
@@ -546,9 +596,24 @@ const REVIEWED: Record<string, ReviewOutcome> = {
   // comma-joined cross-page label and parsed as its own route.
   "/faq/": { worst: "high", count: 5, areas: ["cta", "hierarchy", "other", "section-order"] },
   // Same for the mobile-only finding filed separately from /projects/.
-  "/projects/": { worst: "high", count: 4, areas: ["imagery", "mobile", "other"] },
+  // other: heading no longer presents the solar set as the whole portfolio; cards
+  // without a photograph show output and system type instead of a broken frame.
+  // imagery stays open — nine photographs are in quarantine pending the owner.
+  "/projects/": {
+    worst: "high",
+    count: 4,
+    areas: ["imagery", "mobile", "other"],
+    fixed: ["other"],
+  },
   "/quote/": { worst: "high", count: 4, areas: ["hero", "other", "section-order"] },
-  "/reviews/": { worst: "high", count: 7, areas: ["cta", "hierarchy", "imagery", "other", "section-order"] },
+  // hierarchy: the H2 duplicating the H1 is renamed. cta: all-audiences band.
+  // imagery: portraits are held pending consent — blocked on the owner, not on us.
+  "/reviews/": {
+    worst: "high",
+    count: 7,
+    areas: ["cta", "hierarchy", "imagery", "other", "section-order"],
+    fixed: ["cta", "hierarchy"],
+  },
   "/solar/": { worst: "high", count: 5, areas: ["hero", "imagery", "other", "spacing", "typography"] },
   "/solar/commercial/": { worst: "medium", count: 4, areas: ["other", "spacing"] },
   "/solar/contractors/": { worst: "high", count: 5, areas: ["imagery", "other", "section-order", "spacing"] },
@@ -595,8 +660,9 @@ function applyReview(page: { route?: string; pattern?: string; reviews: Reviews 
     for (const d of JUDGED) if (page.reviews[d] === "pending") page.reviews[d] = "passed";
     return;
   }
+  const open = outcome.areas.filter((a) => !(outcome.fixed ?? []).includes(a));
   const affected = new Set(
-    outcome.areas.map((a) => AREA_DIMENSION[a]).filter(Boolean) as (keyof Reviews)[]
+    open.map((a) => AREA_DIMENSION[a]).filter(Boolean) as (keyof Reviews)[]
   );
   const state: ReviewState = outcome.worst === "high" ? "blocked" : "in-progress";
   for (const d of JUDGED) {
