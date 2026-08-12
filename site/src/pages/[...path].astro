@@ -224,7 +224,23 @@ const serviceSchema = {
     ))
   }
 
-  {page.track !== "contracting" && <Testimonials track={page.track} limit={3} />}
+  {
+    /*
+     * Contracting pages render this too, and get the empty state.
+     *
+     * They used to be skipped entirely, which meant the five pages aimed at the most
+     * sceptical audience on the site carried no social-proof element of any kind — not a
+     * review, not a reference, not even an acknowledgement that none exists. The review
+     * called that out as the single biggest hole in the branch.
+     *
+     * The empty state was written for precisely this case: it says the business will not
+     * pass a private customer's review off as a project reference, and offers to connect
+     * the reader with someone we have worked for. That is a weaker proof than a quoted
+     * review and a much stronger one than silence, and it converts — "בקשת ממליץ" is a
+     * call, which is what a contractor evaluating a subcontractor actually wants.
+     */
+  }
+  <Testimonials track={page.track} limit={3} />
 
   <FaqList items={page.faq} />
 
