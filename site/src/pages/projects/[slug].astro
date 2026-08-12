@@ -35,6 +35,39 @@ const trail = [
 const gallery = (project.gallery ?? [project.image]).filter((src): src is string => Boolean(src));
 const complete = hasStory(project);
 
+/*
+ * Title and description, built from facts rather than concatenated blindly.
+ *
+ * The old title was `${title}, ${location} — ${systemType}`, which overflowed 60
+ * characters on the two projects with the longest system names — "בית כנסת יונה, גני
+ * תקווה — מערכת אוף גריד עם אגירת אנרגיה" renders at 64 with the brand suffix, so Google
+ * truncates exactly where the system type begins. The system type is dropped when the
+ * shorter form is already long enough; the page's H1 and spec list still carry it.
+ *
+ * The old description was one sentence and averaged 84 characters — roughly half a SERP
+ * line. It now assembles what is actually known about each project, in descending order
+ * of usefulness, and stops adding clauses once it is long enough. Nothing is invented:
+ * every clause reads a field that exists, and projects missing a field simply get a
+ * shorter description rather than a padded one.
+ */
+const BRAND_SUFFIX = 8; // " | RNRG"
+const longTitle = `${project.title}, ${project.location} — ${project.systemType}`;
+const title =
+  longTitle.length + BRAND_SUFFIX <= 60 ? longTitle : `${project.title}, ${project.location}`;
+
+const descParts = [
+  project.summary,
+  project.sizeKw ? `הספק ${project.sizeKw} קילוואט.` : "",
+  `${CUSTOMER_TYPE_LABEL[project.customerType]} ב${project.location}.`,
+  project.systemType ? `סוג מערכת: ${project.systemType}.` : "",
+];
+let description = "";
+for (const part of descParts) {
+  if (!part) continue;
+  if (description.length >= 130) break;
+  description += (description ? " " : "") + part;
+}
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "CreativeWork",
@@ -47,8 +80,8 @@ const schema = {
 ---
 
 <Base
-  title={`${project.title}, ${project.location} — ${project.systemType}`}
-  description={`${project.summary} פרויקט שבוצע ב${project.location}${project.sizeKw ? `, ${project.sizeKw} קילוואט` : ""}.`}
+  title={title}
+  description={description}
   track="solar"
   breadcrumbs={trail}
   schema={[schema]}
