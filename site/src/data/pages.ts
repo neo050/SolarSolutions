@@ -555,14 +555,14 @@ const REVIEWED: Record<string, ReviewOutcome> = {
     worst: "high",
     count: 7,
     areas: ["cta", "imagery", "other", "section-order", "typography"],
-    fixed: ["cta", "other"],
+    fixed: ["cta", "other", "section-order", "typography"],
   },
   // cta: all-audiences band. other: internal priority badges gone from production.
   "/areas/": {
     worst: "high",
     count: 7,
     areas: ["cta", "hierarchy", "imagery", "other", "section-order"],
-    fixed: ["cta", "other"],
+    fixed: ["cta", "hierarchy", "imagery", "other"],
   },
   "/contact/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
   // section-order: evidence gallery and licence table added, so the page now proves
@@ -572,29 +572,29 @@ const REVIEWED: Record<string, ReviewOutcome> = {
     worst: "high",
     count: 8,
     areas: ["cta", "imagery", "other", "section-order", "spacing"],
-    fixed: ["other", "section-order"],
+    fixed: ["cta", "other", "section-order", "spacing"],
   },
-  "/contracting/builders/": { worst: "high", count: 8, areas: ["cta", "hero", "hierarchy", "imagery", "other", "section-order"] },
-  "/contracting/commercial/": { worst: "high", count: 4, areas: ["hierarchy", "imagery", "other", "spacing"] },
-  "/contracting/infrastructure/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"] },
-  "/contracting/process/": { worst: "high", count: 5, areas: ["hierarchy", "other", "typography"] },
-  "/contracting/renovation/": { worst: "medium", count: 4, areas: ["mobile", "section-order", "spacing", "typography"] },
+  "/contracting/builders/": { worst: "high", count: 8, areas: ["cta", "hero", "hierarchy", "imagery", "other", "section-order"], fixed: ["cta", "hierarchy", "other", "section-order"] },
+  "/contracting/commercial/": { worst: "high", count: 4, areas: ["hierarchy", "imagery", "other", "spacing"], fixed: ["hierarchy", "other"] },
+  "/contracting/infrastructure/": { worst: "high", count: 3, areas: ["imagery", "other", "section-order"], fixed: ["imagery", "section-order"] },
+  "/contracting/process/": { worst: "high", count: 5, areas: ["hierarchy", "other", "typography"], fixed: ["hierarchy", "other", "typography"] },
+  "/contracting/renovation/": { worst: "medium", count: 4, areas: ["mobile", "section-order", "spacing", "typography"], fixed: ["section-order"] },
   // mobile: the licence table is a card list below 40rem, so the capacity column is
   // no longer off-screen on a phone.
   "/electrical/": {
     worst: "high",
     count: 5,
     areas: ["cta", "imagery", "mobile", "other", "section-order"],
-    fixed: ["mobile"],
+    fixed: ["mobile", "other", "section-order"],
   },
-  "/electrical/homes/": { worst: "high", count: 6, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
-  "/electrical/inspection/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "spacing"] },
-  "/electrical/lighting/": { worst: "medium", count: 4, areas: ["cta", "imagery", "other", "spacing"] },
-  "/electrical/panels/": { worst: "high", count: 4, areas: ["cta", "imagery", "other"] },
-  "/electrical/three-phase/": { worst: "high", count: 6, areas: ["cta", "hero", "imagery", "other", "spacing"] },
+  "/electrical/homes/": { worst: "high", count: 6, areas: ["cta", "imagery", "mobile", "other", "spacing"], fixed: ["mobile", "other", "spacing"] },
+  "/electrical/inspection/": { worst: "high", count: 5, areas: ["cta", "imagery", "mobile", "other", "spacing"], fixed: ["other", "spacing"] },
+  "/electrical/lighting/": { worst: "medium", count: 4, areas: ["cta", "imagery", "other", "spacing"], fixed: ["imagery"] },
+  "/electrical/panels/": { worst: "high", count: 4, areas: ["cta", "imagery", "other"], fixed: ["imagery", "other"] },
+  "/electrical/three-phase/": { worst: "high", count: 6, areas: ["cta", "hero", "imagery", "other", "spacing"], fixed: ["hero", "other", "spacing"] },
   // The two /faq/ groups in the raw output were merged: one arrived inside a
   // comma-joined cross-page label and parsed as its own route.
-  "/faq/": { worst: "high", count: 5, areas: ["cta", "hierarchy", "other", "section-order"] },
+  "/faq/": { worst: "high", count: 5, areas: ["cta", "hierarchy", "other", "section-order"], fixed: ["hierarchy", "other", "section-order"] },
   // Same for the mobile-only finding filed separately from /projects/.
   // other: heading no longer presents the solar set as the whole portfolio; cards
   // without a photograph show output and system type instead of a broken frame.
@@ -603,9 +603,9 @@ const REVIEWED: Record<string, ReviewOutcome> = {
     worst: "high",
     count: 4,
     areas: ["imagery", "mobile", "other"],
-    fixed: ["other"],
+    fixed: ["mobile", "other"],
   },
-  "/quote/": { worst: "high", count: 4, areas: ["hero", "other", "section-order"] },
+  "/quote/": { worst: "high", count: 4, areas: ["hero", "other", "section-order"], fixed: ["hero", "other", "section-order"] },
   // hierarchy: the H2 duplicating the H1 is renamed. cta: all-audiences band.
   // imagery: portraits are held pending consent — blocked on the owner, not on us.
   "/reviews/": {
@@ -614,11 +614,11 @@ const REVIEWED: Record<string, ReviewOutcome> = {
     areas: ["cta", "hierarchy", "imagery", "other", "section-order"],
     fixed: ["cta", "hierarchy"],
   },
-  "/solar/": { worst: "high", count: 5, areas: ["hero", "imagery", "other", "spacing", "typography"] },
-  "/solar/commercial/": { worst: "medium", count: 4, areas: ["other", "spacing"] },
-  "/solar/contractors/": { worst: "high", count: 5, areas: ["imagery", "other", "section-order", "spacing"] },
-  "/solar/residential/": { worst: "high", count: 5, areas: ["hero", "hierarchy", "imagery", "other", "spacing"] },
-  "/solar/storage/": { worst: "high", count: 5, areas: ["imagery", "other", "spacing"] },
+  "/solar/": { worst: "high", count: 5, areas: ["hero", "imagery", "other", "spacing", "typography"], fixed: ["other", "spacing", "typography"] },
+  "/solar/commercial/": { worst: "medium", count: 4, areas: ["other", "spacing"], fixed: ["other", "spacing"] },
+  "/solar/contractors/": { worst: "high", count: 5, areas: ["imagery", "other", "section-order", "spacing"], fixed: ["other", "section-order", "spacing"] },
+  "/solar/residential/": { worst: "high", count: 5, areas: ["hero", "hierarchy", "imagery", "other", "spacing"], fixed: ["hierarchy", "spacing"] },
+  "/solar/storage/": { worst: "high", count: 5, areas: ["imagery", "other", "spacing"], fixed: ["imagery", "other", "spacing"] },
   "/thank-you/": { worst: "medium", count: 2, areas: ["other", "typography"] },
   "/thank-you/private/": { worst: "medium", count: 2, areas: ["other", "typography"] },
   "/thank-you/contracting/": { worst: "medium", count: 1, areas: ["typography"] },

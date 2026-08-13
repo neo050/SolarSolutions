@@ -121,9 +121,9 @@ registered entries against eight dimensions, and reads:
 
 ```
 technical      31/31      responsive     31/31      accessibility  31/31
-ux             20/31      conversion     22/31      seo            22/31
-content        12/31      ui              7/31
-done on all eight:  3 of 31
+ux             28/31      conversion     24/31      seo            22/31
+content        26/31      ui             15/31
+done on all eight:  6 of 31
 ```
 
 The automated columns are full because they are automated. The judged ones are not, and
