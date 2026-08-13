@@ -10,15 +10,27 @@
 import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import CtaBand from "~/components/CtaBand.astro";
-import Testimonials from "~/components/Testimonials.astro";
 import Pending from "~/components/Pending.astro";
 import { SHOW_PENDING } from "~/data/pending";
 import { BUSINESS } from "~/data/business";
 import { LICENCE_CLASSES, LICENCE_NOTE } from "~/data/regulatory";
 import { projectStats } from "~/data/projects";
+import { TESTIMONIALS } from "~/data/testimonials";
 
 const trail = [{ label: "אודות", href: "/about/" }];
 const stats = projectStats();
+
+/**
+ * One review, set as a pull-quote — not the three-card grid.
+ *
+ * /about/ used <Testimonials limit={3} />, which rendered the first three entries of
+ * /reviews/ verbatim: same quotes, same cards, same order. A visitor arriving here from
+ * that page read the identical block twice, which is what made the two pages feel like
+ * one. Chosen by name rather than by index so re-ordering the data file cannot silently
+ * swap it: this is the only review about the person rather than about a solar system,
+ * which is the subject of this page.
+ */
+const pullQuote = TESTIMONIALS.find((t) => t.name === "רז אבישי") ?? TESTIMONIALS[0];
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -46,7 +58,12 @@ const personSchema = {
     <div class="container">
       <p class="eyebrow">אודות</p>
       <h1>{BUSINESS.owner}</h1>
-      <p class="lede">{BUSINESS.ownerRole} · {BUSINESS.licenceLabel}</p>
+      {/*
+        Composed rather than `ownerRole · licenceLabel`, which printed "רישיון חשמלאי
+        ראשי" twice in the same line — the first thing read on the page whose whole job is
+        the credential.
+      */}
+      <p class="lede">הנדסאי חשמל · חשמלאי ראשי, רישיון {BUSINESS.licenceNumber}</p>
     </div>
   </section>
 
@@ -63,18 +80,31 @@ const personSchema = {
           משם ההתרחבות הייתה טבעית: מערכות סולאריות לבתים פרטיים, אחר כך למבנים חקלאיים
           ומסחריים, ובמקביל עבודות החשמל עצמן — לוחות, תשתיות, בדיקות ופרויקטים.
         </p>
+        {/*
+          Contracting used to get six words inside a list, on the page a main contractor
+          opens to decide whether this is a business he can put on his site. It now gets
+          the first sentence and the detail — what the work consists of, who it is
+          coordinated with — while staying inside what is known: scope of service, not
+          track record. No project count, crew size or client name is claimed here.
+        */}
         <p>
-          היום העסק פועל בשלושה תחומים: עבודות חשמל לבתים ולדירות, קבלנות ביצוע לפרויקטים
-          מול קבלנים ויזמים, ומערכות סולאריות. המשותף לכולם הוא שהם מבוצעים תחת אותו
-          רישיון ובאותה אחריות.
+          היום העסק עובד בשלושה מישורים. ביצוע חשמל בפרויקטים — מול קבלנים, יזמים ומנהלי
+          פרויקט, משלב השלד ועד המסירה: תשתיות, נקודות, לוחות ובדיקות, לפי תוכניות ובתיאום
+          עם יועץ החשמל ומנהל העבודה באתר. לצידו עבודות חשמל לבתים ולדירות, ומערכות
+          סולאריות.
+        </p>
+        <p>
+          את שלושתם מבצע אותו בעל רישיון. זה נשמע טכני, ובפועל זה מה שמונע את השאלה
+          שחוזרת בכל עבודה שמחולקת בין גורמים — מי אחראי לחלק שלא עובד.
         </p>
 
         <h2>מה זה אומר, רישיון חשמלאי ראשי</h2>
         <p>
           דרגת רישיון החשמל אינה תואר כבוד — היא קובעת בדיוק עד איזה גודל חיבור מותר
           לתכנן ולבצע. הרבה בעלי מקצוע כותבים "חשמלאי ראשי" בלי לציין מספר רישיון ובלי
-          להסביר מה הדרגה מתירה. המספר שלנו הוא <strong>{BUSINESS.licenceNumber}</strong>,
-          והוא מופיע בתחתית כל עמוד באתר.
+          להסביר מה הדרגה מתירה. המספר שלנו הוא <strong>{BUSINESS.licenceNumber}</strong>.
+          אפשר לבדוק אותו מול משרד העבודה — וכדאי לעשות את זה לכל בעל מקצוע שאתם שוקלים,
+          לא רק לנו.
         </p>
       </div>
 
@@ -107,6 +137,15 @@ const personSchema = {
                 record an output. Rounding it to 86 presented an approximation as exact. */}
             <dd class="mono"><bdi>{stats.totalKw} kWp</bdi></dd>
           </div>
+          {/*
+            A scale figure the page did not have. It answers the "is this business the
+            size of my job" question with a counted maximum rather than an estimate, and
+            it is derived — not typed — so it cannot drift from projects.ts.
+          */}
+          <div>
+            <dt>המערכת הגדולה ביותר</dt>
+            <dd class="mono"><bdi>{stats.largestKw} kWp</bdi></dd>
+          </div>
           {SHOW_PENDING && (
             <div>
               <dt>גודל צוות</dt>
@@ -118,8 +157,12 @@ const personSchema = {
             <dd>{BUSINESS.areaServed}</dd>
           </div>
         </dl>
+        {/*
+          Was "מה שעדיין לא ידוע מסומן ככזה" — true of the development build, and false of
+          the page a visitor sees, where the unknown rows do not render at all.
+        */}
         <p class="about-facts__note">
-          המספרים כאן נספרים מעבודות מתועדות. מה שעדיין לא ידוע מסומן ככזה ולא מוערך.
+          כל מספר כאן נספר מעבודות מתועדות. מה שלא ידוע לא מוערך, ולכן לא מופיע.
         </p>
       </aside>
     </div>
@@ -163,41 +206,42 @@ const personSchema = {
     </div>
   </section>
 
-  {
-    /*
-     * A working note, not page copy. It tells the visitor that the business cannot show
-     * them a team and cites the asset count on the previous site — an internal fact that
-     * only undermines the page it sits on. The About page's job is to establish that
-     * there is a real, licensed person behind the work; a panel explaining what is
-     * missing does the opposite. Visible in dev and at /internal/gaps/, where the three
-     * gaps it names are already tracked.
-     */
-    SHOW_PENDING && (
-  <section class="section">
+  {/*
+    The "הצוות" panel that stood here has been deleted, not hidden.
+
+    It was a working note printed as page copy: it told the visitor that the business
+    cannot show him a team, and cited the asset count on the previous site as evidence.
+    On the one page whose job is to establish that a real, licensed person is behind the
+    work, a panel enumerating what is missing argues the other way — and it argued it in
+    the vocabulary of a build report ("78 הנכסים הוויזואליים", "האתר הקודם"), which no
+    customer has a reason to read.
+
+    Nothing stops being tracked: photo.owner.portrait, photo.team.onsite and
+    fact.credentials.extra are open in src/data/gaps.ts and render in full at
+    /internal/gaps/. When a photograph of a person arrives it belongs in the hero, beside
+    the origin story — the column the review identified as the right place for it.
+  */}
+
+  {/*
+    One review, set large, instead of the three-card grid that duplicated /reviews/.
+    Different treatment for the same source material, so arriving here from /reviews/ no
+    longer reads as the same page twice.
+  */}
+  <section class="section section--sunken">
     <div class="container">
-      <div class="pending-block">
-        <h2>הצוות</h2>
-        <p>
-          כאן אמורים להופיע תמונות של רוני ושל הצוות בעבודה, מספר אנשי הצוות, והסמכות
-          נוספות מעבר לרישיון 991433.
-        </p>
-        <p>
-          אין באתר הזה ולו תמונה אחת של אדם — כל 78 הנכסים הוויזואליים שהיו באתר הקודם הם
-          תוצרים: לוחות גמורים וגגות עם פאנלים. עסק שמבקש מקבלן לסמוך עליו שיביא צוות צריך
-          להראות שיש צוות.
-        </p>
-        <p class="pending-block__meta">
-          <Pending id="photo.owner.portrait" label="P0 — צילום בעל העסק" />
-          <Pending id="photo.team.onsite" label="P0 — צילום צוות" />
-          <Pending id="fact.credentials.extra" label="P1 — הסמכות נוספות" />
-        </p>
-      </div>
+      <figure class="about-quote">
+        <blockquote>{pullQuote.quote}</blockquote>
+        <figcaption>
+          <strong>{pullQuote.name}</strong>
+          <span>{pullQuote.city} · {pullQuote.work}</span>
+        </figcaption>
+      </figure>
+      <p class="about-quote__more">
+        <a href="/reviews/">כל ההמלצות, בשם מלא ובישוב</a>
+      </p>
     </div>
   </section>
-    )
-  }
 
-  <Testimonials limit={3} />
   <CtaBand track="all" />
 </Base>
 
@@ -255,6 +299,40 @@ const personSchema = {
     border-block-start: 1px solid var(--border);
     font-size: 0.82rem;
     color: var(--text-subtle);
+  }
+
+  /* Display-size quote: the page's one break from the site-wide rhythm of
+     eyebrow → h2 → body paragraph. */
+  .about-quote {
+    max-width: 40ch;
+    margin: 0;
+  }
+  .about-quote blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: var(--leading-snug);
+    text-wrap: balance;
+  }
+  .about-quote blockquote::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 3px;
+    background: var(--accent);
+    margin-block-end: var(--space-5);
+  }
+  .about-quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-block-start: var(--space-5);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .about-quote__more {
+    margin-block-start: var(--space-6);
+    font-size: 0.9rem;
   }
 
   @media (min-width: 62rem) {

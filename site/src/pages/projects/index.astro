@@ -11,14 +11,17 @@ import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
 import ProjectCard from "~/components/ProjectCard.astro";
 import CtaBand from "~/components/CtaBand.astro";
-import Pending from "~/components/Pending.astro";
 import { PROJECTS, CUSTOMER_TYPE_LABEL, projectStats } from "~/data/projects";
-import { BUSINESS } from "~/data/business";
+import { BUSINESS, TRACKS } from "~/data/business";
 
 const trail = [{ label: "פרויקטים", href: "/projects/" }];
 const stats = projectStats();
 
 const types = Array.from(new Set(PROJECTS.map((p) => p.customerType)));
+
+/** Counted from the data, never typed: the range the grid below actually covers. */
+const sizes = PROJECTS.map((p) => p.sizeKw).filter((n): n is number => typeof n === "number");
+const smallestKw = Math.min(...sizes);
 
 const itemListSchema = {
   "@context": "https://schema.org",
@@ -34,9 +37,14 @@ const itemListSchema = {
 };
 ---
 
+{/*
+  The title used to promise "לוחות, תשתיות ומערכות סולאריות". Every one of the ten
+  documented projects is solar; a title naming two categories the page does not contain
+  sets up the exact disappointment the review recorded.
+*/}
 <Base
-  title="פרויקטים — לוחות, תשתיות ומערכות סולאריות"
-  description="פרויקטים שבוצעו בפועל: בתים פרטיים, בניין משותף, גג רפת והאנגר תעשייתי. שם, מיקום, סוג מערכת והספק לכל פרויקט."
+  title="פרויקטים סולאריים שבוצעו — שם, יישוב והספק"
+  description="פרויקטים סולאריים שבוצעו בפועל: בתים פרטיים, בניין משותף, גג רפת והאנגר תעשייתי. לכל אחד שם לקוח, יישוב, סוג מערכת והספק המותקן — בלי תמונות מלאי ובלי דוגמאות."
   breadcrumbs={trail}
   schema={[itemListSchema]}
 >
@@ -46,9 +54,11 @@ const itemListSchema = {
     <div class="container">
       <p class="eyebrow">עבודות שבוצעו</p>
       <h1>פרויקטים</h1>
+      {/* "והספק" was stated of every project; one of the ten has no recorded output, so
+          the count is derived rather than asserted. */}
       <p class="lede">
-        כל פרויקט כאן בוצע בפועל, עם שם, מיקום, סוג מערכת והספק. אין כאן תמונות מלאי
-        ואין פרויקטים לדוגמה.
+        כל פרויקט כאן בוצע בפועל, עם שם, מיקום וסוג מערכת. ל־{sizes.length} מתוך {stats.count}
+        {" "}רשום גם ההספק. אין כאן תמונות מלאי ואין פרויקטים לדוגמה.
       </p>
 
       <ul class="projects-stats">
@@ -69,9 +79,56 @@ const itemListSchema = {
     </div>
   </section>
 
+  {/*
+    The contracting band, above the grid rather than in a dashed box at the foot of an
+    8000px page.
+
+    The review asked for a table here — units of housing, floor area, connection size,
+    role under the main contractor, actual programme, as-made documents. None of those
+    numbers exists for a single contracting job (`case.contracting.first`,
+    `fact.project.max-scale`), so the table would have to be written from imagination, and
+    a fabricated scope table on a portfolio page is the one thing worse than an absent
+    one. What is here instead is the same information a project manager actually needs
+    from this page: what it does and does not prove, and what to ask for instead.
+  */}
+  <section class="section section--inverse projects-contracting">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">לקבלנים, יזמים ומנהלי פרויקט</p>
+        <h2>בודקים אותנו לפרויקט?</h2>
+      </div>
+      <div class="projects-contracting__body">
+        <p>
+          מה שמתועד בעמוד הזה סולארי. עבודות החשמל והפרויקטים הקבלניים שבוצעו לא צולמו בזמן
+          אמת, וצילום באתר פעיל הוא ממילא לא תמיד מה שהקבלן הראשי רוצה — לכן הם לא מופיעים
+          כאן, ולא נמציא אותם.
+        </p>
+        <p>
+          מה שכן: בשיחה אפשר לעבור על איך אנחנו נכנסים לפרויקט — באילו שלבים, מול מי
+          מתבצע התיאום, ומי יהיה איש הקשר שלכם. ומה שנשלח לכם בכתב אפשר להשוות סעיף מול
+          סעיף מול הצעות אחרות.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--accent" href={TRACKS.contracting.href}>מה כולל הביצוע הקבלני</a>
+          <a
+            class="btn btn--outline"
+            href={TRACKS.contracting.quoteHref}
+            data-cta-location="projects-contracting">הצעת מחיר לפרויקט</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <h2 class="visually-hidden">רשימת הפרויקטים</h2>
+      <div class="section-head">
+        <h2>מערכות סולאריות שבוצעו</h2>
+        <p>
+          {stats.count} פרויקטים, מ־{smallestKw} ועד {stats.largestKw} קילוואט. אפשר לסנן
+          לפי סוג הלקוח:
+        </p>
+      </div>
       <div class="filters" role="group" aria-label="סינון לפי סוג לקוח">
         <button type="button" class="filter" data-filter="all" aria-pressed="true">הכול</button>
         {
@@ -98,33 +155,20 @@ const itemListSchema = {
     </div>
   </section>
 
-  <!--
-    Stated plainly rather than hidden. Every documented project is solar and residential
-    or agricultural; there is not one contracting or commercial-electrical project on
-    record, which is the largest evidence gap in the rebuild.
-  -->
-  <section class="section section--sunken">
-    <div class="container">
-      <div class="missing-note">
-        <h2>מה עוד לא מופיע כאן</h2>
-        <p>
-          כל הפרויקטים המתועדים הם סולאריים. עבודות החשמל והפרויקטים הקבלניים שבוצעו
-          פשוט לא תועדו בזמן אמת — ולכן הם לא מוצגים כאן, ולא נמציא אותם.
-        </p>
-        <ul>
-          <li>
-            <Pending id="case.contracting.first" label="P0" /> פרויקט קבלני מתועד
-          </li>
-          <li>
-            <Pending id="case.commercial.first" label="P1" /> פרויקט חשמל מסחרי
-          </li>
-          <li>
-            <Pending id="case.details.solar" label="P0" /> סיפור מלא לחמשת הפרויקטים המובילים
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
+  {/*
+    The "מה עוד לא מופיע כאן" panel is gone.
+
+    It was the project's own backlog, rendered in production: a dashed box listing three
+    internal tasks with orange P0/P1 chips against them. A business customer checking
+    whether this contractor can be trusted with his site read priority codes from someone
+    else's sprint. The sentence that mattered — every documented project is solar — is now
+    the first paragraph of the contracting band above the grid, where the reader who needs
+    it arrives before scrolling ten cards, and it is stated as a fact about the business
+    rather than as a ticket.
+
+    case.contracting.first, case.commercial.first and case.details.solar remain open in
+    src/data/gaps.ts and are reported in full at /internal/gaps/.
+  */}
 
   <CtaBand track="all" />
 </Base>
@@ -146,11 +190,34 @@ const itemListSchema = {
     padding: 0;
   }
 
+  .projects-contracting .section-head h2 {
+    font-size: var(--step-3);
+  }
+  .projects-contracting__body {
+    max-width: var(--measure);
+  }
+  .projects-contracting__body p + p {
+    margin-block-start: var(--space-4);
+  }
+  .projects-contracting__body .btn-row {
+    margin-block-start: var(--space-6);
+  }
+
+  /*
+   * Sticky on the way down. The mobile page is 8124px of one-column cards and the filter
+   * row — the only control that shortens it — used to scroll out of reach after the first
+   * card. It is the whole navigation of this page, so it stays.
+   */
   .filters {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-block-end: var(--space-6);
+    padding-block: var(--space-3);
+    background: var(--bg);
   }
   .filter {
     padding: 0.5rem 1rem;
@@ -192,36 +259,6 @@ const itemListSchema = {
   }
   .projects-empty:empty {
     display: none;
-  }
-
-  .missing-note {
-    max-width: var(--measure);
-    padding: var(--space-6);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--radius-lg);
-    background: var(--bg-raised);
-  }
-  .missing-note h2 {
-    font-size: var(--step-2);
-    margin-block-end: var(--space-3);
-  }
-  .missing-note p {
-    color: var(--text-muted);
-    margin-block-end: var(--space-4);
-  }
-  .missing-note ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-3);
-    font-size: 0.92rem;
-  }
-  .missing-note li {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    flex-wrap: wrap;
   }
 </style>
 

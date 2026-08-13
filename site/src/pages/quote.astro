@@ -13,7 +13,21 @@ import LeadForm from "~/components/LeadForm.astro";
 import { BUSINESS, links, TRACKS } from "~/data/business";
 
 const trail = [{ label: "בקשת הצעת מחיר", href: "/quote/" }];
-const tracks = ["private", "contracting", "solar"] as const;
+
+/*
+ * Contracting first, and first is also the default.
+ *
+ * This is the site's single lead page. It used to open on the domestic form: a developer
+ * or project manager landing here was shown "עבודת חשמל לבית" and had to find the middle
+ * tab to reach his own. The order of a segmented control is a statement about who the
+ * page expects, and it contradicted every other ordering decision on the site — the CTA
+ * band already lists contracting first for exactly this reason.
+ *
+ * Every CTA that knows its audience passes ?track=, so this only governs a bare visit to
+ * /quote/ — which is the visit with no context, and the one worth aiming at the
+ * commercial priority.
+ */
+const tracks = ["contracting", "private", "solar"] as const;
 ---
 
 {/*
@@ -29,9 +43,13 @@ const tracks = ["private", "contracting", "solar"] as const;
   <script is:inline>
     (function () {
       var valid = ["private", "contracting", "solar"];
-      var t = new URLSearchParams(location.search).get("track");
+      var q = new URLSearchParams(location.search);
+      // `type` is accepted as well as `track`: the review's recommended links from the
+      // contracting pages use ?type=, and a parameter that silently does nothing sends
+      // the reader to the wrong form with no sign anything went wrong.
+      var t = q.get("track") || q.get("type");
       document.documentElement.dataset.quoteTrack =
-        valid.indexOf(t) > -1 ? t : "private";
+        valid.indexOf(t) > -1 ? t : "contracting";
     })();
   </script>
 
@@ -107,6 +125,54 @@ const tracks = ["private", "contracting", "solar"] as const;
       </dl>
     </aside>
   </div>
+
+  {/*
+    The page ended at the form, with roughly 200px of nothing before the footer and not
+    one reason to fill it in: no licence in the reading path, no statement of what comes
+    back, nothing about who is on the other side. This is the answer to "what am I
+    signing up for" — and every line of it is either a verified fact or a description of
+    what this form actually does.
+
+    Deliberately absent: any commitment to a callback time. `fact.response-time` is open,
+    and "we'll call within X" is precisely the kind of number this rebuild exists to stop
+    inventing. Nothing here promises a clock.
+  */}
+  <section class="section section--sunken quote-after">
+    <div class="container">
+      <div class="section-head">
+        <h2>מה קורה אחרי ששולחים</h2>
+      </div>
+      <ol class="quote-steps">
+        <li>
+          <h3>הפנייה נשמרת לפני שהיא נשלחת</h3>
+          <p>
+            הפרטים נכתבים אצלכם בדפדפן ברגע השליחה, ורק אחר כך יוצאים. אם השליחה נכשלת
+            המערכת מנסה שוב, ואתם מקבלים דרך חלופית לשלוח — ולא מסך שנראה כאילו הכל תקין.
+          </p>
+        </li>
+        <li>
+          <h3>שיחת בירור</h3>
+          <p>
+            בפרויקט — היקף, שלב, לוח זמנים ומה כבר קיים בתוכניות. בעבודה בבית — מה קורה
+            היום ומה צריך לקרות. אם משהו לא מתאים לנו, תשמעו את זה בשיחה הזו.
+          </p>
+        </li>
+        <li>
+          <h3>הצעה בכתב</h3>
+          <p>
+            הצעה מפורטת לפי סעיפים: מה כלול, מה לא, ומה עלול להתגלות בשטח ולהוסיף עלות.
+            לא הערכה בטלפון.
+          </p>
+        </li>
+      </ol>
+
+      <p class="quote-after__note">
+        את הביצוע מבצע וחותם עליו בעל רישיון חשמלאי ראשי מס׳ {BUSINESS.licenceNumber} —
+        <a href="/about/">מה הדרגה הזו מתירה לתכנן ולבצע</a>. שאלות לפני שממלאים?
+        <a href="/faq/">שאלות נפוצות</a>.
+      </p>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -121,7 +187,9 @@ const tracks = ["private", "contracting", "solar"] as const;
   .quote-layout {
     display: grid;
     gap: var(--space-6);
-    padding-block-end: var(--section-y);
+    /* Was --section-y, which closed the page. The proof section below now supplies its
+       own leading space, and two full section paddings back to back read as a gap. */
+    padding-block-end: var(--space-7);
   }
 
   /* Always three-up or one-up, never 2+1: auto-fit produced an orphan third button
@@ -167,8 +235,8 @@ const tracks = ["private", "contracting", "solar"] as const;
   :root[data-quote-track="solar"] .quote-panel[data-track-panel="solar"] {
     display: block;
   }
-  /* Without JavaScript no attribute is set, so fall back to the shortest form. */
-  :root:not([data-quote-track]) .quote-panel[data-track-panel="private"] {
+  /* Without JavaScript no attribute is set, so fall back to the default track. */
+  :root:not([data-quote-track]) .quote-panel[data-track-panel="contracting"] {
     display: block;
   }
 
@@ -228,6 +296,56 @@ const tracks = ["private", "contracting", "solar"] as const;
     font-weight: 600;
   }
 
+  .quote-after {
+    padding-block: var(--space-7);
+  }
+  .quote-steps {
+    display: grid;
+    gap: var(--space-5);
+    counter-reset: step;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .quote-steps li {
+    counter-increment: step;
+    padding-block-start: var(--space-4);
+    border-block-start: 2px solid var(--accent);
+  }
+  .quote-steps h3 {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-size: var(--step-0);
+    margin-block-end: var(--space-3);
+  }
+  .quote-steps h3::before {
+    content: counter(step);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+  }
+  .quote-steps p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--text-muted);
+  }
+  .quote-after__note {
+    max-width: var(--measure);
+    margin-block-start: var(--space-6);
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .quote-steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+  }
+
   @media (min-width: 62rem) {
     .quote-layout {
       grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
@@ -252,6 +370,8 @@ const tracks = ["private", "contracting", "solar"] as const;
     if (pushState) {
       const url = new URL(location.href);
       url.searchParams.set("track", track);
+      // Drop the ?type= alias so the URL cannot end up naming two different tracks.
+      url.searchParams.delete("type");
       history.replaceState(null, "", url);
     }
     (window as any).rnrgTrack?.("quote_start", { track });
@@ -263,7 +383,7 @@ const tracks = ["private", "contracting", "solar"] as const;
 
   // The inline head script already chose the track; mirror it onto the buttons without
   // re-writing the URL.
-  const chosen = (document.documentElement.dataset.quoteTrack ?? "private") as Track;
+  const chosen = (document.documentElement.dataset.quoteTrack ?? "contracting") as Track;
   buttons.forEach((b) =>
     b.setAttribute("aria-pressed", String(b.dataset.trackBtn === chosen))
   );

@@ -6,8 +6,14 @@
  * warranty, and no FAQPage schema.
  *
  * Answers here stay inside what is verifiable. Where an answer depends on a business fact
- * nobody has supplied (warranty length, response time, pricing), the answer says so rather
- * than inventing a number — which is more useful to a reader than a vague reassurance.
+ * nobody has supplied (warranty length, response time, insurance cover, capacity), the
+ * answer describes how the thing is actually handled instead of inventing a number.
+ *
+ * What changed after the August review: several answers were written about the state of
+ * the website rather than about the business — "טרם פורסם", "טרם עודכנו באתר". A reader
+ * asking whether you are insured does not care which fields of your CMS are filled in; he
+ * reads "not published" as "not held". None of those answers now claims a fact that is
+ * not known, and none of them talks about the site.
  */
 import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
@@ -16,10 +22,28 @@ import { BUSINESS } from "~/data/business";
 
 const trail = [{ label: "שאלות נפוצות", href: "/faq/" }];
 
-const GROUPS = [
+interface Group {
+  id: string;
+  title: string;
+  /** One line naming who the group is for, so 24 rows can be skipped by audience. */
+  intro: string;
+  /** Renders on a raised surface. Used for the contracting group only. */
+  feature?: boolean;
+  items: { q: string; a: string }[];
+}
+
+/*
+ * Order matters and is the finding: "קבלנים ופרויקטים" used to be third of four, starting
+ * around 40% down the page, behind five questions about a tripping RCD. Section order is
+ * how a page says who it is for, and a main contractor who has to scroll past domestic
+ * questions to reach his own concludes he is not the audience. It now sits directly under
+ * the general group.
+ */
+const GROUPS: Group[] = [
   {
     id: "general",
     title: "כללי",
+    intro: "רישיונות, מחירים ואזורי עבודה — רלוונטי לכל סוג פנייה.",
     items: [
       {
         q: "מה ההבדל בין חשמלאי מוסמך, חשמלאי ראשי וקבלן חשמל?",
@@ -33,27 +57,84 @@ const GROUPS = [
         q: "איך אפשר לוודא שרישיון של בעל מקצוע אמיתי?",
         a:
           "מבקשים את מספר הרישיון ובודקים אותו מול משרד העבודה. בעל מקצוע שמסרב למסור מספר " +
-          `רישיון — זו תשובה בפני עצמה. הרישיון שלנו הוא ${BUSINESS.licenceNumber} והוא מופיע ` +
-          "בתחתית כל עמוד באתר.",
+          `רישיון — זו תשובה בפני עצמה. הרישיון שלנו הוא ${BUSINESS.licenceNumber}, והוא זה ` +
+          "שחתום על הביצוע.",
+      },
+      {
+        q: "כמה עולה עבודת חשמל?",
+        // Reordered, not rewritten in substance. The answer opened on "לא נפרסם כאן
+        // מחירון" — a refusal as the first words of the most-read question on the site.
+        // The content was already good; it just came second.
+        a:
+          "העלות נגזרת מארבעה דברים: מצב התשתית הקיימת, גודל החיבור, היקף העבודה והגישה " +
+          "לאתר. לכן במקום מחירון אתם מקבלים הצעה מפורטת — מה כלול, מה לא, ומה עלול להתגלות " +
+          "בשטח ולהוסיף עלות. את זה תדעו לפני שמתחילים ולא בחשבון בסוף. מחיר שנמסר בלי לראות " +
+          "את הנכס הוא ניחוש שמתגלה כלא נכון בהמשך.",
       },
       {
         q: "באילו אזורים אתם עובדים?",
         a:
-          `אזור הפעילות המוצהר הוא ${BUSINESS.areaServed}. בפועל, פרויקט ארוך ועבודה נקודתית ` +
-          "הם לא אותו דבר מבחינת מרחק — לכן שווה לשאול לגבי המקרה הספציפי.",
+          `הבסיס ב${BUSINESS.locality} וטווח הפעילות ${BUSINESS.areaServed}. תקלה נקודתית ` +
+          "ופרויקט שנמשך שבועות הם לא אותו דבר מבחינת מרחק — לכן שווה לשאול לגבי המקרה " +
+          "הספציפי גם אם אתם על הגבול.",
+      },
+    ],
+  },
+  {
+    id: "contracting",
+    title: "קבלנים ופרויקטים",
+    intro: "לקבלנים ראשיים, יזמים ומנהלי פרויקט שבודקים התקשרות עם קבלן משנה לחשמל.",
+    feature: true,
+    items: [
+      {
+        q: "אתם עובדים כקבלן משנה תחת קבלן ראשי?",
+        a:
+          "כן. זו צורת ההתקשרות המקובלת — ביצוע החלק החשמלי תחת הקבלן הראשי, בתיאום מול מנהל " +
+          "העבודה ולפי לוח הזמנים של האתר.",
       },
       {
-        q: "כמה עולה עבודת חשמל?",
+        q: "אפשר לקבל הצעת מחיר לפי כתב כמויות?",
         a:
-          "לא נפרסם כאן מחירון. עלות מושפעת ממצב התשתית הקיימת, מגודל החיבור, מהיקף העבודה " +
-          "ומהגישה לאתר — ומחיר שמפורסם בלי לראות את הנכס הוא ניחוש שמתגלה כלא נכון בהמשך. " +
-          "מה שכן: הצעת המחיר מפרטת מה כלול ומה לא, לפני שמתחילים.",
+          "כן, וזו הדרך המדויקת ביותר. עם כתב כמויות או תוכניות חשמל נחזור עם הצעה לפי סעיפים. " +
+          "בלי אחד מהם, אפשר להתחיל משיחה ומביקור באתר.",
+      },
+      {
+        q: "מה קורה כשמתגלה בשטח משהו שלא היה בתוכנית?",
+        a:
+          "מעלים את זה מיד מול מנהל הפרויקט או היועץ, עם הצעה לפתרון ולעלות, ומחכים לאישור " +
+          "בכתב. לא מבצעים חריגה ואז מציגים חשבון.",
+      },
+      {
+        q: "יש לכם ביטוח עבודות קבלניות?",
+        // Was: "פרטי הביטוח וההיקף טרם פורסמו באתר" — which a procurement reader
+        // translates to "no policy". The honest answer is that cover is a document
+        // matched to a specific project's requirements, not a line on a marketing page.
+        // It deliberately neither claims nor denies a policy: `fact.insurance` is open,
+        // and only the owner can close it.
+        a:
+          "זו שאלת סף לגיטימית, והתשובה לה היא מסמך ולא משפט באתר — כי נוסח האישור, סכומי " +
+          "הכיסוי והמבוטחים הנוספים שכל מזמין דורש שונים זה מזה. שלחו את דרישות ההתקשרות שלכם " +
+          "ותקבלו התייחסות למה שאנחנו יכולים להעמיד, לפני שאתם משקיעים זמן בהעברת תוכניות " +
+          `לתמחור. מה שכן קבוע ופתוח לבדיקה הוא הרישיון: חשמלאי ראשי ${BUSINESS.licenceNumber}, ` +
+          "והוא זה שחתום על הביצוע.",
+      },
+      {
+        q: "כמה פרויקטים אתם יכולים לקחת במקביל?",
+        // Was: "הנתום הזה טרם פורסם" — report language, and the third answer in this
+        // group to open that way. `fact.concurrent-projects` is open; the reason not to
+        // publish a blanket number is real, so it is given as a reason rather than as a
+        // status.
+        a:
+          "תלוי בהיקף ובשלב, ולכן מספר גורף לא יהיה נכון לאורך זמן — עומס של חודש אחד לא " +
+          "מעיד על החודש הבא. שלחו את לוח הזמנים של הפרויקט ותקבלו תשובה על הזמינות בפועל " +
+          "לתקופה הזו, כולל אם היא שלילית. עדיף לוותר על עבודה מאשר לקחת אותה ולעכב אתכם.",
       },
     ],
   },
   {
     id: "private",
     title: "לקוחות פרטיים",
+    intro: "בתים ודירות — לוחות, פחת, תלת פאזי ואחריות.",
     items: [
       {
         q: "מתי חייבים להחליף לוח חשמל?",
@@ -82,52 +163,62 @@ const GROUPS = [
       },
       {
         q: "מה האחריות על העבודה?",
+        // Was an answer about the state of the site ("טרם עודכנו באתר"). The structural
+        // answer — workmanship separately from the manufacturer's cover on equipment —
+        // is itself the professionally useful part, and it needs no figure. The number of
+        // years is still open (`fact.warranty`) and is still not invented here.
         a:
-          "תנאי האחריות המדויקים — מספר השנים ומה בדיוק מכוסה — טרם עודכנו באתר, ואנחנו מעדיפים " +
-          'לא לכתוב "אחריות לשנים קדימה" בלי מספר. שאלו אותנו והתשובה תינתן בכתב בהצעת המחיר.',
-      },
-    ],
-  },
-  {
-    id: "contracting",
-    title: "קבלנים ופרויקטים",
-    items: [
-      {
-        q: "אתם עובדים כקבלן משנה תחת קבלן ראשי?",
-        a:
-          "כן. זו צורת ההתקשרות המקובלת — ביצוע החלק החשמלי תחת הקבלן הראשי, בתיאום מול מנהל " +
-          "העבודה ולפי לוח הזמנים של האתר.",
-      },
-      {
-        q: "אפשר לקבל הצעת מחיר לפי כתב כמויות?",
-        a:
-          "כן, וזו הדרך המדויקת ביותר. עם כתב כמויות או תוכניות חשמל נחזור עם הצעה לפי סעיפים. " +
-          "בלי אחד מהם, אפשר להתחיל משיחה ומביקור באתר.",
-      },
-      {
-        q: "מה קורה כשמתגלה בשטח משהו שלא היה בתוכנית?",
-        a:
-          "מעלים את זה מיד מול מנהל הפרויקט או היועץ, עם הצעה לפתרון ולעלות, ומחכים לאישור " +
-          "בכתב. לא מבצעים חריגה ואז מציגים חשבון.",
-      },
-      {
-        q: "יש לכם ביטוח עבודות קבלניות?",
-        a:
-          "פרטי הביטוח וההיקף טרם פורסמו באתר. זו שאלת סף לגיטימית בכל פרויקט — בקשו את " +
-          "האישורים ונשלח אותם.",
-      },
-      {
-        q: "כמה פרויקטים אתם יכולים לקחת במקביל?",
-        a:
-          "הנתון הזה טרם פורסם. זו שאלה חשובה ואנחנו מעדיפים לענות עליה בכנות מול פרויקט ספציפי " +
-          "מאשר לפרסם מספר גורף שלא בהכרח נכון לכל תקופה.",
+          "האחריות נמסרת בכתב בהצעת המחיר, והיא מחולקת לשניים: אחריות על העבודה שלנו — " +
+          "החיבורים, הלוח, ההתקנה והתשתית — ואחריות היצרן על הציוד עצמו, שמשתנה בין רכיב " +
+          "לרכיב וניתנת ישירות מהיצרן. שתיהן נמסרות בכתב עם ההצעה ומופרדות בה, כדי שלא " +
+          'תגלו ביום שתצטרכו מה בדיוק מכוסה. לא נכתוב כאן "אחריות לשנים קדימה" — ' +
+          "מספר בלי הגדרה הוא לא אחריות, והגדרה נכתבת מול פרויקט ולא מול עמוד באתר.",
       },
     ],
   },
   {
     id: "solar",
     title: "מערכות סולאריות",
+    intro: "עלות, לוחות זמנים, רגולציה ומה נדרש מכם.",
     items: [
+      /*
+       * The four questions that decide a solar job — cost, timing, what is required of
+       * the customer, and payback — were all missing. The group answered what we will not
+       * tell you (a savings percentage), what is forbidden (backfeed during an outage) and
+       * a technical limit, and never what the buyer actually weighs.
+       *
+       * They lead the group, and none of them carries a number: installation duration,
+       * regulatory lead time and payback period are all genuinely unknown per property,
+       * and the site has already had to remove one invented figure (the 90% saving).
+       */
+      {
+        q: "כמה עולה מערכת סולארית?",
+        a:
+          "המחיר נגזר מההספק, מסוג ההתקנה — גג קיים לעומת סככה חדשה זה הפער הגדול — ומהאם " +
+          "יש אגירה. אחרי שרואים חשבון חשמל, תמונת גג ותמונת לוח, נשלחת הצעה מפורטת לפי " +
+          "סעיפים שכוללת גם את החלק של ההסדרה, ולא טווח מחירים כללי.",
+      },
+      {
+        q: "תוך כמה זמן המערכת עובדת?",
+        a:
+          "יש כאן שני לוחות זמנים נפרדים: ההתקנה עצמה, שתלויה בגודל המערכת ובגג, וההסדרה " +
+          "מול חברת החשמל — וההסדרה היא בדרך כלל זו שקובעת את התאריך בפועל. נאמר לכם לוח " +
+          "זמנים ריאלי לנכס שלכם בשיחה, ולא נתחייב לתאריך לפני שברור מה המסלול.",
+      },
+      {
+        q: "מה נדרש מכם בתהליך?",
+        a:
+          "בהתחלה חשבון חשמל, תמונת גג ותמונת לוח — מהם אפשר לבנות הצעה. אחר כך חתימות על " +
+          "טופסי ההסדרה, וגישה לגג ביום ההתקנה. את התיאום מול חברת החשמל ואת הביצוע אנחנו " +
+          "עושים.",
+      },
+      {
+        q: "מתי המערכת מחזירה את עצמה?",
+        a:
+          "אין מספר אחיד, וכל מי שנוקב באחד לא ראה את הנכס. ההחזר נגזר מהייצור בפועל מול " +
+          "התעריף שאתם משלמים היום, והתעריף נקבע ברגולציה ומתעדכן. בהצעה תקבלו תחשיב על " +
+          "הנתונים שלכם ולא נוסחה כללית.",
+      },
       {
         q: "כמה אחוז אפשר לחסוך בחשבון החשמל?",
         a:
@@ -184,7 +275,7 @@ const faqSchema = {
 
 <Base
   title="שאלות נפוצות — חשמל, קבלנות וסולארי"
-  description="תשובות על רישיונות, מחירים, אחריות, בדיקות, היתרים ומערכות סולאריות — כולל מה שאנחנו עדיין לא יודעים לענות עליו."
+  description="תשובות ישירות על רישיונות, מחירים, אחריות, לוחות זמנים והיתרים — כולל מה שקבלן ראשי בודק לפני התקשרות, ומה נדרש מכם בהתקנת מערכת סולארית."
   breadcrumbs={trail}
   schema={[faqSchema]}
 >
@@ -194,9 +285,15 @@ const faqSchema = {
     <div class="container container--narrow">
       <p class="eyebrow">שאלות נפוצות</p>
       <h1>שאלות ותשובות</h1>
+      {/*
+        The lede used to count the questions and then warn that some answers are not
+        answers — so a reader entered looking for holes instead of for information. It now
+        says what is covered.
+      */}
       <p class="lede">
-        {allItems.length} שאלות בארבעה נושאים. כשהתשובה תלויה בנתון שעדיין לא פרסמנו — כתוב
-        כאן במפורש, במקום תשובה מעורפלת.
+        תשובות ישירות על מה שבאמת שואלים אותנו — רישיונות, מחירים, אחריות, לוחות זמנים,
+        היתרים ומערכות סולאריות. לא מצאתם את השאלה שלכם? התקשרו, בדרך כלל זה נפתר בשיחה
+        קצרה.
       </p>
       <nav class="faq-nav" aria-label="נושאים">
         {GROUPS.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
@@ -208,10 +305,21 @@ const faqSchema = {
     GROUPS.map((group) => (
       <section class="section" id={group.id}>
         <div class="container container--narrow">
-          <h2 class="faq-group-title">{group.title}</h2>
-          <div class="faq">
-            {group.items.map((item) => (
-              <details class="faq__item">
+          {/*
+            Sticky group title: on a 3450px page of visually identical rows, the heading
+            is the only thing that tells the reader where he is, and it used to scroll
+            away after the first question.
+          */}
+          <div class="faq-group-head">
+            <h2>{group.title}</h2>
+            <p>{group.intro}</p>
+          </div>
+          <div class:list={["faq", { "faq--feature": group.feature }]}>
+            {group.items.map((item, i) => (
+              // The first question in each group opens by default. Twenty closed rows of
+              // identical weight gave the page no visible answer anywhere on it; one open
+              // answer per group shows the register of the answers without a click.
+              <details class="faq__item" open={i === 0}>
                 <summary>{item.q}</summary>
                 <div class="faq__answer">
                   <p>{item.a}</p>
@@ -254,10 +362,38 @@ const faqSchema = {
     border-color: var(--brand);
     color: var(--brand);
   }
-  .faq-group-title {
-    font-size: var(--step-2);
-    margin-block-end: var(--space-4);
+
+  .faq-group-head {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 1;
+    padding-block: var(--space-3) var(--space-4);
+    /* Opaque: the rows scroll underneath it. */
+    background: var(--bg);
   }
+  .faq-group-head h2 {
+    font-size: var(--step-2);
+    margin-block-end: 0.35rem;
+  }
+  .faq-group-head p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* The contracting group on its own surface. Section order says who the page is for;
+     this says it a second time to a reader who landed on an anchor. */
+  .faq--feature {
+    padding-inline: var(--space-5);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-block-start: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .faq--feature .faq__item:last-child {
+    border-block-end: 0;
+  }
+
   .section + .section {
     padding-block-start: 0;
   }

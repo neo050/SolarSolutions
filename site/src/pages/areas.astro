@@ -7,9 +7,16 @@
  * location is thin content — and the town list needed to build them properly does not
  * exist yet (`fact.areas.list`).
  *
- * What this page can do honestly today: state the declared area, show the towns where work
- * has actually been done — which is evidence, not a claim — and be upfront that a longer
- * project and a call-out are not the same thing distance-wise.
+ * What this page can do honestly today: state the area, and turn the towns from a row of
+ * word-pills into the evidence they actually are — every one of them links to the job
+ * that was done there. The review's finding was that this page could have its words
+ * swapped and become any other tradesman's site; a list where each row is a real project
+ * with a real output figure cannot be swapped.
+ *
+ * The map the review asked for is not here on purpose. Drawing Israel and dropping a pin
+ * per town means inventing coordinates for ten places, and a pin in the wrong valley is a
+ * factual error rendered at 400px. The north-to-south ordering below carries the same
+ * information — it is what makes the strip legible — without asserting any geometry.
  */
 import Base from "~/layouts/Base.astro";
 import Breadcrumbs from "~/components/Breadcrumbs.astro";
@@ -20,22 +27,65 @@ import { BUSINESS } from "~/data/business";
 import { PROJECTS } from "~/data/projects";
 
 const trail = [{ label: "אזורי פעילות", href: "/areas/" }];
-const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) => a.localeCompare(b, "he"));
+
+/**
+ * North to south, so the list reads as the strip it describes rather than as an
+ * alphabetical accident. Ordinary geography, not a business fact — כליל is in the western
+ * Galilee, רביבים is in the Negev, and everything between them sits in that order.
+ *
+ * Anything not named here sorts to the end alphabetically, so adding a project to
+ * projects.ts can never drop a town off this page.
+ */
+const NORTH_TO_SOUTH = [
+  "כליל",
+  "יישוב עדי",
+  "קיבוץ מצר",
+  "כפר יונה",
+  "גני תקווה",
+  "יבנה",
+  "בן זכאי",
+  "מושב שתולים",
+  "מושב בית עזרא",
+  "קיבוץ רביבים",
+];
+
+const rank = (town: string) => {
+  const i = NORTH_TO_SOUTH.indexOf(town);
+  return i === -1 ? NORTH_TO_SOUTH.length : i;
+};
+
+/** One row per town, carrying the project that proves it. */
+const towns = Array.from(new Set(PROJECTS.map((p) => p.location)))
+  .sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, "he"))
+  .map((town) => ({
+    town,
+    projects: PROJECTS.filter((p) => p.location === town),
+  }));
 ---
 
 <Base
-  title="אזורי שירות — חשמלאי מאשדוד, ממצפה רמון לעמק חפר"
-  description="RNRG פועלת מבסיס באשדוד, ממצפה רמון ועד עמק חפר. היישובים שבהם כבר בוצעו פרויקטים מתועדים, ולמה טווח ההגעה לקריאת שירות שונה מזה של פרויקט קבלני."
+  title="איפה אנחנו עובדים — ממצפה רמון ועד עמק חפר"
+  description="RNRG פועלת מבסיס באשדוד, ממצפה רמון ועד עמק חפר. היישובים שבהם כבר בוצעו פרויקטים, עם קישור לכל אחד מהם, ולמה טווח ההגעה לתקלה שונה מזה של פרויקט."
   breadcrumbs={trail}
 >
   <Breadcrumbs trail={trail} />
 
   <section class="section areas-head">
     <div class="container">
-      <p class="eyebrow">איפה אנחנו עובדים</p>
-      <h1>אזורי פעילות</h1>
+      <p class="eyebrow">אזורי פעילות</p>
+      <h1>איפה אנחנו עובדים</h1>
+      {/*
+        "אזור הפעילות המוצהר" was the previous wording. "מוצהר" is the language of a form,
+        and it implies a gap between what is declared and what is done — the opposite of
+        what this page needs to establish. The distance argument is stated as a difference
+        in what governs the decision, not as a claim that projects are taken further than
+        the stated range; whether the range holds for a long project is an open question
+        for the owner (`fact.areas.list`), not something to answer here.
+      */}
       <p class="lede">
-        אזור הפעילות המוצהר הוא {BUSINESS.areaServed}. הבסיס ב{BUSINESS.locality}.
+        הבסיס ב{BUSINESS.locality}, וטווח הפעילות {BUSINESS.areaServed}. בתקלה נקודתית מה
+        שקובע הוא זמן הנסיעה; בפרויקט שנמשך שבועות זה שיקול אחר לגמרי — אז אם אתם על הגבול,
+        שווה לשאול לפני שמניחים.
       </p>
     </div>
   </section>
@@ -44,55 +94,124 @@ const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) 
     <div class="container">
       <div class="section-head">
         <h2>יישובים שבהם בוצעו עבודות</h2>
-        <p>
-          זו לא רשימת אזורים שאנחנו מצהירים שאנחנו מגיעים אליהם — אלה יישובים שבהם יש
-          פרויקט מתועד באתר.
-        </p>
+        <p>בכל יישוב ברשימה יש עבודה שבוצעה בפועל — אפשר ללחוץ ולראות אותה.</p>
       </div>
-      <ul class="towns">
-        {worked.map((town) => <li>{town}</li>)}
-      </ul>
+
+      {/*
+        Was a row of static pills styled exactly like the interactive filter chips on
+        /projects/ and /faq/ — same pill, same border, same radius, and nothing happened
+        when you pressed one. They are now real links, ordered north to south, each
+        carrying what was actually installed there. The town is the anchor; the work is
+        the proof.
+      */}
+      <ol class="towns">
+        {
+          towns.map(({ town, projects }) => (
+            <li class="town">
+              <span class="town__name">{town}</span>
+              <ul class="town__jobs">
+                {projects.map((p) => (
+                  <li>
+                    {/* The town sits in a sibling span, so the link text alone —
+                        "סככה סולארית" — is ambiguous out of context. */}
+                    <a href={`/projects/${p.slug}/`} aria-label={`${p.systemType}, ${town}`}>
+                      {p.systemType}
+                      {p.sizeKw !== undefined && (
+                        <span class="town__size mono">
+                          {" · "}
+                          <bdi>{p.sizeKw} kWp</bdi>
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+
       <p class="towns__note">
-        <a href="/projects/">לפרויקטים עצמם</a>
+        הרשימה מסודרת מצפון לדרום. <a href="/projects/">לכל הפרויקטים</a>
       </p>
     </div>
   </section>
 
   <section class="section section--sunken">
     <div class="container">
-      <div class="prose">
+      <div class="section-head">
         <h2>קריאת שירות ופרויקט הם לא אותו מרחק</h2>
         <p>
-          לתקלה נקודתית, מה שקובע הוא זמן הנסיעה — ולכן טווח ההגעה לעבודה קצרה מצומצם יותר
-          מטווח ההגעה לפרויקט.
-        </p>
-        <p>
-          בפרויקט קבלני התמונה שונה: כשהעבודה נמשכת שבועות והצוות נמצא באתר ממילא, המרחק
-          פחות משמעותי. לכן אם אתם קבלן או יזם מחוץ לאזור המיידי — עדיין שווה לשאול.
+          שתי העבודות נראות דומות ברשימת שירותים, אבל המרחק מתנהג בהן אחרת — ולכן התשובה
+          לשאלה "אתם מגיעים אליי?" תלויה במה שאתם צריכים.
         </p>
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="pending-block">
-        <h2>למה אין כאן עמוד לכל עיר</h2>
-        <p>
-          עמוד נפרד לכל יישוב הוא מהלך SEO מקובל, אבל רק כשיש בו תוכן אמיתי לאותו יישוב —
-          פרויקטים, זמני הגעה, מאפיינים מקומיים. עמוד שנבנה מתבנית עם החלפת שם עיר הוא תוכן
-          דל, וגוגל מטפל בו בהתאם.
-        </p>
-        <p>
-          כשתתקבל רשימת היישובים שבהם העסק באמת עובד, ובאיזה סוג עבודה — נבנה עמודי אזור
-          למי שמצדיק אותם.
-        </p>
-        {SHOW_PENDING && (
-          <p class="pending-block__meta">
-            <Pending id="fact.areas.list" label="P0 — רשימת יישובים" />
-          </p>
-        )}
+      {/*
+        Two paragraphs of running body copy carried the one idea on this page that
+        separates the private reader from the contracting one, at the same typographic
+        weight as everything else, with the left half of the viewport empty. As a
+        comparison it is scannable and it fills the column.
+
+        Every cell is qualitative on purpose. A kilometre radius and a response time are
+        both unknown (`fact.areas.list`, `fact.response-time`); a comparison is not a
+        licence to put a number in a box.
+      */}
+      <div class="compare">
+        <div class="compare__col">
+          <h3>קריאת שירות</h3>
+          <dl>
+            <div>
+              <dt>מה קובע את המרחק</dt>
+              <dd>זמן הנסיעה לביקור אחד. ככל שהעבודה קצרה יותר, הנסיעה משקלה גדול יותר.</dd>
+            </div>
+            <div>
+              <dt>מול מי מתאמים</dt>
+              <dd>ישירות מולכם — מועד שמתאים לכם, ובעבודה בלוח גם תיאום של הפסקת החשמל.</dd>
+            </div>
+            <div>
+              <dt>אם אתם מחוץ לטווח</dt>
+              <dd>נגיד את זה בשיחה. אם עדיף שתפנו למישהו קרוב יותר — נאמר גם את זה.</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="compare__col">
+          <h3>פרויקט</h3>
+          <dl>
+            <div>
+              <dt>מה קובע את המרחק</dt>
+              <dd>העבודה נמשכת שבועות והצוות נמצא באתר ממילא, ולכן המרחק פחות מכריע.</dd>
+            </div>
+            <div>
+              <dt>מול מי מתאמים</dt>
+              <dd>מול מנהל העבודה והיועץ, לפי לוח הזמנים של האתר ולא לפי היומן שלנו.</dd>
+            </div>
+            <div>
+              <dt>אם אתם מחוץ לטווח</dt>
+              <dd>שווה לשאול בכל מקרה — ההיקף והלוח קובעים כאן יותר מהקילומטרים.</dd>
+            </div>
+          </dl>
+        </div>
       </div>
+
+      {/*
+        What used to stand here as its own titled panel was an explanation of the site's
+        SEO strategy — why there is no page per town, what thin content is, and how Google
+        treats it. Nobody opens "אזורי פעילות" to read that. The position it defended is
+        kept as one line of body copy; the reasoning belongs in the file header, where it
+        now is.
+      */}
+      <p class="areas-ask">
+        לא בטוחים אם אנחנו מגיעים אליכם? התקשרו — זו תשובה של שיחה אחת, כולל אם המסקנה היא
+        שעדיף לכם מישהו קרוב יותר.
+      </p>
+
+      {SHOW_PENDING && (
+        <p class="pending-block__meta">
+          <Pending id="fact.areas.list" label="P0 — רשימת יישובים" />
+        </p>
+      )}
     </div>
   </section>
 
@@ -104,16 +223,97 @@ const worked = Array.from(new Set(PROJECTS.map((p) => p.location))).sort((a, b) 
   .areas-head h1 { font-size: var(--step-4); margin-block-end: var(--space-4); }
 
   .towns {
-    display: flex; flex-wrap: wrap; gap: var(--space-2);
-    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: var(--space-2) var(--space-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  .towns li {
-    padding: 0.5rem 1rem;
+  .town {
+    display: grid;
+    gap: 0.15rem;
+    padding-block: var(--space-3);
+    border-block-start: 1px solid var(--border);
+  }
+  .town__name {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+  }
+  .town__jobs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .town__jobs li + li {
+    margin-block-start: 0.2rem;
+  }
+  .town__jobs a {
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .town__jobs a:hover {
+    text-decoration: underline;
+  }
+  .town__size {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.85rem;
+  }
+  .towns__note {
+    margin-block-start: var(--space-6);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .compare {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .compare__col {
+    padding: var(--space-6);
     background: var(--bg-raised);
     border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    font-size: 0.92rem; font-weight: 600;
+    border-radius: var(--radius-lg);
   }
-  .towns__note { margin-block-start: var(--space-5); font-size: 0.9rem; }
+  .compare__col h3 {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-5);
+    padding-block-end: var(--space-3);
+    border-block-end: 2px solid var(--accent);
+  }
+  .compare dl {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+  .compare dt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    margin-block-end: 0.25rem;
+  }
+  .compare dd {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
 
+  .areas-ask {
+    max-width: var(--measure-narrow);
+    margin-block-start: var(--space-7);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .compare {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-5);
+    }
+  }
 </style>
